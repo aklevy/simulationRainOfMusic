@@ -1,13 +1,21 @@
 #include "metabot.hpp"
 
-Metabot::Metabot(ofVec3f zoneDim,ofVec3f size):
-    _zoneDim(zoneDim),_size(size){
+Metabot::Metabot(ofVec3f zoneDim,ofVec3f size, int id):
+    _zoneDim(zoneDim),
+    _size(size),_id(id),
+    _color(ofVec3f(0,0,200+id)){
+    // Temporary
+    _3dmodel = "Square";
 }
-
 //--------------------------------------------------------------
 
-ofVec3f Metabot::nextPosition(ofVec3f position, ofVec3f speed){
-    return position + speed;
+void Metabot::initialPosition(ofVec3f initPos){
+    _position = initPos;
+}
+//--------------------------------------------------------------
+
+void Metabot::move(ofVec3f speed){
+    _position += speed;
 }
 
 //--------------------------------------------------------------
