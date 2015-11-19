@@ -42,6 +42,6 @@ private:
     // Vector containing Metabot
     std::vector<Metabot>  _metabots; // no need to initialize
 
-
+    int _selectedId = 0;
 
 };

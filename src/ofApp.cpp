@@ -14,13 +14,26 @@ void ofApp::setup(){
     ofEnableDepthTest();
 
     _metabots.emplace_back(_zoneGrid.dimension(),ofVec3f(30),1); //construct instead of copy
-   // _metabots.back().initialPosition(ofVec3f(0));
-    _metabots.emplace_back(_zoneGrid.dimension(),ofVec3f(50),2,ofVec3f(100)); //construct instead of copy
+    // _metabots.back().initialPosition(ofVec3f(0));
+    _metabots.emplace_back(_zoneGrid.dimension(),ofVec3f(50),2,ofVec3f(100),"Metabot.obj"); //construct instead of copy
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    for(auto &bot : _metabots){
 
+        // Checks if the 3D model object is available
+        if(bot.model() != "Square"){
+            std::cout <<"The 3D model '"<< bot.model() <<"' for the robot "<<bot.className()<< " "<< bot.id() << " was not found : the robot will be displayed as a square instead" <<std::endl;
+            bot.defaultModel();
+        }
+
+        // Checks if the position is not out of the zone
+        if(bot.isInZone() && !_view.checkPosition(bot.position(),bot.size().x)){
+            std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
+            bot.outOfZone();
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -40,6 +53,9 @@ void ofApp::draw(){
             bot.move(ofVec3f(1,0,0));
         }
         _view.drawBot(bot);
+        if(bot.id() == _selectedId){
+            _msg = _view.information(bot);
+        }
     }
 
     // Draw zone defined in setup()
@@ -47,7 +63,6 @@ void ofApp::draw(){
 
 
     _cam.end();
-
     ofDrawBitmapStringHighlight(_msg, 10, 20);
 
 }
@@ -78,19 +93,20 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
     _msg.clear();
 
-    /*  unsigned char pixels[3];
+    // Gets pixel value under the mouse
+    unsigned char pixels[3];
     glReadPixels(mouseX,ofGetHeight()-mouseY,1,1,GL_RGB,GL_UNSIGNED_BYTE,pixels);
-    string botSelected;
+    ofVec3f pix(pixels[0],pixels[1],pixels[2]);
 
-    botSelected = _robot1->isSelected(ofVec3f(pixels[0],pixels[1],pixels[2]));
-    if(botSelected != "nothing"){
-        _msg = "Robot selected:" + botSelected+"\n";
+
+    for(auto &bot : _metabots){
+        if(bot.color() == pix){
+            _selectedId = bot.id();
+            break;
+        }
     }
-*/
-    /*   //  std::cout << std::to_string(x)<< " "<< std::to_string(y)<<std::endl;
 
-    string botSelected = _robot->isSelected(_cam.screenToWorld(ofVec3f(x,y,_cam.getImagePlaneDistance())));
-    _msg = "Robot selected: " + botSelected + "\n";*/
+
 }
 
 //--------------------------------------------------------------
