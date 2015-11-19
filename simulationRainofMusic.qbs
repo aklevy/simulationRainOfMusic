@@ -17,6 +17,8 @@ Project{
             "src/ofApp.hpp",
             "src/view.cpp",
             "src/view.hpp",
+            "src/tree.cpp",
+            "src/tree.hpp",
             "src/metabot.cpp",
             "src/metabot.hpp",
             "src/zonegrid.cpp",
