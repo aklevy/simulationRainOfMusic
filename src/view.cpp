@@ -7,7 +7,7 @@ View::View(ofVec3f zoneDim):
 //--------------------------------------------------------------
 
 bool View::checkPosition(ofVec3f pos, int size,string model){
-
+int sizetmp = size;
     for(int i=0;i<3;i++){
         ofVec3f t = pos;
         ofVec3f squareSize = ofVec3f(size);
@@ -27,6 +27,7 @@ bool View::checkPosition(ofVec3f pos, int size,string model){
             if (model == "Sphere"){
                 sizetmp = 2 * size;
             }
+
             paintRed(t,squareSize,sizetmp);
 
             return false;
