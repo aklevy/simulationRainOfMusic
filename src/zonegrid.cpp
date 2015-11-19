@@ -1,10 +1,9 @@
 #include "zonegrid.hpp"
 
 ZoneGrid::ZoneGrid(ofVec3f dim):_dim(dim){
-   x_axis = false;
+    x_axis = false;
     y_axis = false;
     z_axis = false;
-
 }
 
 //--------------------------------------------------------------
@@ -149,12 +148,11 @@ void ZoneGrid::modifyAxis(int axis){
     else if (axis == 'y')
         y_axis = !y_axis;
     else if (axis == 'z')
-       z_axis = !z_axis;
+        z_axis = !z_axis;
 
 }
 
 //--------------------------------------------------------------
 ofVec3f ZoneGrid::dimension(){
-
     return _dim;
 }

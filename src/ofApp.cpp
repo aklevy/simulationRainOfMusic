@@ -13,23 +13,9 @@ void ofApp::setup(){
     // rather than always drawing things on top of each other
     ofEnableDepthTest();
 
-    //Initialization of zone grid
-    /*  _zoneDim = ofVec3f(600,400,400);
-    _zoneGrid = ZoneGrid(_zoneDim);
-
-    // Initialization of view
-    _view = View(_zoneDim);
-
-    // Initialization of vector containing metabot
-    _metabots = std::vector<Metabot>();
-*/
-    // Create a metabot and adds to container
-    //Metabot bot1(_zoneGrid.dimension(),ofVec3f(30,30,30),1);
-    //bot1.initialPosition(ofVec3f(0,0,0));
-    //_metabots.push_back(bot1);
-
-    _metabots.emplace_back(_zoneGrid.dimension(),ofVec3f(30,30,30),1);
-    _metabots.back().initialPosition(ofVec3f{0,0,0});
+    _metabots.emplace_back(_zoneGrid.dimension(),ofVec3f(30),1); //construct instead of copy
+   // _metabots.back().initialPosition(ofVec3f(0));
+    _metabots.emplace_back(_zoneGrid.dimension(),ofVec3f(50),2,ofVec3f(100)); //construct instead of copy
 }
 
 //--------------------------------------------------------------

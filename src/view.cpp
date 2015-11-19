@@ -23,8 +23,7 @@ void View::drawBot(Metabot& meta){
         ofPushMatrix();
         glDepthMask(false);
 
-        // ofTranslate(_x-dimZone.x/2,_y+_size/2-dimZone.y/2,_z-dimZone.z/2);
-        ofTranslate(size/2 - _zoneDim.x/2, size/2 - _zoneDim.y/2,size/2 - _zoneDim.z/2);
+        ofTranslate(ofVec3f(size/2) - _zoneDim/2);
         ofTranslate(position);
         ofSetLineWidth(1);
 
@@ -76,10 +75,9 @@ void View::paintRed(ofVec3f t, ofVec3f squareSize, int size){
     ofPushStyle();
     ofPushMatrix();
 
-    ofTranslate(size/2 - _zoneDim.x/2, size/2 - _zoneDim.y/2,size/2 - _zoneDim.z/2);
+    ofTranslate(ofVec3f(size/2) - _zoneDim/2);
     ofTranslate(t);
     ofSetColor(255,0,0); //red
-
     ofDrawBox(squareSize.x,squareSize.y,squareSize.z);
 
     ofPopMatrix();

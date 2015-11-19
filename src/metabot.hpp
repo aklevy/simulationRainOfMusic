@@ -8,9 +8,11 @@
 class Metabot
 {
 public:
-    Metabot() = default; //default constructor
+    Metabot() = delete; //forbids default constructor
+    Metabot(const Metabot&) = delete; //forbids copy constructor
 
-    Metabot(ofVec3f zoneDim,ofVec3f size,int id);
+    Metabot(Metabot&&) = default; //move constructor : ctrl-X
+    Metabot(ofVec3f zoneDim, ofVec3f size, int id, ofVec3f pos = ofVec3f(0));
 
     // Set the initial position of the robot
     void initialPosition(ofVec3f initPos);
@@ -38,12 +40,14 @@ public:
 
 private:
     ofVec3f _zoneDim;
+
     ofVec3f _size;
+    int _id;
 
     ofVec3f _position;
     ofVec3f _color;
 
-    int _id;
+
 
     bool _inZone = true;
 

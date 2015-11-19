@@ -1,4 +1,4 @@
-    #ifndef ZONEGRID_H
+#ifndef ZONEGRID_H
 #define ZONEGRID_H
 
 #include "ofMain.h"
@@ -25,8 +25,8 @@ public:
     ofVec3f dimension();
 
 private:
-        ofVec3f _dim;
-        bool x_axis, y_axis, z_axis;
+    ofVec3f _dim;
+    bool x_axis, y_axis, z_axis;
 };
 
 #endif // ZONEGRID_H
