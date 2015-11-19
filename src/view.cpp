@@ -6,9 +6,7 @@ View::View(ofVec3f zoneDim):
 
 //--------------------------------------------------------------
 
-
-
-bool View::checkPosition(ofVec3f pos, int size){
+bool View::checkPosition(ofVec3f pos, int size,string model){
 
     for(int i=0;i<3;i++){
         ofVec3f t = pos;
@@ -18,24 +16,18 @@ bool View::checkPosition(ofVec3f pos, int size){
         if ((pos[i] >= _zoneDim[i] - size) || (pos[i] < 0)){
             if (pos[i] >= _zoneDim[i] - size){
                 t[i] += size/2;
-                // std::cout<< botID() << " will be out of the zone, check position["<< std::to_string(i) <<"]"<< std::endl;
+                //std::cout<<  " will be out of the zone, check position["<< std::to_string(i) <<"]"<< std::endl;
             }
             if (pos[i] < 0) {
                 t[i] -= size/2;
-                // std::cout<< botID() << " will be out of the zone, check position["<< std::to_string(i) <<"]"<< std::endl;
+                // std::cout<<  " will be out of the zone, check position["<< std::to_string(i) <<"]"<< std::endl;
             }
             squareSize[i] = 1;
 
-            ofPushStyle();
-            ofPushMatrix();
-
-            ofTranslate(ofVec3f(size/2) - _zoneDim/2);
-            ofTranslate(t);
-            ofSetColor(255,0,0); //red
-            ofDrawBox(squareSize.x,squareSize.y,squareSize.z);
-
-            ofPopMatrix();
-            ofPopStyle();
+            if (model == "Sphere"){
+                sizetmp = 2 * size;
+            }
+            paintRed(t,squareSize,sizetmp);
 
             return false;
         }
@@ -43,18 +35,17 @@ bool View::checkPosition(ofVec3f pos, int size){
     return true;
 
 }
+void View::paintRed(ofVec3f trans, ofVec3f squareSize, int size){
+    ofPushStyle();
+    ofPushMatrix();
 
-string View::information(Metabot &bot){
-    string msg;
+    ofTranslate(ofVec3f(size/2) - _zoneDim/2);
+    ofTranslate(trans);
+    ofSetColor(255,0,0); //red
+    ofDrawBox(squareSize.x,squareSize.y,squareSize.z);
 
-    msg = "Robot selected:"
-            + bot.className() + " "
-            + std::to_string( bot.id()) + "\n";
-    msg += "at position ("
-            + std::to_string((int)bot.position().x)+", "
-            + std::to_string((int)bot.position().y)+", "
-            + std::to_string((int)bot.position().z)+") ";
-
-    return msg;
+    ofPopMatrix();
+    ofPopStyle();
 }
+
 

@@ -1,35 +1,35 @@
-#ifndef METABOT_H
-#define METABOT_H
+#ifndef DRONE_H
+#define DRONE_H
 
 #include "ofMain.h"
 //Point(0,0,0) is at the back left corner
 
 /*
-* Metabot class
+* Drone class
 * */
-class Metabot
+class Drone
 {
 public:
-    Metabot() = delete; //forbids default constructor
-    Metabot(const Metabot&) = delete; //forbids copy constructor
+    Drone() = delete; //forbids default constructor
+    Drone(const Drone&) = delete; //forbids copy constructor
 
-    Metabot(Metabot&&) = default; //move constructor : ctrl-X
-    Metabot( int id, ofVec3f size, ofVec3f pos = ofVec3f(0), string model = "Square");
+    Drone(Drone&&) = default; //move constructor : ctrl-X
+    Drone(int id, ofVec3f size, ofVec3f pos = ofVec3f(0), string model = "Sphere");
 
     // Moves to the next position
     void move(ofVec3f speed);
 
-    // Modifies the model to the default one (=Square)
-    void modelToDefault(){_3dmodel = "Square";}
+    // Modifies the model to the default one (=Sphere)
+    void modelToDefault(){_3dmodel = "Sphere";}
 
     // Set inZone to false : bot out of zone
     void outOfZone(){_inZone = false;}
 
-    // Returns classname (=Metabot)
-    string className() const {return "Metabot";}
+    // Returns classname (=Drone)
+    string className() const {return "Drone";}
 
-    // Returns the default model (=square)
-    string defaultModel(){return "Square";}
+    // Returns the default model (=sphere)
+    string defaultModel(){return "Sphere";}
 
     // Returns id
     int id() const {return _id;}
@@ -50,16 +50,16 @@ public:
     string model() const {return _3dmodel;}
 
 private:
-    // Metabot individual id
+    // Drone individual id
     int _id;
 
-    // Metabot size
+    // Drone size
     ofVec3f _size;
 
-    // Metabot current position
+    // Drone current position
     ofVec3f _position;
 
-    // Metabot color (temporary used in selecting in ofApp)
+    // Drone color (temporary used in selecting in ofApp)
     ofVec3f _color;
 
     // boolean to check if the position is inbound or not
@@ -68,7 +68,6 @@ private:
     // 3D model corresponding
     string _3dmodel;
 
-
 };
 
-#endif // METABOT_H
+#endif // DRONE_H

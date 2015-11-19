@@ -4,7 +4,8 @@
 ofApp::ofApp():
     _zoneDim(600,400,400),
     _zoneGrid(_zoneDim), // no need to write explicitely constructor
-    _view(_zoneDim){
+    _view(_zoneDim),
+    _pixel(0){
 
 }
 
@@ -13,26 +14,22 @@ void ofApp::setup(){
     // rather than always drawing things on top of each other
     ofEnableDepthTest();
 
-    _metabots.emplace_back(_zoneGrid.dimension(),ofVec3f(30),1); //construct instead of copy
+    // Fill Metabot vector
+    _metabots.emplace_back(1,ofVec3f(30)); //construct instead of copy
     // _metabots.back().initialPosition(ofVec3f(0));
-    _metabots.emplace_back(_zoneGrid.dimension(),ofVec3f(50),2,ofVec3f(100),"Metabot.obj"); //construct instead of copy
-}
+    _metabots.emplace_back(2,ofVec3f(50),ofVec3f(100),"metabot.obj"); //construct instead of copy
 
+    // Fill Drone vector
+    _drones.emplace_back(1,ofVec3f(10),ofVec3f(0,200,50),"drone.obj"); //construct instead of copy
+
+}
 //--------------------------------------------------------------
 void ofApp::update(){
-    for(auto &bot : _metabots){
-
-        // Checks if the 3D model object is available
-        if(bot.model() != "Square"){
-            std::cout <<"The 3D model '"<< bot.model() <<"' for the robot "<<bot.className()<< " "<< bot.id() << " was not found : the robot will be displayed as a square instead" <<std::endl;
-            bot.defaultModel();
-        }
-
-        // Checks if the position is not out of the zone
-        if(bot.isInZone() && !_view.checkPosition(bot.position(),bot.size().x)){
-            std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
-            bot.outOfZone();
-        }
+    for(auto &metabot : _metabots){
+        updateOneBot(metabot);
+    }
+    for(auto &drone : _drones){
+        updateOneBot(drone);
     }
 }
 
@@ -47,15 +44,14 @@ void ofApp::draw(){
     _zoneGrid.drawAxes();
     _zoneGrid.drawGrid();
 
-    //Draw bot defined in setup()
+    //Draw Metabots
     for(auto &bot : _metabots){
-        if(bot.isInZone()){
-            bot.move(ofVec3f(1,0,0));
-        }
-        _view.drawBot(bot);
-        if(bot.id() == _selectedId){
-            _msg = _view.information(bot);
-        }
+        drawOneBot(bot);
+    }
+
+    //Draw Drones
+    for(auto &bot : _drones){
+        drawOneBot(bot);
     }
 
     // Draw zone defined in setup()
@@ -96,17 +92,7 @@ void ofApp::mousePressed(int x, int y, int button){
     // Gets pixel value under the mouse
     unsigned char pixels[3];
     glReadPixels(mouseX,ofGetHeight()-mouseY,1,1,GL_RGB,GL_UNSIGNED_BYTE,pixels);
-    ofVec3f pix(pixels[0],pixels[1],pixels[2]);
-
-
-    for(auto &bot : _metabots){
-        if(bot.color() == pix){
-            _selectedId = bot.id();
-            break;
-        }
-    }
-
-
+    _pixel = ofVec3f(pixels[0],pixels[1],pixels[2]);
 }
 
 //--------------------------------------------------------------
