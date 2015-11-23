@@ -10,26 +10,32 @@ ofApp::ofApp():
 }
 
 void ofApp::setup(){
+    ofSetLogLevel(OF_LOG_VERBOSE);
+
     // this uses depth information for occlusion
     // rather than always drawing things on top of each other
     ofEnableDepthTest();
 
     // Fill Metabot vector
-    _metabots.emplace_back(1,ofVec3f(30)); //construct instead of copy
-    // _metabots.back().initialPosition(ofVec3f(0));
-    _metabots.emplace_back(2,ofVec3f(50),ofVec3f(100),"metabot.obj"); //construct instead of copy
+    _metabots.emplace_back(1); //construct instead of copy
 
+    _metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
     // Fill Drone vector
-    _drones.emplace_back(1,ofVec3f(10),ofVec3f(0,200,50),"drone.obj"); //construct instead of copy
+    _drones.emplace_back(1,ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
 
 }
 //--------------------------------------------------------------
 void ofApp::update(){
     for(auto &metabot : _metabots){
         updateOneBot(metabot);
+
     }
     for(auto &drone : _drones){
         updateOneBot(drone);
+        drone.updateBot();
     }
 }
 

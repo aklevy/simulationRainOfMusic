@@ -16,25 +16,28 @@ public:
     // Updates one robot
     template<typename Bot_T>
     void updateOneBot(Bot_T& bot){
-            // Checks if the 3D model object is available
-            if(bot.model() != bot.defaultModel()){
-                std::cout <<"The 3D model '"<< bot.model()
-                         <<"' for the robot "<<bot.className() << " "<< bot.id()
-                        << " was not found : the robot will be displayed as a "
-                          << bot.defaultModel() <<" instead" <<std::endl;
-                bot.modelToDefault();
-            }
 
-            // Checks if the position is not out of the zone
-            if(bot.isInZone() && !_view.checkPosition(bot.position(),bot.size().x,bot.model())){
-                std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
-                bot.outOfZone();
-            }
+        // Checks if the 3D model object is available
+        /*if(bot.model() != bot.defaultModel()){
+            std::cout <<"The 3D model '"<< bot.model()
+                     <<"' for the robot "<<bot.className() << " "<< bot.id()
+                    << " was not found : the robot will be displayed as a "
+                    << bot.defaultModel() <<" instead" <<std::endl;
+            bot.modelToDefault();
+            //    std::cout << bot.model()<<std::endl;
+        }*/
 
-            // Updates the message to be displayed
-            if(bot.color() == _pixel){
-                _msg = _view.information(bot);
-            }
+        // Checks if the position is not out of the zone
+        if(bot.isInZone() && !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
+            std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
+            bot.outOfZone();
+        }
+
+        // Updates the message to be displayed
+        if(bot.color() == _pixel){
+            _msg = _view.information(bot);
+        }
+
     }
 
     // Draws one bot
@@ -42,12 +45,12 @@ public:
     void drawOneBot(Bot_T& bot){
         // Checks if the bot is not ouf of zone
         if(bot.isInZone()){
-            bot.move(ofVec3f(1,0,0));
+            bot.move(ofVec3f(1,0,1));
         }
         else{
-            _view.checkPosition(bot.position(),bot.size().x,bot.model());
+            _view.checkPosition(bot.position(),bot.size().x,bot.modelName());
         }
-        _view.drawBot(bot);
+        _view.drawBot(bot.position(),bot.color(),bot.size().x,bot.modelName(),bot.loader());
     }
 
 

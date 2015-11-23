@@ -2,64 +2,27 @@
 #define VIEW_H
 
 #include "ofMain.h"
+#include "ofxAssimpModelLoader.h"
 #include "metabot.hpp"
-
-class BotDuPlop
-{
-public :
-    std::string model() const
-    { return {}; }
-    ofVec3f position() const
-    { return {}; }
-    ofVec3f color() const
-    { return {}; }
-    ofVec3f size() const
-    { return {}; }
-};
 
 class View
 {
 public:
     explicit View(ofVec3f zoneDim); // avoids implicit conversion ofVec3f->View
 
-    // Draws the Robot given
-    template<typename Bot_T>
-    void drawBot(const Bot_T& bot){
-        ofVec3f position = bot.position();
-        ofVec3f color = bot.color();
-        int size = bot.size().x;
+     // Draws the Robot with the given parameters
+    void drawBot(const ofVec3f position, const ofVec3f color, const int size, string modelName, ofxAssimpModelLoader model);
 
-        ofPushStyle();
-        ofPushMatrix();
-        glDepthMask(false);
-
-        ofTranslate(ofVec3f(size/2) - _zoneDim/2);
-        ofTranslate(position);
-        ofSetLineWidth(1);
-
-        ofSetColor(color.x,color.y,color.z);
-        ofFill();
-        if(bot.model() == "Square"){
-        ofDrawBox(size);
-
-        ofSetColor(0,0,0);
-        ofNoFill();
-        ofDrawBox(size);
-        }
-        else if(bot.model() == "Sphere"){
-        ofDrawSphere(size);
-        }
-
-        glDepthMask(true);
-        ofPopMatrix();
-        ofPopStyle();
-    }
+   // Draws the 3d object with the given parameters
+    void draw3dObject(const ofVec3f position, const int size, string modelName,ofxAssimpModelLoader model);
 
     // Checks if the robot is out of the zone
     bool checkPosition(ofVec3f pos, int size, string model);
 
     // Changes the face out color to red
-    void paintRed(ofVec3f trans, ofVec3f squareSize, int size);
+    void paintRed(ofVec3f trans, ofVec3f squareSize, int size, string model);
+
+
 
     // Returns the information message contaning the given Robot's data
     template<typename Bot_T>
@@ -80,6 +43,10 @@ public:
 private:
     // choregraphy zone dimension
     ofVec3f _zoneDim;
+
+    // 3D object model loader
+   // ofxAssimpModelLoader _model;
+
 
 
 };

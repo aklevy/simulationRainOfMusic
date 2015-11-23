@@ -2,6 +2,8 @@
 #define METABOT_H
 
 #include "ofMain.h"
+#include "ofxAssimpModelLoader.h"
+
 //Point(0,0,0) is at the back left corner
 
 /*
@@ -14,13 +16,19 @@ public:
     Metabot(const Metabot&) = delete; //forbids copy constructor
 
     Metabot(Metabot&&) = default; //move constructor : ctrl-X
-    Metabot( int id, ofVec3f size, ofVec3f pos = ofVec3f(0), string model = "Square");
+    Metabot(int id, ofVec3f size = ofVec3f(30), ofVec3f pos = ofVec3f(0), string modelName = "Square");
+
+    // Load the 3d model
+    bool load();
+
+    // Update 3D model
+    void updateBot(){_loader.update();}
 
     // Moves to the next position
     void move(ofVec3f speed);
 
     // Modifies the model to the default one (=Square)
-    void modelToDefault(){_3dmodel = "Square";}
+    void modelToDefault(){_modelName = defaultModel();}
 
     // Set inZone to false : bot out of zone
     void outOfZone(){_inZone = false;}
@@ -46,9 +54,11 @@ public:
     // Returns if the bot is in zone or not
     bool isInZone() const {return _inZone;}
 
-    // Returns 3D model object
-    string model() const {return _3dmodel;}
+    // Returns 3D model object name
+    string modelName() const {return _modelName;}
 
+    // Returns 3D model object loader
+    ofxAssimpModelLoader loader() const {return _loader;}
 private:
     // Metabot individual id
     int _id;
@@ -65,10 +75,11 @@ private:
     // boolean to check if the position is inbound or not
     bool _inZone = true;
 
-    // 3D model corresponding
-    string _3dmodel;
+    // 3D model name
+    string _modelName;
 
-
+    // 3D object model loader
+    ofxAssimpModelLoader _loader;
 };
 
 #endif // METABOT_H
