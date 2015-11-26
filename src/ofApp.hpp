@@ -45,7 +45,7 @@ public:
     void drawOneBot(Bot_T& bot){
         // Checks if the bot is not ouf of zone
         if(bot.isInZone()){
-            bot.move(ofVec3f(1,0,1));
+            bot.move(ofVec3f(0,0,0));
         }
         else{
             _view.checkPosition(bot.position(),bot.size().x,bot.modelName());

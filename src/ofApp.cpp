@@ -65,7 +65,13 @@ void ofApp::draw(){
 
 
     _cam.end();
+
+    // Displays the message concerning selected robot
     ofDrawBitmapStringHighlight(_msg, 10, 20);
+
+    // Displays general message
+    string _msgGeneral = "Time : "+ std::to_string((int)ofGetElapsedTimeMicros()*pow(10,-6))+"\n";
+    ofDrawBitmapStringHighlight(_msgGeneral, 10, 680);
 
 }
 
