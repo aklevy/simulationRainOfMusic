@@ -17,15 +17,16 @@ Project{
             "src/ofApp.hpp",
             "src/view.cpp",
             "src/view.hpp",
-            "src/tree.cpp",
-            "src/tree.hpp",
             "src/metabot.cpp",
             "src/metabot.hpp",
+            "src/drone.cpp",
+            "src/drone.hpp",
             "src/zonegrid.cpp",
             "src/zonegrid.hpp",
         ]
 
         of.addons: [
+            'ofxAssimpModelLoader',
         ]
 
         // additional flags for the project. the of module sets some
