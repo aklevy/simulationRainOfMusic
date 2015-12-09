@@ -10,7 +10,11 @@ ofApp::ofApp():
 }
 
 void ofApp::setup(){
-    ofSetLogLevel(OF_LOG_VERBOSE);
+    // To print out log, uncomment the line below
+    // ofSetLogLevel(OF_LOG_VERBOSE);
+
+    // To change the frame rate, uncomment the line below
+    // ofSetFrameRate(60);
 
     // this uses depth information for occlusion
     // rather than always drawing things on top of each other
@@ -18,11 +22,12 @@ void ofApp::setup(){
 
     // Fill Metabot vector
     _metabots.emplace_back(1); //construct instead of copy
-
-    _metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj"); //construct instead of copy
+    _metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50));
+    // Example for 3D model : warning : slows down the app
+    /*_metabots.emplace_back(3,ofVec3f(40),ofVec3f(100,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj"); //construct instead of copy
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
-    }
+    }*/
     // Fill Drone vector
     _drones.emplace_back(1,ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
 

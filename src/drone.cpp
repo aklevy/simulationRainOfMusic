@@ -27,6 +27,20 @@ bool Drone::load(){
 void Drone::move(ofVec3f speed){
     _position += speed;
 }
+//--------------------------------------------------------------
 
+string Drone::info() const
+{
+    string msg;
+    msg = "Robot selected : "
+            + className() + " "
+            + std::to_string( id()) + "\n";
+    msg += "at position ("
+            + std::to_string((int)position().x)+", "
+            + std::to_string((int)position().y)+", "
+            + std::to_string((int)position().z)+") \n";
+
+    return msg;
+}
 //--------------------------------------------------------------
 

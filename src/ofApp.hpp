@@ -35,7 +35,7 @@ public:
 
         // Updates the message to be displayed
         if(bot.color() == _pixel){
-            _msg = _view.information(bot);
+            _msg = bot.info();
         }
 
     }
@@ -45,7 +45,7 @@ public:
     void drawOneBot(Bot_T& bot){
         // Checks if the bot is not ouf of zone
         if(bot.isInZone()){
-            bot.move(ofVec3f(0,0,0));
+            bot.move(ofVec3f(3,0,1));
         }
         else{
             _view.checkPosition(bot.position(),bot.size().x,bot.modelName());

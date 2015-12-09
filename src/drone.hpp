@@ -35,6 +35,9 @@ public:
     // Set inZone to false : bot out of zone
     void outOfZone(){_inZone = false;}
 
+    // Returns information on the drone
+    string info() const;
+
     // Returns classname (=Drone)
     string className() const {return "Drone";}
 

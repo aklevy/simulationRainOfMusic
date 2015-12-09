@@ -25,7 +25,7 @@ public:
 
 
     // Returns the information message contaning the given Robot's data
-    template<typename Bot_T>
+  /*  template<typename Bot_T>
     string information(const Bot_T& bot){
         string msg;
         msg = "Robot selected : "
@@ -38,16 +38,11 @@ public:
 
         return msg;
     }
-
+*/
 
 private:
     // choregraphy zone dimension
     ofVec3f _zoneDim;
-
-    // 3D object model loader
-   // ofxAssimpModelLoader _model;
-
-
 
 };
 

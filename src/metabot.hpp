@@ -8,6 +8,8 @@
 
 /*
 * Metabot class
+*
+* 3d Model tends to slow down the movement
 * */
 class Metabot
 {
@@ -16,7 +18,11 @@ public:
     Metabot(const Metabot&) = delete; //forbids copy constructor
 
     Metabot(Metabot&&) = default; //move constructor : ctrl-X
-    Metabot(int id, ofVec3f size = ofVec3f(30), ofVec3f pos = ofVec3f(0), string modelName = "Square");
+    Metabot(int id,
+            ofVec3f size = ofVec3f(30),
+            ofVec3f pos = ofVec3f(0),
+            string modelName = "Square",
+            float freq = 2);
 
     // Load the 3d model
     bool load();
@@ -25,13 +31,17 @@ public:
     void updateBot(){_loader.update();}
 
     // Moves to the next position
-    void move(ofVec3f speed);
+    void move(ofVec3f speed); // the speed should be automatically updated,
+                              // so move() will not take argument (attribute _speed to ba added)
 
     // Modifies the model to the default one (=Square)
     void modelToDefault(){_modelName = defaultModel();}
 
     // Set inZone to false : bot out of zone
     void outOfZone(){_inZone = false;}
+
+    // Returns information on the metabot
+    string info() const;
 
     // Returns classname (=Metabot)
     string className() const {return "Metabot";}
@@ -50,6 +60,9 @@ public:
 
     // Returns color
     ofVec3f color() const {return _color;}
+
+    // Returns walking frequency
+    float frequency() const {return _frequency;}
 
     // Returns if the bot is in zone or not
     bool isInZone() const {return _inZone;}
@@ -71,6 +84,9 @@ private:
 
     // Metabot color (temporary used in selecting in ofApp)
     ofVec3f _color;
+
+    // Frequency of the walk, in Hz (default = 2Hz)
+    float _frequency;
 
     // boolean to check if the position is inbound or not
     bool _inZone = true;
