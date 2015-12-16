@@ -28,7 +28,7 @@ bool Metabot::load(){
 //--------------------------------------------------------------
 void Metabot::move(ofVec3f speed){
     _position += speed;
-    _frequency = speed.length();
+    //_frequency = speed.length();
 }
 
 //--------------------------------------------------------------

@@ -4,7 +4,7 @@ View::View(ofVec3f zoneDim):
     _zoneDim(zoneDim){
 }
 //--------------------------------------------------------------
-void View::drawBot(const ofVec3f position,const ofVec3f color, const int size, string modelName,ofxAssimpModelLoader model) {
+void View::drawBot(const ofVec3f position,const ofVec3f color, const int size, const string& modelName, ofxAssimpModelLoader& model) {
 
     ofPushStyle();
     ofSetColor(color.x,color.y,color.z);
@@ -45,8 +45,7 @@ void View::drawBot(const ofVec3f position,const ofVec3f color, const int size, s
 }
 //--------------------------------------------------------------
 
-//--------------------------------------------------------------
-void View::draw3dObject(const ofVec3f position, const int size, string modelName, ofxAssimpModelLoader model){
+void View::draw3dObject(const ofVec3f position, const int size, const string& modelName, ofxAssimpModelLoader& model){
     // Load 3d object
 
 
@@ -87,8 +86,9 @@ bool View::checkPosition(ofVec3f pos, int size,string model){
         }
     }
     return true;
-
 }
+//--------------------------------------------------------------
+
 void View::paintRed(ofVec3f trans, ofVec3f squareSize, int size,string model){
     ofPushStyle();
     ofPushMatrix();
@@ -112,6 +112,43 @@ void View::paintRed(ofVec3f trans, ofVec3f squareSize, int size,string model){
 
     ofPopMatrix();
     ofPopStyle();
+}
+
+bool View::detectCollision(ofVec3f pos, ofVec3f size, ofVec3f otherPos, ofVec3f otherSize)
+{
+    float dist = pos.distance(otherPos) - sqrt(2)/2*(size.x + otherSize.x);//distance - radius of bounding sphere
+    if (dist < _collisionDistance){
+        ofVec3f middle = (pos+otherPos)/2;//pos+dist/2;
+        drawCollisionCircle(middle,sqrt(2)/2*(size.x + otherSize.x));
+        //drawBoundingSphere(middle,max(otherSize.x,size.x));
+       // std::cout << "collision"<<std::endl;
+       return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------
+
+void View::drawCollisionCircle(  const ofVec3f& position, const int size){
+
+    ofPushMatrix();
+    ofTranslate(ofVec3f(size/2) - _zoneDim/2);
+    ofPushStyle();
+    ofSetColor(255,0,0);
+  //  ofSpherePrimitive sphere;
+   // sphere.setRadius(size/2);
+    //sphere.move(ofVec3f(size/2) - _zoneDim/2);
+    //std::cout << std::to_string(position.x)<<" "<< std::to_string(position.z)<<std::endl;
+   // sphere.setPosition(position);
+    //  of3dGraphics::drawSphere(position,size/2);
+   // sphere.draw();
+    ofNoFill();
+   ofDrawCircle(position,size/2);
+    ofPopStyle();
+    ofPopMatrix();
+
+    //    ofTranslate(ofVec3f(size/2) - _zoneDim/2);
+
 }
 
 

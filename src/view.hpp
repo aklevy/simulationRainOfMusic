@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include "ofMain.h"
+//#include "of3dGraphics.h"
 #include "ofxAssimpModelLoader.h"
 #include "metabot.hpp"
 
@@ -11,18 +12,22 @@ public:
     explicit View(ofVec3f zoneDim); // avoids implicit conversion ofVec3f->View
 
      // Draws the Robot with the given parameters
-    void drawBot(const ofVec3f position, const ofVec3f color, const int size, string modelName, ofxAssimpModelLoader model);
+    void drawBot(const ofVec3f position, const ofVec3f color, const int size, const string& modelName, ofxAssimpModelLoader& model);
 
    // Draws the 3d object with the given parameters
-    void draw3dObject(const ofVec3f position, const int size, string modelName,ofxAssimpModelLoader model);
+    void draw3dObject(const ofVec3f position, const int size, const string& modelName,ofxAssimpModelLoader& model);
 
     // Checks if the robot is out of the zone
     bool checkPosition(ofVec3f pos, int size, string model);
 
-    // Changes the face out color to red
+    // Paints the face out of the zone in red
     void paintRed(ofVec3f trans, ofVec3f squareSize, int size, string model);
 
+    // Detects if there is a collision between two robots
+    bool detectCollision(ofVec3f pos, ofVec3f size, ofVec3f otherPos, ofVec3f otherSize);
 
+    // Draw the bounding sphere of radius sqrt(2)*size/2 (sphere surrounding a box)
+    void drawCollisionCircle(const ofVec3f &position, const int size);
 
     // Returns the information message contaning the given Robot's data
   /*  template<typename Bot_T>
@@ -43,6 +48,9 @@ public:
 private:
     // choregraphy zone dimension
     ofVec3f _zoneDim;
+
+    // distance from which two bots are considered to be in collision
+    float _collisionDistance = 1;
 
 };
 

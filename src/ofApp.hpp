@@ -30,14 +30,26 @@ public:
         // Checks if the position is not out of the zone
         if(bot.isInZone() && !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
             std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
-            bot.outOfZone();
+           /* _warning = "The "
+                    + bot.className() + " " + std::to_string(bot.id())
+                    + " is out of the zone\n";
+            */bot.outOfZone();
         }
 
         // Updates the message to be displayed
-        if(bot.color() == _pixel){
+        if(bot.color() == _pixel && _msg.empty()){
             _msg = bot.info();
         }
 
+        // if collision detected
+        if(bot.isInCollision() && _warning.empty()){
+            _warning = "First collision detected for the "
+                     + bot.className() + " " + std::to_string(bot.id())
+                     + "\n at position ("
+                     + std::to_string((int)bot.position().x)+", "
+                     + std::to_string((int)bot.position().y)+", "
+                     + std::to_string((int)bot.position().z)+") \n";
+         }
     }
 
     // Draws one bot
@@ -67,7 +79,7 @@ public:
     void gotMessage(ofMessage msg);
 
 
-    string _msg;
+    string _msg,_warning;
 
 private:
     // Camera

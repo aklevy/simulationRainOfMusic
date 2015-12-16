@@ -40,6 +40,9 @@ public:
     // Set inZone to false : bot out of zone
     void outOfZone(){_inZone = false;}
 
+    // Set collision to true : bot in collision with another
+    void collision(){_collision = true;}
+
     // Returns information on the metabot
     string info() const;
 
@@ -67,11 +70,14 @@ public:
     // Returns if the bot is in zone or not
     bool isInZone() const {return _inZone;}
 
+    // Returns if the bot is in collision or not
+    bool isInCollision() const {return _collision;}
+
     // Returns 3D model object name
     string modelName() const {return _modelName;}
 
     // Returns 3D model object loader
-    ofxAssimpModelLoader loader() const {return _loader;}
+    ofxAssimpModelLoader& loader() {return _loader;}
 private:
     // Metabot individual id
     int _id;
@@ -90,6 +96,9 @@ private:
 
     // boolean to check if the position is inbound or not
     bool _inZone = true;
+
+    // boolean for the collision
+    bool _collision = false;
 
     // 3D model name
     string _modelName;
