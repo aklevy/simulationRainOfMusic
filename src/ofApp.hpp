@@ -43,12 +43,13 @@ public:
 
         // if collision detected
         if(bot.isInCollision() && _warning.empty()){
-            _warning = "First collision detected for the "
+            _warning = "Warning: First collision detected for the "
                      + bot.className() + " " + std::to_string(bot.id())
                      + "\n at position ("
                      + std::to_string((int)bot.position().x)+", "
                      + std::to_string((int)bot.position().y)+", "
                      + std::to_string((int)bot.position().z)+") \n";
+
          }
     }
 
@@ -57,7 +58,10 @@ public:
     void drawOneBot(Bot_T& bot){
         // Checks if the bot is not ouf of zone
         if(bot.isInZone()){
-            bot.move(ofVec3f(3,0,1));
+            if(bot.id() == 1)
+                bot.move(ofVec3f(3,0,1));
+            else
+                bot.move(ofVec3f(-1,0,0.5));
         }
         else{
             _view.checkPosition(bot.position(),bot.size().x,bot.modelName());

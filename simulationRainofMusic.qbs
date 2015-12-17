@@ -23,27 +23,33 @@ Project{
             "src/drone.hpp",
             "src/zonegrid.cpp",
             "src/zonegrid.hpp",
+            "src/network.cpp",
+            "src/network.hpp"
         ]
 
         of.addons: [
-            'ofxAssimpModelLoader',
+            'ofxAssimpModelLoader'
         ]
 
         // additional flags for the project. the of module sets some
         // flags by default to add the core libraries, search paths...
         // this flags can be augmented through the following properties:
         of.pkgConfigs: []       // list of additional system pkgs to include
-        of.includePaths: []     // include search paths
         of.cFlags: []           // flags passed to the c compiler
-        of.cxxFlags: []         // flags passed to the c++ compiler
+        of.cxxFlags: ["-std=c++11"]         // flags passed to the c++ compiler
         of.linkerFlags: []      // flags passed to the linker
         of.defines: []          // defines are passed as -D to the compiler
                                 // and can be checked with #ifdef or #if in the code
-
+        of.includePaths: [
+            ".",
+            "/opt/API/Headers"
+        ]
         // other flags can be set through the cpp module: http://doc.qt.io/qbs/cpp-module.html
         // eg: this will enable ccache when compiling
         //
         // cpp.compilerWrapper: 'ccache'
+        cpp.libraryPaths: ["/opt/build-api/Implementations/Jamoma"]
+        cpp.dynamicLibraries: "APIJamoma"
 
         Depends{
             name: "cpp"
