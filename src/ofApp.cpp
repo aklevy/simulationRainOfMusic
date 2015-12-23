@@ -5,8 +5,8 @@ ofApp::ofApp():
     _zoneDim(600,400,400),
     _zoneGrid(_zoneDim), // no need to write explicitely constructor
     _view(_zoneDim),
-    _pixel(0){
-
+    _pixel(0),
+    _nw(){
 }
 
 void ofApp::setup(){
@@ -32,8 +32,8 @@ void ofApp::setup(){
 
     // Fill Drone vector
     _drones.emplace_back(1,ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
-
 }
+
 //--------------------------------------------------------------
 void ofApp::update(){
     for(auto &metabot : _metabots){
