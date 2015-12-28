@@ -1,6 +1,6 @@
 #include "metabot.hpp"
 
-Metabot::Metabot(int id , ofVec3f size, ofVec3f pos, string modelName, float freq):
+Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f pos, string modelName, float freq):
     _id(id),
     _size(size),
     _position(pos),
@@ -10,6 +10,7 @@ Metabot::Metabot(int id , ofVec3f size, ofVec3f pos, string modelName, float fre
     /* if(string::npos != modelName.find(".")){
         _3dmodel = PATH+modelName;
     }*/
+    shareMetabot(parentNode);
 }
 
 //--------------------------------------------------------------
@@ -49,5 +50,14 @@ string Metabot::info() const
             + std::to_string(frequency()) + " Hz";
     return msg;
 }
+
+void Metabot::shareMetabot(std::shared_ptr<Node> parentNode){
+    auto metabotNode = *(parentNode->emplace(parentNode->children().cend(), "Metabot "+ to_string(id())));
+    auto idAddress = metabotNode->createAddress(Value::Type::INT);
+    Int i(_id);
+    idAddress->pushValue(&i);
+}
+
+
 
 

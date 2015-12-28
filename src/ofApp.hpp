@@ -1,10 +1,13 @@
 #pragma once
 
+#include <thread>
+
 #include "ofMain.h"
 #include "view.hpp"
 #include "zonegrid.hpp"
 #include "metabot.hpp"
 #include "drone.hpp"
+#include "network.hpp"
 
 class ofApp : public ofBaseApp{
 public:
@@ -129,4 +132,7 @@ private:
 
     // Boolean for the stop/play the choeregraphy
     bool play = true;
+
+    // Network for communication
+    Network _nw;
 };

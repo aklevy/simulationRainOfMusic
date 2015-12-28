@@ -4,6 +4,24 @@
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
 
+#if defined(Bool)
+#undef Bool
+#endif
+#if defined(True)
+#undef True
+#endif
+#if defined(False)
+#undef False
+#endif
+
+#include "Network/Address.h"
+#include "Network/Device.h"
+#include "Network/Protocol/Local.h"
+#include "Network/Protocol/Minuit.h"
+
+using namespace OSSIA;
+using namespace std;
+
 #define PATH ""
 
 //Point(0,0,0) is at the back left corner
@@ -18,7 +36,7 @@ public:
     Drone(const Drone&) = delete; //forbids copy constructor
 
     Drone(Drone&&) = default; //move constructor : ctrl-X
-    Drone(int id, ofVec3f size, ofVec3f pos = ofVec3f(0), string modelName = "Sphere");
+    Drone(int id, std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f pos = ofVec3f(0), string modelName = "Sphere");
 
     // Load the 3d model
     bool load();
@@ -71,6 +89,9 @@ public:
     // Returns 3D model object loader
     ofxAssimpModelLoader& loader() {return _loader;}
 
+    // Share the drone with i-score
+    void shareDrone(std::shared_ptr<Node> parentNode);
+
 private:
     // Drone individual id
     int _id;
@@ -95,6 +116,10 @@ private:
 
     // 3D object model loader
     ofxAssimpModelLoader _loader;
+
+    // node in the network
+    //std::shared_ptr<Node> droneNode;
+    //std::shared_ptr<Address> idAddress;
 };
 
 #endif // DRONE_H

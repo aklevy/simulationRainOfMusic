@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <functional>
+#include <thread>
 
 #if defined(Bool)
 #undef Bool
@@ -19,10 +20,26 @@
 #include "Network/Device.h"
 #include "Network/Protocol/Local.h"
 #include "Network/Protocol/Minuit.h"
-class network
+
+using namespace OSSIA;
+
+class Network
 {
 public:
-    network();
+    Network();
+    ~Network();
+
+    // expose the application and a scene node to i-score
+    void publication();
+
+    // get the scene node
+    std::shared_ptr<Node> getSceneNode();
+
+private:
+    std::shared_ptr<Protocol> localProtocol;
+    std::shared_ptr<Device> localDevice;
+    std::shared_ptr<Node> localSceneNode;
+    std::thread networkThread;
 };
 
 #endif // NETWORK_H
