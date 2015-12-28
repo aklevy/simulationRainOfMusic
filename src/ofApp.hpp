@@ -109,5 +109,5 @@ private:
     ofVec3f _pixel;
 
     // Network for communication
-    network _nw;
+    Network _nw;
 };

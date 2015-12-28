@@ -4,6 +4,24 @@
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
 
+#if defined(Bool)
+#undef Bool
+#endif
+#if defined(True)
+#undef True
+#endif
+#if defined(False)
+#undef False
+#endif
+
+#include "Network/Address.h"
+#include "Network/Device.h"
+#include "Network/Protocol/Local.h"
+#include "Network/Protocol/Minuit.h"
+
+using namespace OSSIA;
+using namespace std;
+
 //Point(0,0,0) is at the back left corner
 
 /*
@@ -19,6 +37,7 @@ public:
 
     Metabot(Metabot&&) = default; //move constructor : ctrl-X
     Metabot(int id,
+            std::shared_ptr<Node> parentNode,
             ofVec3f size = ofVec3f(30),
             ofVec3f pos = ofVec3f(0),
             string modelName = "Square",
@@ -78,6 +97,10 @@ public:
 
     // Returns 3D model object loader
     ofxAssimpModelLoader& loader() {return _loader;}
+
+    // Share the metabot with i-score
+    void shareMetabot(std::shared_ptr<Node> parentNode);
+
 private:
     // Metabot individual id
     int _id;
@@ -105,6 +128,10 @@ private:
 
     // 3D object model loader
     ofxAssimpModelLoader _loader;
+
+    // node in the network
+    //std::shared_ptr<Node> metabotNode;
+    //std::shared_ptr<Address> idAddress;
 };
 
 #endif // METABOT_H

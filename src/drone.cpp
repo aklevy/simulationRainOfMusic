@@ -1,13 +1,12 @@
 #include "drone.hpp"
 
-Drone::Drone(int id , ofVec3f size, ofVec3f pos, string modelName):
+Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f pos, string modelName):
     _id(id),
     _size(size),
     _position(pos),
     _color(ofVec3f(0,200+id,0)),
     _modelName(modelName){
-
-
+    shareDrone(parentNode);
 }
 
 //--------------------------------------------------------------
@@ -44,3 +43,9 @@ string Drone::info() const
 }
 //--------------------------------------------------------------
 
+void Drone::shareDrone(std::shared_ptr<Node> parentNode){
+    auto droneNode = *(parentNode->emplace(parentNode->children().cend(), "Drone "+ to_string(id())));
+    auto idAddress = droneNode->createAddress(Value::Type::INT);
+    Int i(_id);
+    idAddress->pushValue(&i);
+}
