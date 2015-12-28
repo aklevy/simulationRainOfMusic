@@ -21,7 +21,7 @@ public:
     bool checkPosition(ofVec3f pos, int size, string model);
 
     // Paints the face out of the zone in red
-    void paintRed(ofVec3f trans, ofVec3f squareSize, int size, string model);
+    void paintRed(ofVec3f pos, int size, string model);
 
     // Detects if there is a collision between two robots
     bool detectCollision(ofVec3f pos, ofVec3f size, ofVec3f otherPos, ofVec3f otherSize);

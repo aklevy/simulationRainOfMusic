@@ -36,6 +36,7 @@ void ofApp::setup(){
 }
 //--------------------------------------------------------------
 void ofApp::update(){
+
     for(auto &metabot : _metabots){
         updateOneBot(metabot);
         metabot.updateBot();
@@ -44,6 +45,7 @@ void ofApp::update(){
         updateOneBot(drone);
         drone.updateBot();
     }
+
 }
 
 //--------------------------------------------------------------
@@ -72,12 +74,11 @@ void ofApp::draw(){
         for(auto &otherbot : _metabots){
             if(bot.id() != otherbot.id() && !otherbot.isInCollision()){
                 if(_view.detectCollision(bot.position(),bot.size(),
-                                      otherbot.position(),otherbot.size())){
+                                         otherbot.position(),otherbot.size())){
                     bot.collision();
                 }
             }
-
-            //_view.drawCollisionCircle(otherbot.position(),bot.position(),bot.size());
+            // _view.drawCollisionCircle(otherbot.position(),bot.position(),bot.size());
             /*std::cout << "Collision detected at "+ std::to_string(bot.position().x)
                                              + " & " + std::to_string(otherbot.position().x)<<std::endl;
  */
@@ -85,10 +86,8 @@ void ofApp::draw(){
 
     }
 
-
     // Draw zone defined in setup()
     _zoneGrid.drawZone();
-
 
     _cam.end();
 
@@ -98,8 +97,11 @@ void ofApp::draw(){
     // Displays warning messages
     ofDrawBitmapStringHighlight(_warning, ofGetWidth()/2, 20);
 
-    // Displays general message
-    string _msgGeneral = "Time : "+ std::to_string((int)ofGetElapsedTimeMicros()*pow(10,-6))+"\n";
+    // Displays general message (=time)
+    if(play){
+        _msgGeneral.clear();
+        _msgGeneral = "Time : "+ std::to_string((int)ofGetElapsedTimeMicros()*pow(10,-6))+"\n";
+    }
     ofDrawBitmapStringHighlight(_msgGeneral, 10, ofGetHeight()-20);
 
 }

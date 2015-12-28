@@ -27,7 +27,9 @@ bool Metabot::load(){
 }
 //--------------------------------------------------------------
 void Metabot::move(ofVec3f speed){
-    _position += speed;
+    if(!isInCollision()){
+        _position += speed;
+    }
     //_frequency = speed.length();
 }
 

@@ -31,7 +31,7 @@ void View::drawBot(const ofVec3f position,const ofVec3f color, const int size, c
         }
     }
     else{
-        std::cout << modelName<<std::endl;
+        // std::cout << modelName<<std::endl;
 
         draw3dObject(position,size,modelName,model);
 
@@ -57,18 +57,27 @@ void View::draw3dObject(const ofVec3f position, const int size, const string& mo
     ofTranslate(ofVec3f(0,-55,0));
     model.setPosition(position.x,position.y,position.z);
     model.drawFaces();
-
-    std::cout << std::to_string(model.getPosition().x)<<std::endl;
-
 }
 //--------------------------------------------------------------
 
 bool View::checkPosition(ofVec3f pos, int size,string model){
     for(int i=0;i<3;i++){
+        //if the bot is out of bound, return true
+        if ((pos[i] >= _zoneDim[i] - size) || (pos[i] < 0)){
+
+            return false;
+        }
+    }
+    return true;
+}
+//--------------------------------------------------------------
+
+void View::paintRed(ofVec3f pos, int size,string model){
+    for(int i=0;i<3;i++){
         ofVec3f trans = pos;
         ofVec3f squareSize = ofVec3f(size);
 
-        //if the bot is out of bound, paint in red the face out
+        //if the bot is out of bound, return true
         if ((pos[i] >= _zoneDim[i] - size) || (pos[i] < 0)){
             if (pos[i] >= _zoneDim[i] - size){
                 trans[i] += size/2;
@@ -80,38 +89,31 @@ bool View::checkPosition(ofVec3f pos, int size,string model){
             }
             squareSize[i] = 1;
 
-            paintRed(trans,squareSize,size,model);
+            ofPushStyle();
+            ofPushMatrix();
+            ofTranslate(trans);
 
-            return false;
-        }
-    }
-    return true;
-}
-//--------------------------------------------------------------
-
-void View::paintRed(ofVec3f trans, ofVec3f squareSize, int size,string model){
-    ofPushStyle();
-    ofPushMatrix();
-    ofTranslate(trans);
-
-    if (model == "Sphere"){
-        ofVec3f t(-size/2);
-        for(int i=0;i<3;i++){
-            if(squareSize[i] == 1){
-                t[i] = 0;
+            if (model == "Sphere"){
+                ofVec3f t(-size/2);
+                for(int i=0;i<3;i++){
+                    if(squareSize[i] == 1){
+                        t[i] = 0;
+                    }
+                }
+                ofTranslate(ofVec3f(t));
+                size= 2 * size;
             }
+
+            ofTranslate(ofVec3f(size/2) - _zoneDim/2);
+
+            ofSetColor(255,0,0); //red
+            ofDrawBox(squareSize.x,squareSize.y,squareSize.z);
+
+            ofPopMatrix();
+            ofPopStyle();
+            break;
         }
-        ofTranslate(ofVec3f(t));
-        size= 2 * size;
     }
-
-    ofTranslate(ofVec3f(size/2) - _zoneDim/2);
-
-    ofSetColor(255,0,0); //red
-    ofDrawBox(squareSize.x,squareSize.y,squareSize.z);
-
-    ofPopMatrix();
-    ofPopStyle();
 }
 
 bool View::detectCollision(ofVec3f pos, ofVec3f size, ofVec3f otherPos, ofVec3f otherSize)
@@ -121,8 +123,8 @@ bool View::detectCollision(ofVec3f pos, ofVec3f size, ofVec3f otherPos, ofVec3f 
         ofVec3f middle = (pos+otherPos)/2;//pos+dist/2;
         drawCollisionCircle(middle,sqrt(2)/2*(size.x + otherSize.x));
         //drawBoundingSphere(middle,max(otherSize.x,size.x));
-       // std::cout << "collision"<<std::endl;
-       return true;
+        // std::cout << "collision"<<std::endl;
+        return true;
     }
     return false;
 }
@@ -135,15 +137,15 @@ void View::drawCollisionCircle(  const ofVec3f& position, const int size){
     ofTranslate(ofVec3f(size/2) - _zoneDim/2);
     ofPushStyle();
     ofSetColor(255,0,0);
-  //  ofSpherePrimitive sphere;
-   // sphere.setRadius(size/2);
+    //  ofSpherePrimitive sphere;
+    // sphere.setRadius(size/2);
     //sphere.move(ofVec3f(size/2) - _zoneDim/2);
     //std::cout << std::to_string(position.x)<<" "<< std::to_string(position.z)<<std::endl;
-   // sphere.setPosition(position);
+    // sphere.setPosition(position);
     //  of3dGraphics::drawSphere(position,size/2);
-   // sphere.draw();
+    // sphere.draw();
     ofNoFill();
-   ofDrawCircle(position,size/2);
+    ofDrawCircle(position,size/2);
     ofPopStyle();
     ofPopMatrix();
 

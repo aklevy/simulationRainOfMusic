@@ -26,15 +26,39 @@ public:
             bot.modelToDefault();
             //    std::cout << bot.model()<<std::endl;
         }*/
+        if(play){
+            // if bot is in zone update position and  the choeragraphy is on play
+            if(bot.isInZone()){
+                if(bot.id() == 1)
+                    bot.move(ofVec3f(3,0,1));
+                else
+                    bot.move(ofVec3f(-1,0,0.5));
+            }
 
-        // Checks if the position is not out of the zone
-        if(bot.isInZone() && !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
-            std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
-           /* _warning = "The "
+            // Checks if the position is not out of the zone
+            if(bot.isInZone() && !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
+                std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
+                /* _warning = "The "
                     + bot.className() + " " + std::to_string(bot.id())
                     + " is out of the zone\n";
             */bot.outOfZone();
+                play = false; //stop playing once a robot is out of zone
+            }
         }
+        // Checks if there is a collision
+        /*for(auto &bot : _metabots){
+                if(bot.id() != otherbot.id() && !otherbot.isInCollision()){
+                    if(_view.detectCollision(bot.position(),bot.size(),
+                                             otherbot.position(),otherbot.size())){
+                        bot.collision();
+                    }
+                }
+                //_view.drawCollisionCircle(otherbot.position(),bot.position(),bot.size());
+                /*std::cout << "Collision detected at "+ std::to_string(bot.position().x)
+                                                 + " & " + std::to_string(otherbot.position().x)<<std::endl;
+     */
+        //  }
+
 
         // Updates the message to be displayed
         if(bot.color() == _pixel && _msg.empty()){
@@ -44,28 +68,26 @@ public:
         // if collision detected
         if(bot.isInCollision() && _warning.empty()){
             _warning = "Warning: First collision detected for the "
-                     + bot.className() + " " + std::to_string(bot.id())
-                     + "\n at position ("
-                     + std::to_string((int)bot.position().x)+", "
-                     + std::to_string((int)bot.position().y)+", "
-                     + std::to_string((int)bot.position().z)+") \n";
-
-         }
+                    + bot.className() + " " + std::to_string(bot.id())
+                    + "\n at position ("
+                    + std::to_string((int)bot.position().x)+", "
+                    + std::to_string((int)bot.position().y)+", "
+                    + std::to_string((int)bot.position().z)+") \n";
+            play = false; //stop playing once a collision is detected
+        }
     }
 
     // Draws one bot
     template<typename Bot_T>
     void drawOneBot(Bot_T& bot){
         // Checks if the bot is not ouf of zone
-        if(bot.isInZone()){
-            if(bot.id() == 1)
-                bot.move(ofVec3f(3,0,1));
-            else
-                bot.move(ofVec3f(-1,0,0.5));
+
+        if(!bot.isInZone()){
+            _view.paintRed(bot.position(),bot.size().x,bot.modelName());
         }
-        else{
-            _view.checkPosition(bot.position(),bot.size().x,bot.modelName());
-        }
+        /*if(bot.collision()){
+
+        }*/
         _view.drawBot(bot.position(),bot.color(),bot.size().x,bot.modelName(),bot.loader());
     }
 
@@ -83,7 +105,7 @@ public:
     void gotMessage(ofMessage msg);
 
 
-    string _msg,_warning;
+    string _msg,_warning,_msgGeneral;
 
 private:
     // Camera
@@ -105,4 +127,6 @@ private:
     // Pixel of where the mouse clicked
     ofVec3f _pixel;
 
+    // Boolean for the stop/play the choeregraphy
+    bool play = true;
 };
