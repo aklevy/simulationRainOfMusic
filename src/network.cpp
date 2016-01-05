@@ -6,7 +6,7 @@ using namespace std;
 Network::Network(){
     // declare this program "B" as Local device
     localProtocol = Local::create();
-    localDevice = Device::create(localProtocol, "B");
+    localDevice = Device::create(localProtocol, "newDevice");
 
     // add a node "scene"
     localSceneNode = *(localDevice->emplace(localDevice->children().cend(), "scene"));
@@ -21,7 +21,7 @@ Network::~Network(){
 }
 
 void Network::publication(){
-    auto minuitProtocol = Minuit::create("127.0.0.1", 9999, 6666);
+    auto minuitProtocol = Minuit::create("127.0.0.1", 13579, 9998);
     auto minuitDevice = Device::create(minuitProtocol, "i-score");
 
     while (true)
