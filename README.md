@@ -1,8 +1,10 @@
 # simulationRainOfMusic
 
-simulationRainOfMusic is a simulation tool designed for a choeregraphy with robots written using i-score, the interactive intermedia sequencer.
+simulationRainOfMusic is a simulation tool designed for a choeregraphy with robots written using i-score, the interactive intermedia sequencer.  
+The aim of this tool is to help the artists of the project RainOfMusic to create a choeregraphy using drones and quadruped robots (Metabots https://github.com/Rhoban/Metabot)
 
-**To build the source code :**
+
+**To build the project simulationRainOfMusic :**
 
 * Install openFrameworks (available on http://openframeworks.cc/download)
 
@@ -10,13 +12,13 @@ simulationRainOfMusic is a simulation tool designed for a choeregraphy with robo
 
 * Build JamomaCore (available on https://github.com/Jamoma/JamomaCore)
 
-* Build OSSIA/API (available on https://github.com/OSSIA/API) and create a dynamic library :
+* Build OSSIA/API (available on https://github.com/OSSIA/API) and create a dynamic library:
 
-$ cd API-build/
+    $ cd API-build/  
+    $ cmake -DBUILD_SHARED_LIBS:Bool=True .
 
-$ cmake -DBUILD_SHARED_LIBS:Bool=True .
+* Modify in the file 'simulationRainOfMusic.qbs' the line 'cpp.libraryPaths':
 
-* Modify in the 'simulationRainOfMusic.qbs' the line 'cpp.libraryPaths' :
 cpp.libraryPaths: ["path-to-API-build/Implementations/Jamoma"]
 
 * Add the path to the dynamic library in the variable LD_PATH_VARIABLE
