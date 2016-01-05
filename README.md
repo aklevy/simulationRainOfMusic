@@ -4,11 +4,12 @@ simulationRainOfMusic is a simulation tool designed for a choeregraphy with robo
 The aim of this tool is to help the artists of the project RainOfMusic to create a choeregraphy using drones and quadruped robots Metabots (https://github.com/Rhoban/Metabot).
 
 
-**To build the project simulationRainOfMusic :**
+**To build the project simulationRainOfMusic:**
 
 * Install openFrameworks (available on http://openframeworks.cc/download)
 
-* Clone the repository in the openFrameworks project folder:
+* Clone the repository in the openFrameworks project folder:  
+
     $ cd of_folder/apps/myApps  
     $ git clone https://github.com/iscore-metabots/simulationRainOfMusic
 
