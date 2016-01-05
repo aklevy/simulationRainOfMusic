@@ -1,0 +1,68 @@
+template<typename Valuedata>
+class Parameter : ofParameter{
+
+Valuedata _data;
+string _name;
+std::shared_ptr<Node> _botNode;
+
+Parameter(std::shared_ptr<Node> parentBotNode, OSSIA::Value::Type type, DataValue& data, string name, bool listening){
+		_botNode = parentBotNode;
+		
+        //creates node
+        std::shared_ptr<Node> node = *(_botNode->emplace(_botNode->children().cend(), name));
+
+        //set value
+        _data = data;
+        std::shared_ptr<Address> address = node->createAddress(type);
+        address->pushValue(&data);
+        
+        if(listening){
+			addListener(this,listen());
+		}
+    }
+}
+
+void listen(){
+_data = getValue();
+}
+
+Valuedata value(){
+return _data;
+}
+
+void update(Valuedata other){
+	//change attribute value
+	_data = other;
+	
+	//update the changed attribute value
+	pushValue(_data);
+}
+
+}
+
+metabot{
+
+Parameter<Bool> _collision; pas de listener
+Parameter<Bool> _inZone; pas de listener
+
+
+Parameter<Float> _frequency; listener
+
+Parameter<Float> _vx; listener
+Parameter<Float> _vy; listener
+Parameter<Float> _vz; listener
+
+ofVec3f _position;
+
+Metabot::Metabot(){
+_collision = Parameter<Bool>(Value::Type::BOOL,false,string("collision"),false);
+}
+
+getter/setter a modifier
+
+
+void move(){
+	_position.x += _vx.value(); 
+	_position.y += _vy.value();
+}
+}
