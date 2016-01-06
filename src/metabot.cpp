@@ -5,12 +5,29 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     _size(size),
     _position(pos),
     _color(ofVec3f(0,0,200+id)),
-    _modelName(modelName),
-    _frequency(freq){
+    _modelName(modelName){
     /* if(string::npos != modelName.find(".")){
         _3dmodel = PATH+modelName;
     }*/
+
+    // adds the metabot to the node Scene
     shareMetabot(parentNode);
+
+    // creates parameters to be published
+    _collision = Parameter<Bool>(_metabotNode,
+                                 Value::Type::BOOL,
+                                 Bool(false),
+                                 string("collision"), false);
+    _inZone = Parameter<Bool>(_metabotNode,
+                              Value::Type::BOOL,
+                              Bool(true),
+                              string("inZone"), false);
+
+    // creates parameters to be published and listened
+    _frequency =Parameter<Float>(_metabotNode,
+                                Value::Type::FLOAT,
+                                Float(freq),
+                                string("frequency"), true);
 }
 
 //--------------------------------------------------------------
@@ -28,7 +45,7 @@ bool Metabot::load(){
 }
 //--------------------------------------------------------------
 void Metabot::move(ofVec3f speed){
-    if(!isInCollision()){
+    if(isInCollision()== Bool(false)){
         _position += speed;
     }
     //_frequency = speed.length();
@@ -47,17 +64,18 @@ string Metabot::info() const
             + std::to_string((int)position().y)+", "
             + std::to_string((int)position().z)+") \n";
     msg += "Walking frequency: "
-            + std::to_string(frequency()) + " Hz";
+            + std::to_string((int)(frequency().value)) + " Hz";
+
     return msg;
 }
 
 void Metabot::shareMetabot(std::shared_ptr<Node> parentNode){
-    auto metabotNode = *(parentNode->emplace(parentNode->children().cend(), "Metabot "+ to_string(id())));
-    auto idAddress = metabotNode->createAddress(Value::Type::INT);
-    Int i(_id);
-    idAddress->pushValue(&i);
+    _metabotNode = *(parentNode->emplace(parentNode->children().cend(), "Metabot "+ to_string(id())));
 }
 
 
+void Metabot::updateAttributes(){
+
+}
 
 

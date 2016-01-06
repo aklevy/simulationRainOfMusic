@@ -3,6 +3,7 @@
 
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
+#include "parameter.hpp"
 
 #if defined(Bool)
 #undef Bool
@@ -53,14 +54,39 @@ public:
     void move(ofVec3f speed); // the speed should be automatically updated,
                               // so move() will not take argument (attribute _speed to ba added)
 
+    /*
+     * Networks methos
+     */
+
+    // Share the metabot with i-score
+    void shareMetabot(std::shared_ptr<Node> parentNode);
+
+    // Updates the metabot attributes
+    void updateAttributes();
+
+
+        template<typename DataValue>
+        void createAttribute(OSSIA::Value::Type type, DataValue& data, string name){
+            //creates node
+            std::shared_ptr<Node> node = *(_metabotNode->emplace(_metabotNode->children().cend(), name));
+
+            //set value
+            std::shared_ptr<Address> address = node->createAddress(type);
+            address->pushValue(&data);
+        }
+
+    /*
+     * Getter/Setter
+     * */
+
     // Modifies the model to the default one (=Square)
     void modelToDefault(){_modelName = defaultModel();}
 
     // Set inZone to false : bot out of zone
-    void outOfZone(){_inZone = false;}
+    void outOfZone(){_inZone.update(Bool(false));}
 
-    // Set collision to true : bot in collision with another
-    void collision(){_collision = true;}
+    // Set collision to true and publishes the value: bot in collision with another
+    void collision(){_collision.update(Bool(true));}
 
     // Returns information on the metabot
     string info() const;
@@ -84,13 +110,16 @@ public:
     ofVec3f color() const {return _color;}
 
     // Returns walking frequency
-    float frequency() const {return _frequency;}
+   /* void test(){Float other;
+                 _frequency.listen(other);}
+    */
+    Float frequency() const {return _frequency.get();}
 
     // Returns if the bot is in zone or not
-    bool isInZone() const {return _inZone;}
+    Bool isInZone() const {return _inZone.get();}
 
     // Returns if the bot is in collision or not
-    bool isInCollision() const {return _collision;}
+    Bool isInCollision() const {return _collision.get();}
 
     // Returns 3D model object name
     string modelName() const {return _modelName;}
@@ -98,12 +127,14 @@ public:
     // Returns 3D model object loader
     ofxAssimpModelLoader& loader() {return _loader;}
 
-    // Share the metabot with i-score
-    void shareMetabot(std::shared_ptr<Node> parentNode);
+
 
 private:
     // Metabot individual id
     int _id;
+
+    // node in the network
+    std::shared_ptr<Node> _metabotNode;
 
     // Metabot size
     ofVec3f _size;
@@ -115,23 +146,19 @@ private:
     ofVec3f _color;
 
     // Frequency of the walk, in Hz (default = 2Hz)
-    float _frequency;
+    Parameter<Float> _frequency;
 
     // boolean to check if the position is inbound or not
-    bool _inZone = true;
+    Parameter<Bool> _inZone;
 
     // boolean for the collision
-    bool _collision = false;
+    Parameter<Bool> _collision;
 
     // 3D model name
     string _modelName;
 
     // 3D object model loader
     ofxAssimpModelLoader _loader;
-
-    // node in the network
-    //std::shared_ptr<Node> metabotNode;
-    //std::shared_ptr<Address> idAddress;
 };
 
 #endif // METABOT_H

@@ -47,6 +47,18 @@ public:
     // Moves to the next position
     void move(ofVec3f speed);
 
+    /*
+     * Networks methos
+     */
+    // Share the drone with i-score
+    void shareDrone(std::shared_ptr<Node> parentNode);
+
+    // Updates the drone attributes
+    void updateAttributes(){}
+
+    /*
+     * Getter/Setter
+     * */
     // Modifies the model to the default one (=Sphere)
     void modelToDefault(){_modelName = defaultModel();}
 
@@ -78,10 +90,10 @@ public:
     ofVec3f color() const {return _color;}
 
     // Returns if the bot is in zone or not
-    bool isInZone() const {return _inZone;}
+    Bool isInZone() const {return _inZone;}
 
     // Returns if the bot is in collision or not
-    bool isInCollision() const {return _collision;}
+    Bool isInCollision() const {return _collision;}
 
     // Returns 3D model object name
     string modelName() const {return _modelName;}
@@ -89,8 +101,7 @@ public:
     // Returns 3D model object loader
     ofxAssimpModelLoader& loader() {return _loader;}
 
-    // Share the drone with i-score
-    void shareDrone(std::shared_ptr<Node> parentNode);
+
 
 private:
     // Drone individual id
@@ -106,10 +117,10 @@ private:
     ofVec3f _color;
 
     // boolean to check if the position is inbound or not
-    bool _inZone = true;
+    Bool _inZone = true;
 
     // boolean for the collision
-    bool _collision = false;
+    Bool _collision = false;
 
     // 3D model name
     string _modelName;

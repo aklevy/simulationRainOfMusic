@@ -24,7 +24,7 @@ bool Drone::load(){
 //--------------------------------------------------------------
 
 void Drone::move(ofVec3f speed){
-     if(!isInCollision()){
+     if(isInCollision()==Bool(false)){
         _position += speed;
      }
 }

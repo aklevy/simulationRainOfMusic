@@ -31,7 +31,7 @@ void ofApp::setup(){
     }
 
     // Fill Drone vector
-    _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
+   // _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
 }
 
 //--------------------------------------------------------------
@@ -39,6 +39,7 @@ void ofApp::update(){
 
     for(auto &metabot : _metabots){
         updateOneBot(metabot);
+        //metabot.test();
         metabot.updateBot();
     }
     for(auto &drone : _drones){
@@ -72,7 +73,7 @@ void ofApp::draw(){
     // Check collision
     for(auto &bot : _metabots){
         for(auto &otherbot : _metabots){
-            if(bot.id() != otherbot.id() && !otherbot.isInCollision()){
+            if(bot.id() != otherbot.id() && otherbot.isInCollision()==Bool(false)){
                 if(_view.detectCollision(bot.position(),bot.size(),
                                          otherbot.position(),otherbot.size())){
                     bot.collision();

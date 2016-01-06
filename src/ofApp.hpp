@@ -31,15 +31,16 @@ public:
         }*/
         if(play){
             // if bot is in zone update position and  the choeragraphy is on play
-            if(bot.isInZone()){
+            if(Bool(true) == bot.isInZone()){
                 if(bot.id() == 1)
                     bot.move(ofVec3f(3,0,1));
+                // bot.move(); the speed is updated automatically as an attribute of the robot
                 else
                     bot.move(ofVec3f(-1,0,0.5));
             }
 
             // Checks if the position is not out of the zone
-            if(bot.isInZone() && !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
+            if((Bool(false) == bot.isInZone())&& !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
                 std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
                 /* _warning = "The "
                     + bot.className() + " " + std::to_string(bot.id())
@@ -69,7 +70,7 @@ public:
         }
 
         // if collision detected
-        if(bot.isInCollision() && _warning.empty()){
+        if((Bool(true) == bot.isInCollision()) && _warning.empty()){
             _warning = "Warning: First collision detected for the "
                     + bot.className() + " " + std::to_string(bot.id())
                     + "\n at position ("
@@ -84,8 +85,7 @@ public:
     template<typename Bot_T>
     void drawOneBot(Bot_T& bot){
         // Checks if the bot is not ouf of zone
-
-        if(!bot.isInZone()){
+        if(Bool(false) == bot.isInZone()){
             _view.paintRed(bot.position(),bot.size().x,bot.modelName());
         }
         /*if(bot.collision()){
@@ -135,4 +135,6 @@ private:
 
     // Network for communication
     Network _nw;
+
+
 };
