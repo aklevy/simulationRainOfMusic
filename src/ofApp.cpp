@@ -18,12 +18,9 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     // this uses depth information for occlusion
     // rather than always drawing things on top of each other
-    ofEnableDepthTest();
 
-    // GUI
-    /*_gui.setup("panel");
-    _gui.add();
-    */
+
+    //   ofEnableDepthTest();
 
     // Fill Metabot list
     _metabots.emplace_back(1, _nw.getSceneNode()); //construct instead of copy
@@ -39,7 +36,17 @@ void ofApp::setup(){
     }
 
     // Fill Drone list
-    _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
+    //_drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
+
+    // GUI
+    _gui.setup("panel");
+    Parameter<int,Int> p;
+    p.set("plop",2,1,5);
+    _gui.add(p);
+    for(auto &metabot : _metabots){ //template bot
+        _gui.add(metabot.parameters());
+    }
+
 }
 
 //--------------------------------------------------------------
@@ -81,7 +88,7 @@ void ofApp::draw(){
     // Check collision
     for(auto &bot : _metabots){
         for(auto &otherbot : _metabots){
-            if(bot.id() != otherbot.id() && otherbot.isInCollision()==Bool(false)){
+            if(bot.id() != otherbot.id() && !otherbot.isInCollision()){
                 if(_view.detectCollision(bot.position(),bot.size(),
                                          otherbot.position(),otherbot.size())){
                     bot.collision();
@@ -108,6 +115,13 @@ void ofApp::draw(){
     }
     ofDrawBitmapStringHighlight(_msgGeneral, 10, ofGetHeight()-20);
 
+    /*_gui.setPosition(10,100);
+    _gui.setTextColor(ofColor(255));
+    _gui.setBackgroundColor(ofColor(255));
+    _gui.setFillColor(255);
+    _gui.setBorderColor(255);
+    _gui.setName("plop");*/
+    //_gui.draw();
 }
 
 

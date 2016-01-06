@@ -11,14 +11,12 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
     shareDrone(parentNode);
 
     // creates parameters to be published
-    _collision = Parameter<Bool>(_droneNode,
-                                 Value::Type::BOOL,
-                                 Bool(false),
-                                 string("collision"));
-    _inZone = Parameter<Bool>(_droneNode,
-                              Value::Type::BOOL,
-                              Bool(true),
-                              string("inZone"));
+    _collision = Parameter<bool,Bool>(_droneNode,
+                                      Bool(false),
+                                      string("collision"),0,1);
+    _inZone = Parameter<bool,Bool>(_droneNode,
+                                   Bool(true),
+                                   string("inZone"),0,1);
 
 }
 
@@ -42,9 +40,9 @@ bool Drone::load(){
 //--------------------------------------------------------------
 
 void Drone::move(ofVec3f speed){
-     if(isInCollision()==Bool(false)){
+    if(!isInCollision()){
         _position += speed;
-     }
+    }
 }
 //--------------------------------------------------------------
 

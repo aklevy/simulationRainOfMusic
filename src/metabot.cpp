@@ -14,26 +14,29 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     shareMetabot(parentNode);
 
     // creates parameters to be published
-    _collision = Parameter<Bool>(_metabotNode,
-                                 Value::Type::BOOL,
+    _collision = Parameter<bool,Bool>(_metabotNode,
                                  Bool(false),
-                                 string("collision"));
-    _inZone = Parameter<Bool>(_metabotNode,
-                              Value::Type::BOOL,
+                                 string("collision"),0,1);
+    _inZone = Parameter<bool,Bool>(_metabotNode,
                               Bool(true),
-                              string("inZone"));
+                              string("inZone"),0,1);
 
     // creates parameters to be published and listened
-    _frequency = Parameter<Float>(_metabotNode,
-                                  Value::Type::FLOAT,
+    _frequency = Parameter<float,Float>(_metabotNode,
                                   Float(freq),
-                                  string("frequency"+to_string(_id)));
+                                  string("frequency"),0,100);
 
     _frequency.getAddress()->addCallback([&](const Value *v){
         Float * val= (Float *)v;
         _frequency.set(val->value);
         //std::cout << std::to_string((int)val->value)<<" "<< std::endl;
     });
+
+    // adds parameters to the group of parameter
+    _parameters.add(_collision);
+    _parameters.add(_inZone);
+    _parameters.add(_frequency);
+
 }
 
 
@@ -57,7 +60,7 @@ bool Metabot::load(){
 }
 //--------------------------------------------------------------
 void Metabot::move(ofVec3f speed){
-    if(isInCollision()== Bool(false)){
+    if(!isInCollision()){
         _position += speed;
     }
     //_frequency = speed.length();
@@ -76,7 +79,7 @@ string Metabot::info() const
             + std::to_string((int)position().y)+", "
             + std::to_string((int)position().z)+") \n";
     msg += "Walking frequency: "
-            + std::to_string((int)(frequency().value)) + " Hz";
+            + std::to_string((int)(frequency())) + " Hz";
 
     return msg;
 }

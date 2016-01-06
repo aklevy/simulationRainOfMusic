@@ -88,10 +88,10 @@ public:
     ofVec3f color() const {return _color;}
 
     // Returns if the bot is in zone or not
-    Bool isInZone() const {return _inZone.get();}
+    bool isInZone() const {return _inZone.get();}
 
     // Returns if the bot is in collision or not
-    Bool isInCollision() const {return _collision.get();}
+    bool isInCollision() const {return _collision.get();}
 
     // Returns 3D model object name
     string modelName() const {return _modelName;}
@@ -117,11 +117,14 @@ private:
     // Drone color (temporary used in selecting in ofApp)
     ofVec3f _color;
 
+    // Parameter group
+    ofParameterGroup _parameters;
+
     // boolean to check if the position is inbound or not
-    Parameter<Bool> _inZone;
+    Parameter<bool,Bool> _inZone;
 
     // boolean for the collision
-    Parameter<Bool> _collision;
+    Parameter<bool,Bool> _collision;
 
     // 3D model name
     string _modelName;

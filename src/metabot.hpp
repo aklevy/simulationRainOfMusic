@@ -95,14 +95,17 @@ public:
     // Returns color
     ofVec3f color() const {return _color;}
 
+    // Returns parameters group
+    ofParameterGroup parameters(){return _parameters;}
+
     // Returns walking frequency
-    Float frequency() const {return _frequency.get();}
+    float frequency() const {return _frequency.get();}
 
     // Returns if the bot is in zone or not
-    Bool isInZone() const {return _inZone.get();}
+    bool isInZone() const {return _inZone.get();}
 
     // Returns if the bot is in collision or not
-    Bool isInCollision() const {return _collision.get();}
+    bool isInCollision() const {return _collision.get();}
 
     // Returns 3D model object name
     string modelName() const {return _modelName;}
@@ -128,14 +131,17 @@ private:
     // Metabot color (temporary used in selecting in ofApp)
     ofVec3f _color;
 
+    // Parameter group
+    ofParameterGroup _parameters;
+
     // Frequency of the walk, in Hz (default = 2Hz)
-    Parameter<Float> _frequency;
+    Parameter<float,Float> _frequency;
 
     // boolean to check if the position is inbound or not
-    Parameter<Bool> _inZone;
+    Parameter<bool,Bool> _inZone;
 
     // boolean for the collision
-    Parameter<Bool> _collision;
+    Parameter<bool,Bool> _collision;
 
     // 3D model name
     string _modelName;
