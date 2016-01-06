@@ -57,6 +57,9 @@ public:
     /*
      * Getter/Setter
      * */
+    // Returns parameters group
+    ofParameterGroup parameters(){return _parameters;}
+
     // Modifies the model to the default one (=Sphere)
     void modelToDefault(){_modelName = defaultModel();}
 

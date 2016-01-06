@@ -16,16 +16,19 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     // creates parameters to be published
     _collision = Parameter<bool,Bool>(_metabotNode,
                                  Bool(false),
-                                 string("collision"),0,1);
+                                 string("collision"));
+    _collision.setName("collision");
+
     _inZone = Parameter<bool,Bool>(_metabotNode,
                               Bool(true),
-                              string("inZone"),0,1);
+                              string("inZone"));
+    _inZone.setName("inZone");
 
     // creates parameters to be published and listened
     _frequency = Parameter<float,Float>(_metabotNode,
                                   Float(freq),
-                                  string("frequency"),0,100);
-
+                                  string("frequency"));
+    _frequency.setup("frequency",0,100);
     _frequency.getAddress()->addCallback([&](const Value *v){
         Float * val= (Float *)v;
         _frequency.set(val->value);
@@ -33,11 +36,11 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     });
 
     // adds parameters to the group of parameter
+    _parameters.setName(this->className()+std::to_string(_id));
     _parameters.add(_collision);
     _parameters.add(_inZone);
     _parameters.add(_frequency);
-
-}
+  }
 
 
 //--------------------------------------------------------------
@@ -79,7 +82,7 @@ string Metabot::info() const
             + std::to_string((int)position().y)+", "
             + std::to_string((int)position().z)+") \n";
     msg += "Walking frequency: "
-            + std::to_string((int)(frequency())) + " Hz";
+            + std::to_string(frequency()) + " Hz";
 
     return msg;
 }

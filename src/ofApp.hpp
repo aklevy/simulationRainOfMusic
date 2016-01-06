@@ -17,6 +17,7 @@ public:
     void update();
     void draw();
 
+
     // Updates one robot
     template<typename Bot_T>
     void updateOneBot(Bot_T& bot){
@@ -113,5 +114,4 @@ private:
 
     // GUI
     ofxPanel _gui;
-    ofParameter<bool> plop;
 };

@@ -13,10 +13,18 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
     // creates parameters to be published
     _collision = Parameter<bool,Bool>(_droneNode,
                                       Bool(false),
-                                      string("collision"),0,1);
+                                      string("collision"));
+    _collision.setName("collision");
+
     _inZone = Parameter<bool,Bool>(_droneNode,
                                    Bool(true),
-                                   string("inZone"),0,1);
+                                   string("inZone"));
+    _inZone.setName("inZone");
+
+    // adds parameters to the group of parameter
+    _parameters.setName(this->className()+std::to_string(_id));
+    _parameters.add(_collision);
+    _parameters.add(_inZone);
 
 }
 

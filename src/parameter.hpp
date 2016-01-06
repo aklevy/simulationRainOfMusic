@@ -17,13 +17,10 @@ public:
 
     Parameter(shared_ptr<Node> parentBotNode,
               OSSIAValue ossiaData,
-              string name,
-              DataValue min,
-              DataValue max):
-        ofParameter<DataValue>(name,ossiaData.value,min,max),
+              string name):
+        ofParameter<DataValue>(name,ossiaData.value),
         _botNode(parentBotNode){
 
-        //this->set(name,data.value);
         // _data = data;
         //creates node
         std::shared_ptr<Node> node = *(_botNode->emplace(_botNode->children().cend(), name));
@@ -34,8 +31,16 @@ public:
 
         // adds listener to listen to the gui
         this->addListener(this,&Parameter::listen);
+    }
 
-
+    // sets the name, the minimum and maximum value (for the gui)
+    void setup(string name){
+        this->setName(name);
+     }
+    void setup(string name,DataValue min,DataValue max){
+        this->setName(name);
+        this->setMin(min);
+        this->setMax(max);
     }
 
     std::shared_ptr<Address> getAddress() const{
