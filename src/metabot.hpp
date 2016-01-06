@@ -61,9 +61,6 @@ public:
     // Share the metabot with i-score
     void shareMetabot(std::shared_ptr<Node> parentNode);
 
-    // Updates the metabot attributes
-    void updateAttributes();
-
     /*
      * Getter/Setter
      * */
@@ -99,7 +96,7 @@ public:
     ofVec3f color() const {return _color;}
 
     // Returns walking frequency
-    Float frequency() const {return _frequency->get();}
+    Float frequency() const {return _frequency.get();}
 
     // Returns if the bot is in zone or not
     Bool isInZone() const {return _inZone.get();}
@@ -132,7 +129,7 @@ private:
     ofVec3f _color;
 
     // Frequency of the walk, in Hz (default = 2Hz)
-    Parameter<Float> * _frequency;
+    Parameter<Float> _frequency;
 
     // boolean to check if the position is inbound or not
     Parameter<Bool> _inZone;

@@ -24,11 +24,11 @@ void ofApp::setup(){
     /*_gui.setup("panel");
     _gui.add();
     */
-    //ofSleepMillis(10000);
-    // Fill Metabot vector
+
+    // Fill Metabot list
     _metabots.emplace_back(1, _nw.getSceneNode()); //construct instead of copy
     //_metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50));
-    _metabots.emplace_back(2, _nw.getSceneNode(),ofVec3f(20),ofVec3f(200,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj");
+    _metabots.emplace_back(2, _nw.getSceneNode(),ofVec3f(10),ofVec3f(200,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj");
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
@@ -37,12 +37,9 @@ void ofApp::setup(){
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
-    _metabots.emplace_back(4, _nw.getSceneNode(),ofVec3f(40),ofVec3f(0,0,400),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj"); //construct instead of copy
-    if( !_metabots.back().load()){
-        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
-    }
-    // Fill Drone vector
-   // _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
+
+    // Fill Drone list
+    _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
 }
 
 //--------------------------------------------------------------
@@ -90,12 +87,7 @@ void ofApp::draw(){
                     bot.collision();
                 }
             }
-            // _view.drawCollisionCircle(otherbot.position(),bot.position(),bot.size());
-            /*std::cout << "Collision detected at "+ std::to_string(bot.position().x)
-                                             + " & " + std::to_string(otherbot.position().x)<<std::endl;
- */
         }
-
     }
 
     // Draw zone defined in setup()

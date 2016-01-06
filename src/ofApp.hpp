@@ -21,21 +21,12 @@ public:
     template<typename Bot_T>
     void updateOneBot(Bot_T& bot){
 
-        // Checks if the 3D model object is available
-        /*if(bot.model() != bot.defaultModel()){
-            std::cout <<"The 3D model '"<< bot.model()
-                     <<"' for the robot "<<bot.className() << " "<< bot.id()
-                    << " was not found : the robot will be displayed as a "
-                    << bot.defaultModel() <<" instead" <<std::endl;
-            bot.modelToDefault();
-            //    std::cout << bot.model()<<std::endl;
-        }*/
         if(play){
             // if bot is in zone update position and  the choeragraphy is on play
             if(Bool(true) == bot.isInZone()){
                 if(bot.id() == 1)
                     bot.move(ofVec3f(3,0,1));
-                // bot.move(); the speed is updated automatically as an attribute of the robot
+                // the speed is updated automatically as an attribute of the robot
                 else
                     bot.move(ofVec3f(-1,0,0.5));
             }
@@ -50,20 +41,6 @@ public:
                 play = false; //stop playing once a robot is out of zone
             }
         }
-        // Checks if there is a collision
-        /*for(auto &bot : _metabots){
-                if(bot.id() != otherbot.id() && !otherbot.isInCollision()){
-                    if(_view.detectCollision(bot.position(),bot.size(),
-                                             otherbot.position(),otherbot.size())){
-                        bot.collision();
-                    }
-                }
-                //_view.drawCollisionCircle(otherbot.position(),bot.position(),bot.size());
-                /*std::cout << "Collision detected at "+ std::to_string(bot.position().x)
-                                                 + " & " + std::to_string(otherbot.position().x)<<std::endl;
-     */
-        //  }
-
 
         // Updates the message to be displayed
         if(bot.color() == _pixel && _msg.empty()){
@@ -89,9 +66,6 @@ public:
         if(Bool(false) == bot.isInZone()){
             _view.paintRed(bot.position(),bot.size().x,bot.modelName());
         }
-        /*if(bot.collision()){
-
-        }*/
         _view.drawBot(bot.position(),bot.color(),bot.size().x,bot.modelName(),bot.loader());
     }
 
@@ -122,11 +96,11 @@ private:
     // View
     View _view;
 
-    // Vector containing Metabot
-    std::vector<Metabot>  _metabots; // no need to initialize
+    // list containing Metabot
+    std::list<Metabot>  _metabots; // no need to initialize
 
-    // Vector containing Metabot
-    std::vector<Drone>  _drones;
+    // list containing Metabot
+    std::list<Drone>  _drones;
 
     // Pixel of where the mouse clicked
     ofVec3f _pixel;

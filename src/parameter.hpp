@@ -18,8 +18,7 @@ public:
     Parameter(shared_ptr<Node> parentBotNode,
               Value::Type type,
               DataValue data,
-              string name,
-              bool listening):
+              string name):
         // ofParameter<DataValue>(data),
         ofParameter<DataValue>(),
         _botNode(parentBotNode){
@@ -32,17 +31,6 @@ public:
         //set value
         _address = node->createAddress(type);
         _address->pushValue(&data);
-
-        if(listening){
-            // add listener to listen to i-score
-            /*  _address->addCallback([=](const Value *v){
-              DataValue * val= (DataValue *)v;
-               //_frequency.getAddress();
-              this->set(val->value);
-               //_frequency->getValueCallback(v);
-               std::cout << std::to_string((int)val->value)<<std::endl;
-            });*/
-        }
 
         // add listener to listen to the gui
         this->addListener(this,&Parameter::listen);

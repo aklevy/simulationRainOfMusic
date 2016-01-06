@@ -6,9 +6,27 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
     _position(pos),
     _color(ofVec3f(0,200+id,0)),
     _modelName(modelName){
+
+    // adds the drone to the node Scene
     shareDrone(parentNode);
+
+    // creates parameters to be published
+    _collision = Parameter<Bool>(_droneNode,
+                                 Value::Type::BOOL,
+                                 Bool(false),
+                                 string("collision"));
+    _inZone = Parameter<Bool>(_droneNode,
+                              Value::Type::BOOL,
+                              Bool(true),
+                              string("inZone"));
+
 }
 
+//--------------------------------------------------------------
+
+void Drone::shareDrone(std::shared_ptr<Node> parentNode){
+    _droneNode = *(parentNode->emplace(parentNode->children().cend(), "Drone "+ to_string(id())));
+}
 //--------------------------------------------------------------
 
 bool Drone::load(){
@@ -43,11 +61,4 @@ string Drone::info() const
 
     return msg;
 }
-//--------------------------------------------------------------
 
-void Drone::shareDrone(std::shared_ptr<Node> parentNode){
-    auto droneNode = *(parentNode->emplace(parentNode->children().cend(), "Drone "+ to_string(id())));
-    auto idAddress = droneNode->createAddress(Value::Type::INT);
-    Int i(_id);
-    idAddress->pushValue(&i);
-}

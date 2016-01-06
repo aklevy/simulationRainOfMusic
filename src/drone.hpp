@@ -3,6 +3,7 @@
 
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
+#include "parameter.hpp"
 
 #if defined(Bool)
 #undef Bool
@@ -53,9 +54,6 @@ public:
     // Share the drone with i-score
     void shareDrone(std::shared_ptr<Node> parentNode);
 
-    // Updates the drone attributes
-    void updateAttributes(){}
-
     /*
      * Getter/Setter
      * */
@@ -63,10 +61,10 @@ public:
     void modelToDefault(){_modelName = defaultModel();}
 
     // Set inZone to false : bot out of zone
-    void outOfZone(){_inZone = false;}
+    void outOfZone(){_inZone.update(Bool(false));}
 
     // Set collision to true : bot in collision with another
-    void collision(){_collision = true;}
+    void collision(){_collision.update(Bool(true));;}
 
     // Returns information on the drone
     string info() const;
@@ -90,10 +88,10 @@ public:
     ofVec3f color() const {return _color;}
 
     // Returns if the bot is in zone or not
-    Bool isInZone() const {return _inZone;}
+    Bool isInZone() const {return _inZone.get();}
 
     // Returns if the bot is in collision or not
-    Bool isInCollision() const {return _collision;}
+    Bool isInCollision() const {return _collision.get();}
 
     // Returns 3D model object name
     string modelName() const {return _modelName;}
@@ -107,6 +105,9 @@ private:
     // Drone individual id
     int _id;
 
+    // node in the network
+    std::shared_ptr<Node> _droneNode;
+
     // Drone size
     ofVec3f _size;
 
@@ -117,10 +118,10 @@ private:
     ofVec3f _color;
 
     // boolean to check if the position is inbound or not
-    Bool _inZone = true;
+    Parameter<Bool> _inZone;
 
     // boolean for the collision
-    Bool _collision = false;
+    Parameter<Bool> _collision;
 
     // 3D model name
     string _modelName;
