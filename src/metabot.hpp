@@ -55,7 +55,7 @@ public:
                               // so move() will not take argument (attribute _speed to ba added)
 
     /*
-     * Networks methos
+     * Networks methods
      */
 
     // Share the metabot with i-score
@@ -63,17 +63,6 @@ public:
 
     // Updates the metabot attributes
     void updateAttributes();
-
-
-        template<typename DataValue>
-        void createAttribute(OSSIA::Value::Type type, DataValue& data, string name){
-            //creates node
-            std::shared_ptr<Node> node = *(_metabotNode->emplace(_metabotNode->children().cend(), name));
-
-            //set value
-            std::shared_ptr<Address> address = node->createAddress(type);
-            address->pushValue(&data);
-        }
 
     /*
      * Getter/Setter
@@ -110,10 +99,7 @@ public:
     ofVec3f color() const {return _color;}
 
     // Returns walking frequency
-   /* void test(){Float other;
-                 _frequency.listen(other);}
-    */
-    Float frequency() const {return _frequency.get();}
+    Float frequency() const {return _frequency->get();}
 
     // Returns if the bot is in zone or not
     Bool isInZone() const {return _inZone.get();}
@@ -146,7 +132,7 @@ private:
     ofVec3f _color;
 
     // Frequency of the walk, in Hz (default = 2Hz)
-    Parameter<Float> _frequency;
+    Parameter<Float> * _frequency;
 
     // boolean to check if the position is inbound or not
     Parameter<Bool> _inZone;

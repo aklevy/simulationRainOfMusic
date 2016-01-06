@@ -11,7 +11,7 @@ ofApp::ofApp():
 
 void ofApp::setup(){
     // To print out log, uncomment the line below
-    // ofSetLogLevel(OF_LOG_VERBOSE);
+    //ofSetLogLevel(OF_LOG_VERBOSE);
 
     // To change the frame rate, uncomment the line below
     ofSetFrameRate(60);
@@ -20,16 +20,27 @@ void ofApp::setup(){
     // rather than always drawing things on top of each other
     ofEnableDepthTest();
 
+    // GUI
+    /*_gui.setup("panel");
+    _gui.add();
+    */
+    //ofSleepMillis(10000);
     // Fill Metabot vector
     _metabots.emplace_back(1, _nw.getSceneNode()); //construct instead of copy
     //_metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50));
-
-    // Example for 3D model : warning : slows down the app
+    _metabots.emplace_back(2, _nw.getSceneNode(),ofVec3f(20),ofVec3f(200,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj");
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+    // Example for 3D model
     _metabots.emplace_back(3, _nw.getSceneNode(),ofVec3f(40),ofVec3f(400,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj"); //construct instead of copy
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
-
+    _metabots.emplace_back(4, _nw.getSceneNode(),ofVec3f(40),ofVec3f(0,0,400),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
     // Fill Drone vector
    // _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
 }

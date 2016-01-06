@@ -12,6 +12,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
 
     // adds the metabot to the node Scene
     shareMetabot(parentNode);
+    std::cout << " constructor "<< _id<<std::endl;
 
     // creates parameters to be published
     _collision = Parameter<Bool>(_metabotNode,
@@ -24,11 +25,26 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
                               string("inZone"), false);
 
     // creates parameters to be published and listened
-    _frequency =Parameter<Float>(_metabotNode,
-                                Value::Type::FLOAT,
-                                Float(freq),
-                                string("frequency"), true);
+    _frequency = new Parameter<Float>(_metabotNode,
+                                  Value::Type::FLOAT,
+                                  Float(freq),
+                                  string("frequency"+to_string(_id)), true);
+    std::cout << _frequency->getAddress() <<std::endl;
+    _frequency->getAddress()->addCallback([=](const Value *v){
+
+        cout << "ici"<<endl;
+        std::cout << _frequency->getName()<<std::endl;
+
+        if(_frequency->getName() == string("frequency"+to_string(_id))){
+            Float * val= (Float *)v;
+            std::cout << std::to_string((int)val->value)<<" "<< _id<<std::endl;
+
+            _frequency->set(val->value);
+         std::cout << std::to_string((int)val->value)<<" "<< std::to_string(_id)<<std::endl;
+      }
+        });
 }
+
 
 //--------------------------------------------------------------
 

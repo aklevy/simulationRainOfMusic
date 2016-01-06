@@ -1,6 +1,7 @@
 #pragma once
 
 #include <thread>
+//#include "ofxGui.h"
 
 #include "ofMain.h"
 #include "view.hpp"
@@ -40,7 +41,7 @@ public:
             }
 
             // Checks if the position is not out of the zone
-            if((Bool(false) == bot.isInZone())&& !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
+            if((Bool(true) == bot.isInZone())&& !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
                 std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
                 /* _warning = "The "
                     + bot.className() + " " + std::to_string(bot.id())
@@ -136,5 +137,8 @@ private:
     // Network for communication
     Network _nw;
 
-
+    // GUI
+ /*   ofxPanel _gui;
+    Parameter<Float> _coll;
+*/
 };
