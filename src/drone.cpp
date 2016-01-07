@@ -66,9 +66,9 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
         OSSIA::Float * valz = (OSSIA::Float *) val->value[2];
 
         if(valx->value != _position.get().x
-                && valy->value != _position.get().y
-                && valz->value != _position.get().z){
-            _position.set(ofVec3f(valx->value,valy->value,valz->value));
+                && valz->value != _position.get().y
+                && valy->value != _position.get().z){
+            _position.set(ofVec3f(valx->value,valz->value,valy->value));
         }
     });
     _position.addListener(&_position,&Parameter<ofVec3f>::listen);
