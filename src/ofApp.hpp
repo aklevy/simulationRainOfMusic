@@ -42,10 +42,7 @@ public:
                 _warning = "Warning: Out of zone for the robot "
                         + bot.className() + " " + std::to_string(bot.id())
                         + "\n ";
-                /* _warning = "The "
-                    + bot.className() + " " + std::to_string(bot.id())
-                    + " is out of the zone\n";
-            */
+
                 bot.outOfZone();
                 _play.set(false); //stop playing once a robot is out of zone
             }
@@ -120,6 +117,5 @@ private:
     // GUI
     ofxPanel _gui;
     // Boolean for the stop/play the choeregraphy
-    ofxToggle _stop;
     ofParameter<bool> _play;
 };
