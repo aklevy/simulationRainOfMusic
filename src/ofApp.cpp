@@ -43,6 +43,7 @@ void ofApp::setup(){
      * */
 
     _gui.setup("panel");
+    _gui.setPosition(10,100);
     _gui.add(_play.set("play",false));
     for(auto &metabot : _metabots){ //template bot
         _gui.add(metabot.parameters());
@@ -124,7 +125,6 @@ void ofApp::draw(){
     _gui.setFillColor(255);
     _gui.setBorderColor(255);
    */
-    _gui.setPosition(10,100);
     _gui.draw();
 }
 

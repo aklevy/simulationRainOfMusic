@@ -60,6 +60,12 @@ public:
     // Share the metabot with i-score
     void shareMetabot(std::shared_ptr<Node> parentNode);
 
+    // Listeners for GUI
+    void listenFreq(float &data){_frequency.update(Float(data));}
+    void listenSpeedX(float &data){_speed_x.update(Float(data));}
+    void listenSpeedY(float &data){_speed_y.update(Float(data));}
+
+
     /*
      * Getter/Setter
      * */

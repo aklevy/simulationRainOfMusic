@@ -31,6 +31,7 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
         Float * val= (Float *)v;
         _speed_x.set(val->value);
     });
+    _speed_x.addListener(this,&Drone::listenSpeedX);
 
     _speed_y = Parameter<float,Float>(_droneNode,
                                   Float(0),
@@ -40,6 +41,7 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
         Float * val= (Float *)v;
         _speed_y.set(val->value);
     });
+    _speed_y.addListener(this,&Drone::listenSpeedY);
 
     _speed_z = Parameter<float,Float>(_droneNode,
                                   Float(0),
@@ -49,6 +51,8 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
         Float * val= (Float *)v;
         _speed_z.set(val->value);
     });
+    _speed_z.addListener(this,&Drone::listenSpeedZ);
+
     // adds parameters to the group of parameter
     _parameters.setName(this->className()+std::to_string(_id));
     _parameters.add(_speed_x);

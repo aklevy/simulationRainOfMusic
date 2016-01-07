@@ -30,13 +30,13 @@ public:
         _address->pushValue(&ossiaData);
 
         // adds listener to listen to the gui
-        this->addListener(this,&Parameter::listen);
+       // this->addListener(this,&Parameter::listen);
     }
 
     // sets the name, the minimum and maximum value (for the gui)
     void setup(string name){
         this->setName(name);
-     }
+    }
     void setup(string name,DataValue min,DataValue max){
         this->setName(name);
         this->setMin(min);
@@ -47,20 +47,27 @@ public:
         return _address;
     }
 
-
+/*
     void getValueCallback(const Value * v){
         OSSIAValue * val= (OSSIAValue *)v;
         //ofParameter<DataValue>::set(&(val->value));
         //update(val);
         this->set(val->value);
-    }
+    }*/
 
 
     void listen(DataValue &data){
-        this->set(data);
-    }
+        std::cout << "ici" << data <<std::endl;
 
-    /*  void listen(DataValue &data){ // to be checked
+        this->set(data);
+        OSSIAValue * val = (OSSIAValue *)_address->getValue();
+
+        val->value = data;
+        _address->pushValue(val);
+        std::cout << this->get() <<" "<<val->value <<std::endl;
+    }
+/*
+      void listen(DataValue &data){ // to be checked
         // update the value
         _address->pullValue();
 
@@ -70,9 +77,10 @@ public:
         std::cout << std::to_string(this->get().value) <<std::endl;
         std::cout << " et " <<std::to_string(data.value) <<std::endl;
 
-    }
-*/
+    }*/
+
     void update(OSSIAValue other){
+
         // change attribute value
         this->set(other.value);
         // update the changed attribute value

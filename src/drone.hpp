@@ -56,6 +56,11 @@ public:
     // Share the drone with i-score
     void shareDrone(std::shared_ptr<Node> parentNode);
 
+    // Listeners for GUI
+    void listenSpeedX(float &data){_speed_x.update(Float(data));}
+    void listenSpeedY(float &data){_speed_y.update(Float(data));}
+    void listenSpeedZ(float &data){_speed_z.update(Float(data));}
+
     /*
      * Getter/Setter
      * */

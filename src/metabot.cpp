@@ -33,8 +33,8 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     _frequency.getAddress()->addCallback([&](const Value *v){
         Float * val= (Float *)v;
         _frequency.set(val->value);
-        //std::cout << std::to_string((int)val->value)<<" "<< std::endl;
     });
+    _frequency.addListener(this,&Metabot::listenFreq);
 
     // Speed set up
     _speed_x = Parameter<float,Float>(_metabotNode,
@@ -45,6 +45,8 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
         Float * val= (Float *)v;
         _speed_x.set(val->value);
     });
+    _speed_x.addListener(this,&Metabot::listenSpeedX);
+
 
     _speed_y = Parameter<float,Float>(_metabotNode,
                                   Float(0),
@@ -54,12 +56,14 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
         Float * val= (Float *)v;
         _speed_y.set(val->value);
     });
+    _speed_y.addListener(this,&Metabot::listenSpeedY);
 
 
     // adds parameters to the group of parameter
     _parameters.setName(this->className()+std::to_string(_id));
-   // _parameters.add(_collision); // these two booleans don't need to be control on the GUI
-   // _parameters.add(_inZone);
+   /* _parameters.add(_collision); // these two booleans don't need to be control on the GUI
+    _parameters.add(_inZone);
+    */
     _parameters.add(_frequency);
     _parameters.add(_speed_x);
     _parameters.add(_speed_y);
