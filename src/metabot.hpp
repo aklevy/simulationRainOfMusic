@@ -51,9 +51,8 @@ public:
     void updateBot(){_loader.update();}
 
     // Moves to the next position
-    void move(ofVec3f speed); // the speed should be automatically updated,
-                              // so move() will not take argument (attribute _speed to ba added)
-
+    void move(ofVec3f speed);
+    void move();
     /*
      * Networks methods
      */
@@ -127,6 +126,10 @@ private:
 
     // Metabot current position
     ofVec3f _position;
+
+    // Speed values updated from i-score
+    Parameter<float,Float> _speed_x;
+    Parameter<float,Float> _speed_y;
 
     // Metabot color (temporary used in selecting in ofApp)
     ofVec3f _color;

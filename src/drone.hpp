@@ -47,6 +47,8 @@ public:
 
     // Moves to the next position
     void move(ofVec3f speed);
+    void move();
+
 
     /*
      * Networks methos
@@ -116,6 +118,11 @@ private:
 
     // Drone current position
     ofVec3f _position;
+
+    // Speed values updated from i-score
+    Parameter<float,Float> _speed_x;
+    Parameter<float,Float> _speed_y;
+    Parameter<float,Float> _speed_z; // z axis is the height
 
     // Drone color (temporary used in selecting in ofApp)
     ofVec3f _color;

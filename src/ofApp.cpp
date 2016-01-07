@@ -38,8 +38,12 @@ void ofApp::setup(){
     // Fill Drone list
     _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(10),ofVec3f(0,200,50)); //construct instead of copy
 
-    // GUI
+    /*
+     *  GUI
+     * */
+
     _gui.setup("panel");
+    _gui.add(_play.set("play",false));
     for(auto &metabot : _metabots){ //template bot
         _gui.add(metabot.parameters());
     }
@@ -108,18 +112,19 @@ void ofApp::draw(){
     ofDrawBitmapStringHighlight(_warning, ofGetWidth()/2, 20);
 
     // Displays general message (=time)
-    if(play){
+    if(_play.get()){
         _msgGeneral.clear();
         _msgGeneral = "Time : "+ std::to_string((int)ofGetElapsedTimeMicros()*pow(10,-6))+"\n";
     }
     ofDrawBitmapStringHighlight(_msgGeneral, 10, ofGetHeight()-20);
 
-    /*_gui.setPosition(10,100);
+    /*
     _gui.setTextColor(ofColor(255));
     _gui.setBackgroundColor(ofColor(255));
     _gui.setFillColor(255);
     _gui.setBorderColor(255);
-    _gui.setName("plop");*/
+   */
+    _gui.setPosition(10,100);
     _gui.draw();
 }
 

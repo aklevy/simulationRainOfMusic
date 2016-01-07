@@ -22,24 +22,32 @@ public:
     template<typename Bot_T>
     void updateOneBot(Bot_T& bot){
 
-        if(play){
+        if(_play.get()){
             // if bot is in zone update position and  the choeragraphy is on play
             if(bot.isInZone()){
-                if(bot.id() == 1)
+                // test without i-score
+                /*  if(bot.id() == 1)
                     bot.move(ofVec3f(3,0,1));
                 // the speed is updated automatically as an attribute of the robot
                 else
                     bot.move(ofVec3f(-1,0,0.5));
+                */
+                bot.move();
             }
+
 
             // Checks if the position is not out of the zone
             if(bot.isInZone()&& !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
-                std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
+                //std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
+                _warning = "Warning: Out of zone for the robot "
+                        + bot.className() + " " + std::to_string(bot.id())
+                        + "\n ";
                 /* _warning = "The "
                     + bot.className() + " " + std::to_string(bot.id())
                     + " is out of the zone\n";
-            */bot.outOfZone();
-                play = false; //stop playing once a robot is out of zone
+            */
+                bot.outOfZone();
+                _play.set(false); //stop playing once a robot is out of zone
             }
         }
 
@@ -56,7 +64,7 @@ public:
                     + std::to_string((int)bot.position().x)+", "
                     + std::to_string((int)bot.position().y)+", "
                     + std::to_string((int)bot.position().z)+") \n";
-            play = false; //stop playing once a collision is detected
+            _play.set(false); //stop playing once a collision is detected
         }
     }
 
@@ -106,12 +114,12 @@ private:
     // Pixel of where the mouse clicked
     ofVec3f _pixel;
 
-    // Boolean for the stop/play the choeregraphy
-    bool play = true;
-
     // Network for communication
     Network _nw;
 
     // GUI
     ofxPanel _gui;
+    // Boolean for the stop/play the choeregraphy
+    ofxToggle _stop;
+    ofParameter<bool> _play;
 };

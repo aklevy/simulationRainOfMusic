@@ -25,6 +25,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     _inZone.setName("inZone");
 
     // creates parameters to be published and listened
+    // Frequency set up
     _frequency = Parameter<float,Float>(_metabotNode,
                                   Float(freq),
                                   string("frequency"));
@@ -35,11 +36,34 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
         //std::cout << std::to_string((int)val->value)<<" "<< std::endl;
     });
 
+    // Speed set up
+    _speed_x = Parameter<float,Float>(_metabotNode,
+                                  Float(0),
+                                  string("speed_x"));
+    _speed_x.setup("speed_x",-20,20);
+    _speed_x.getAddress()->addCallback([&](const Value *v){
+        Float * val= (Float *)v;
+        _speed_x.set(val->value);
+    });
+
+    _speed_y = Parameter<float,Float>(_metabotNode,
+                                  Float(0),
+                                  string("speed_y"));
+    _speed_y.setup("speed_y",-20,20);
+    _speed_y.getAddress()->addCallback([&](const Value *v){
+        Float * val= (Float *)v;
+        _speed_y.set(val->value);
+    });
+
+
     // adds parameters to the group of parameter
     _parameters.setName(this->className()+std::to_string(_id));
-    _parameters.add(_collision);
-    _parameters.add(_inZone);
+   // _parameters.add(_collision); // these two booleans don't need to be control on the GUI
+   // _parameters.add(_inZone);
     _parameters.add(_frequency);
+    _parameters.add(_speed_x);
+    _parameters.add(_speed_y);
+
   }
 
 
@@ -66,9 +90,14 @@ void Metabot::move(ofVec3f speed){
     if(!isInCollision()){
         _position += speed;
     }
-    //_frequency = speed.length();
 }
-
+void Metabot::move(){
+    if(!isInCollision()){
+        // a simple equation is used here but
+        // it can be changed to a more complex one if needed
+        _position += ofVec3f(_speed_x.get(),0,_speed_y.get());
+    }
+}
 //--------------------------------------------------------------
 
 string Metabot::info() const
