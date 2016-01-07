@@ -59,9 +59,6 @@ public:
     // Share the drone with i-score
     void shareDrone(std::shared_ptr<Node> parentNode);
 
-    // Listeners for GUI
-    void listenPos(ofVec3f &data){_position.set(data);}
-
     /*
      * Getter/Setter
      * */
@@ -128,8 +125,7 @@ private:
     // Speed values updated from i-score
     Parameter<float> _speed_x,_speed_y,_speed_z;
    // z axis is the height
-    ofParameter<ofVec3f> _position;
-
+    Parameter<ofVec3f> _position;
 
     // Drone color (temporary used in selecting in ofApp)
     ofVec3f _color;

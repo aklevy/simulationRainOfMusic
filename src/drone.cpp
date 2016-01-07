@@ -54,8 +54,24 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
     _speed_z.addListener(&_speed_z,&Parameter<float>::listen);
 
     // position
-    _position.set("position",ofVec3f(pos.x,pos.z,pos.y),ofVec3f(0),ofVec3f(500,300,300));
-    _position.addListener(this,&Drone::listenPos);
+    _position = Parameter<ofVec3f>(_droneNode,
+                                pos,
+                                string("position"));
+    _position.setup("position",ofVec3f(0),ofVec3f(500,300,400));
+
+    _position.getAddress()->addCallback([&](const Value *v){
+        OSSIA::Tuple * val = (OSSIA::Tuple *) v;
+        OSSIA::Float * valx = (OSSIA::Float *) val->value[0];
+        OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
+        OSSIA::Float * valz = (OSSIA::Float *) val->value[2];
+
+        if(valx->value != _position.get().x
+                && valy->value != _position.get().y
+                && valz->value != _position.get().z){
+            _position.set(ofVec3f(valx->value,valy->value,valz->value));
+        }
+    });
+    _position.addListener(&_position,&Parameter<ofVec3f>::listen);
 
     // adds parameters to the group of parameter
     _parameters.setName(this->className()+std::to_string(_id));
