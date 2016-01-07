@@ -21,10 +21,20 @@ public:
     // Updates one robot
     template<typename Bot_T>
     void updateOneBot(Bot_T& bot){
-        if(start == 0 && _play.get()){
+
+        // move all the bots to their initial position
+        if(_reset){
+            bot.reset();
             start = (int)ofGetElapsedTimeMicros()*pow(10,-6);
         }
+
         if(_play.get()){
+
+            //get the time when the play button is pressed
+            if(start == 0){
+                start = (int)ofGetElapsedTimeMicros()*pow(10,-6);
+            }
+
             // if bot is in zone update position and  the choeragraphy is on play
             if(bot.isInZone()){
                 // test without i-score
@@ -120,7 +130,8 @@ private:
     ofxPanel _gui;
 
     // Boolean for the stop/play the choeregraphy
-    ofParameter<bool> _play;
+    Parameter<bool> _play;
+    ofxButton _reset;
 
     // Time to start
     int start = 0;

@@ -4,10 +4,59 @@
 #include "ofMain.h"
 #include "network.hpp"
 
-using namespace OSSIA;
-using namespace std;
+template<typename> struct MatchingType;
 
-template <class DataValue,class OSSIAValue>
+template<> struct MatchingType<float> {
+        using ofx_type = float;
+        using ossia_type = OSSIA::Float;
+        static constexpr const auto val = OSSIA::Value::Type::FLOAT;
+
+        static ossia_type* convert(ofx_type f) { return new ossia_type{f}; }
+};
+template<> struct MatchingType<double> {
+    using ofx_type = double;
+        static constexpr const auto val = OSSIA::Value::Type::FLOAT;
+        using ossia_type = OSSIA::Float;
+
+        static ossia_type* convert(ofx_type f) { return new ossia_type{float(f)}; }
+};
+template<> struct MatchingType<int> {
+    using ofx_type = int;
+        static constexpr const auto val = OSSIA::Value::Type::INT;
+        using ossia_type = OSSIA::Int;
+
+        static ossia_type* convert(ofx_type f) { return new ossia_type{f}; }
+};
+template<> struct MatchingType<bool> {
+    using ofx_type = bool;
+        static constexpr const auto val = OSSIA::Value::Type::BOOL;
+        using ossia_type = OSSIA::Bool;
+
+        static ossia_type* convert(ofx_type f) { return new ossia_type{f}; }
+};
+template<> struct MatchingType<string> {
+    using ofx_type = std::string;
+        static constexpr const auto val = OSSIA::Value::Type::STRING;
+        using ossia_type = OSSIA::String;
+
+        static ossia_type* convert(ofx_type f) { return new ossia_type{f}; }
+};
+template<> struct MatchingType<ofVec3f> {
+    using ofx_type = ofVec3f;
+        static constexpr const auto val = OSSIA::Value::Type::TUPLE;
+        using ossia_type = OSSIA::Tuple;
+
+        static ossia_type* convert(ofx_type f) {
+            auto tuple = new ossia_type;
+            tuple->value.reserve(3);
+            tuple->value.push_back(new OSSIA::Float(f.x));
+            tuple->value.push_back(new OSSIA::Float(f.y));
+            tuple->value.push_back(new OSSIA::Float(f.z));
+            return tuple;
+        }
+};
+
+template <class DataValue>
 class Parameter : public ofParameter<DataValue>{
 private:
     std::shared_ptr<Node> _botNode;
@@ -16,18 +65,18 @@ public:
     Parameter(){}
 
     Parameter(shared_ptr<Node> parentBotNode,
-              OSSIAValue ossiaData,
+              DataValue data,
               string name):
-        ofParameter<DataValue>(name,ossiaData.value),
+        ofParameter<DataValue>(name,data),
         _botNode(parentBotNode){
 
-        // _data = data;
         //creates node
         std::shared_ptr<Node> node = *(_botNode->emplace(_botNode->children().cend(), name));
 
         //set value
-        _address = node->createAddress(ossiaData.getType());
-        _address->pushValue(&ossiaData);
+        auto val = MatchingType<DataValue>::convert(data);
+        _address = node->createAddress(MatchingType<DataValue>::val);
+        _address->pushValue(val);
 
         // adds listener to listen to the gui
        // this->addListener(this,&Parameter::listen);
@@ -47,44 +96,18 @@ public:
         return _address;
     }
 
-/*
-    void getValueCallback(const Value * v){
-        OSSIAValue * val= (OSSIAValue *)v;
-        //ofParameter<DataValue>::set(&(val->value));
-        //update(val);
-        this->set(val->value);
-    }*/
-
-
     void listen(DataValue &data){
-        std::cout << "ici" << data <<std::endl;
-
-        this->set(data);
-        OSSIAValue * val = (OSSIAValue *)_address->getValue();
-
-        val->value = data;
-        _address->pushValue(val);
-        std::cout << this->get() <<" "<<val->value <<std::endl;
+        this->update(data);
     }
-/*
-      void listen(DataValue &data){ // to be checked
-        // update the value
-        _address->pullValue();
 
-        // get the value
-        DataValue * val= (DataValue *)_address->getValue();
-        this->set(val->value);
-        std::cout << std::to_string(this->get().value) <<std::endl;
-        std::cout << " et " <<std::to_string(data.value) <<std::endl;
 
-    }*/
+    void update(DataValue other){
 
-    void update(OSSIAValue other){
-
+        auto val = MatchingType<DataValue>::convert(other);
         // change attribute value
-        this->set(other.value);
+        this->set(other);
         // update the changed attribute value
-        _address->pushValue(&other);
+        _address->pushValue(val);
     }
 };
 

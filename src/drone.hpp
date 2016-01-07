@@ -49,6 +49,9 @@ public:
     void move(ofVec3f speed);
     void move();
 
+    // Resets the robot
+    void reset();
+
 
     /*
      * Networks methos
@@ -57,9 +60,7 @@ public:
     void shareDrone(std::shared_ptr<Node> parentNode);
 
     // Listeners for GUI
-    void listenSpeedX(float &data){_speed_x.update(Float(data));}
-    void listenSpeedY(float &data){_speed_y.update(Float(data));}
-    void listenSpeedZ(float &data){_speed_z.update(Float(data));}
+    void listenPos(ofVec3f &data){_position.set(data);}
 
     /*
      * Getter/Setter
@@ -71,10 +72,10 @@ public:
     void modelToDefault(){_modelName = defaultModel();}
 
     // Set inZone to false : bot out of zone
-    void outOfZone(){_inZone.update(Bool(false));}
+    void outOfZone(){_inZone.update(false);}
 
     // Set collision to true : bot in collision with another
-    void collision(){_collision.update(Bool(true));;}
+    void collision(){_collision.update(true);}
 
     // Returns information on the drone
     string info() const;
@@ -92,7 +93,7 @@ public:
     ofVec3f size() const {return _size;}
 
     // Returns current position
-    ofVec3f position() const {return _position;}
+    ofVec3f position() const {return ofVec3f(_position.get().x,_position.get().z,_position.get().y);}
 
     // Returns color
     ofVec3f color() const {return _color;}
@@ -121,13 +122,14 @@ private:
     // Drone size
     ofVec3f _size;
 
-    // Drone current position
-    ofVec3f _position;
+    // Drone current position and initial position
+    ofVec3f _initialPos;
 
     // Speed values updated from i-score
-    Parameter<float,Float> _speed_x;
-    Parameter<float,Float> _speed_y;
-    Parameter<float,Float> _speed_z; // z axis is the height
+    Parameter<float> _speed_x,_speed_y,_speed_z;
+   // z axis is the height
+    ofParameter<ofVec3f> _position;
+
 
     // Drone color (temporary used in selecting in ofApp)
     ofVec3f _color;
@@ -136,10 +138,10 @@ private:
     ofParameterGroup _parameters;
 
     // boolean to check if the position is inbound or not
-    Parameter<bool,Bool> _inZone;
+    Parameter<bool> _inZone;
 
     // boolean for the collision
-    Parameter<bool,Bool> _collision;
+    Parameter<bool> _collision;
 
     // 3D model name
     string _modelName;

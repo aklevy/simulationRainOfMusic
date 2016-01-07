@@ -30,7 +30,7 @@ void ofApp::setup(){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
     // Example for 3D model
-    _metabots.emplace_back(3, _nw.getSceneNode(),ofVec3f(40),ofVec3f(400,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj"); //construct instead of copy
+    _metabots.emplace_back(3, _nw.getSceneNode(),ofVec3f(10),ofVec3f(400,0,50),"/opt/of_v0.9.0_linux64_release/apps/myApps/simulationRainOfMusic/bin/data/spider.obj"); //construct instead of copy
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
@@ -44,7 +44,26 @@ void ofApp::setup(){
 
     _gui.setup("panel");
     _gui.setPosition(10,100);
-    _gui.add(_play.set("play",false));
+
+    _play = Parameter<bool>( _nw.getSceneNode(),
+                             false,
+                             string("play"));
+    _play.setup("play");
+
+    // i-score listener
+    _play.getAddress()->addCallback([&](const Value *v){
+        Float * val= (Float *)v;
+        if(val->value != _play){
+            _play.set(val->value);
+        }
+    });
+
+    // gui listener
+    _play.addListener(&_play,&Parameter<bool>::listen);
+
+    _gui.add(_play);
+    _gui.add(_reset.setup("reset"));
+
     for(auto &metabot : _metabots){ //template bot
         _gui.add(metabot.parameters());
     }
