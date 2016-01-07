@@ -55,6 +55,19 @@ template<> struct MatchingType<ofVec3f> {
             return tuple;
         }
 };
+template<> struct MatchingType<ofVec2f> {
+    using ofx_type = ofVec2f;
+        static constexpr const auto val = OSSIA::Value::Type::TUPLE;
+        using ossia_type = OSSIA::Tuple;
+
+        static ossia_type* convert(ofx_type f) {
+            auto tuple = new ossia_type;
+            tuple->value.reserve(2);
+            tuple->value.push_back(new OSSIA::Float(f.x));
+            tuple->value.push_back(new OSSIA::Float(f.y));
+            return tuple;
+        }
+};
 
 template <class DataValue>
 class Parameter : public ofParameter<DataValue>{

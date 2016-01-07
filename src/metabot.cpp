@@ -32,7 +32,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     _frequency.setup("frequency",0,100);
 
     _frequency.getAddress()->addCallback([&](const Value *v){
-        Float * val= (Float *)v;
+        OSSIA::Float * val= (OSSIA::Float *)v;
         if(val->value !=_frequency){
             _frequency.set(val->value);
         }
@@ -46,7 +46,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     _speed_x.setup("speed_x",-20,20);
 
     _speed_x.getAddress()->addCallback([&](const Value *v){
-        Float * val= (Float *)v;
+        OSSIA::Float * val= (OSSIA::Float *)v;
         if(val->value !=_speed_x){
             _speed_x.set(val->value);
         }
@@ -60,15 +60,29 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
                                 string("speed_y"));
     _speed_y.setup("speed_y",-20,20);
     _speed_y.getAddress()->addCallback([&](const Value *v){
-        Float * val= (Float *)v;
+        OSSIA::Float * val= (OSSIA::Float *)v;
         if(val->value !=_speed_y){
             _speed_y.set(val->value);
         }
     });
     _speed_y.addListener(&_speed_y,&Parameter<float>::listen);
 
-    _position.set("position",pos,ofVec2f(0),ofVec2f(500,300));
-    _position.addListener(this,&Metabot::listenPos);
+    _position = Parameter<ofVec2f>(_metabotNode,
+                                pos,
+                                string("position"));
+    _position.setup("position",ofVec2f(0),ofVec2f(500,300));
+
+    _position.getAddress()->addCallback([&](const Value *v){
+        OSSIA::Tuple * val = (OSSIA::Tuple *) v;
+        OSSIA::Float * valx = (OSSIA::Float *) val->value[0];
+        OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
+
+        if(valx->value != _position.get().x
+                && valy->value != _position.get().y){
+            _position.set(ofVec2f(valx->value,valy->value));
+        }
+    });
+    _position.addListener(&_position,&Parameter<ofVec2f>::listen);
 
 
     // adds parameters to the group of parameter

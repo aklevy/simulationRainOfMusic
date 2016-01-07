@@ -20,7 +20,6 @@
 #include "Network/Protocol/Local.h"
 #include "Network/Protocol/Minuit.h"
 
-using namespace OSSIA;
 using namespace std;
 
 //Point(0,0,0) is at the back left corner
@@ -64,10 +63,6 @@ public:
 
     // Share the metabot with i-score
     void shareMetabot(std::shared_ptr<Node> parentNode);
-
-    // Listeners for GUI
-    void listenPos(ofVec2f &data) { _position.set(data); }
-
 
     /*
      * Getter/Setter
@@ -138,7 +133,7 @@ private:
 
     // Speed values updated from i-score
     Parameter<float> _speed_x,_speed_y;
-    ofParameter<ofVec2f> _position;
+    Parameter<ofVec2f> _position;
 
     // Metabot color (temporary used in selecting in ofApp)
     ofVec3f _color;
