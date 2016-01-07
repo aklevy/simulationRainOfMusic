@@ -115,7 +115,7 @@ void ofApp::draw(){
     // Displays general message (=time)
     if(_play.get()){
         _msgGeneral.clear();
-        _msgGeneral = "Time : "+ std::to_string((int)ofGetElapsedTimeMicros()*pow(10,-6))+"\n";
+        _msgGeneral = "Time : "+ std::to_string((int)ofGetElapsedTimeMicros()*pow(10,-6)-start)+"\n";
     }
     ofDrawBitmapStringHighlight(_msgGeneral, 10, ofGetHeight()-20);
 

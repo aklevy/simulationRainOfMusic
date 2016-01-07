@@ -21,7 +21,9 @@ public:
     // Updates one robot
     template<typename Bot_T>
     void updateOneBot(Bot_T& bot){
-
+        if(start == 0 && _play.get()){
+            start = (int)ofGetElapsedTimeMicros()*pow(10,-6);
+        }
         if(_play.get()){
             // if bot is in zone update position and  the choeragraphy is on play
             if(bot.isInZone()){
@@ -116,6 +118,10 @@ private:
 
     // GUI
     ofxPanel _gui;
+
     // Boolean for the stop/play the choeregraphy
     ofParameter<bool> _play;
+
+    // Time to start
+    int start = 0;
 };
