@@ -78,7 +78,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
         OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
 
         if(valx->value != _position.get().x
-                && valy->value != _position.get().y){
+                || valy->value != _position.get().y){
             _position.set(ofVec2f(valx->value,valy->value));
         }
     });
