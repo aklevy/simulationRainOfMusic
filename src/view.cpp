@@ -4,7 +4,7 @@ View::View(ofVec3f zoneDim):
     _zoneDim(zoneDim){
 }
 //--------------------------------------------------------------
-void View::drawBot(const ofVec3f position,const ofVec3f color, const int size, const string& modelName, ofxAssimpModelLoader& model) {
+void View::drawBot(const ofVec3f position,const ofVec3f color, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model) {
 
     ofPushStyle();
     ofSetColor(color.x,color.y,color.z);
@@ -16,18 +16,18 @@ void View::drawBot(const ofVec3f position,const ofVec3f color, const int size, c
     //std::cout << modelName<<std::endl;
     if(string::npos == modelName.find("obj")){
         // std::cout << modelName<<std::endl;
-        ofTranslate(ofVec3f(size/2) - _zoneDim/2);
+        ofTranslate(size/2 - _zoneDim/2);
         ofTranslate(position);
 
         if(modelName == "Square"){
-            ofDrawBox(size);
+            ofDrawBox(size.x,size.y,size.z);
 
             ofSetColor(0,0,0);
             ofNoFill();
-            ofDrawBox(size);
+            ofDrawBox(size.x,size.y,size.z);
         }
         else if(modelName == "Sphere"){
-            ofDrawSphere(size);
+            ofDrawSphere(size.x);
         }
     }
     else{
@@ -45,25 +45,24 @@ void View::drawBot(const ofVec3f position,const ofVec3f color, const int size, c
 }
 //--------------------------------------------------------------
 
-void View::draw3dObject(const ofVec3f position, const int size, const string& modelName, ofxAssimpModelLoader& model){
+void View::draw3dObject(const ofVec3f position, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model){
     // Load 3d object
 
-
     // translation
-    ofTranslate(ofVec3f(size/2) - _zoneDim/2);
+    ofTranslate(size/2 - _zoneDim/2);
     //ofTranslate(position);
 
     // Draw
-    ofTranslate(ofVec3f(0,-55,0));
+    ofTranslate(ofVec3f(0,-size.y/2,0));
     model.setPosition(position.x,position.y,position.z);
     model.drawFaces();
 }
 //--------------------------------------------------------------
 
-bool View::checkPosition(ofVec3f pos, int size,string model){
+bool View::checkPosition(ofVec3f pos, ofVec3f size,string model){
     for(int i=0;i<3;i++){
         //if the bot is out of bound, return true
-        if ((pos[i] >= _zoneDim[i] - size) || (pos[i] < 0)){
+        if ((pos[i] >= _zoneDim[i] - size[i]) || (pos[i] < 0)){
 
             return false;
         }
@@ -72,19 +71,19 @@ bool View::checkPosition(ofVec3f pos, int size,string model){
 }
 //--------------------------------------------------------------
 
-void View::paintRed(ofVec3f pos, int size,string model){
+void View::paintRed(ofVec3f pos, ofVec3f size, string model){
     for(int i=0;i<3;i++){
         ofVec3f trans = pos;
-        ofVec3f squareSize = ofVec3f(size);
+        ofVec3f squareSize = size;
 
         //if the bot is out of bound, return true
-        if ((pos[i] >= _zoneDim[i] - size) || (pos[i] < 0)){
-            if (pos[i] >= _zoneDim[i] - size){
-                trans[i] += size/2;
+        if ((pos[i] >= _zoneDim[i] - size[i]) || (pos[i] < 0)){
+            if (pos[i] >= _zoneDim[i] - size[i]){
+                trans[i] += size[i]/2;
                 //std::cout<<  " will be out of the zone, check position["<< std::to_string(i) <<"]"<< std::endl;
             }
             if (pos[i] < 0) {
-                trans[i] -= size/2;
+                trans[i] -= size[i]/2;
                 // std::cout<<  " will be out of the zone, check position["<< std::to_string(i) <<"]"<< std::endl;
             }
             squareSize[i] = 1;
@@ -104,7 +103,7 @@ void View::paintRed(ofVec3f pos, int size,string model){
                 size= 2 * size;
             }
 
-            ofTranslate(ofVec3f(size/2) - _zoneDim/2);
+            ofTranslate(size/2 - _zoneDim/2);
 
             ofSetColor(255,0,0); //red
             ofDrawBox(squareSize.x,squareSize.y,squareSize.z);
@@ -118,12 +117,11 @@ void View::paintRed(ofVec3f pos, int size,string model){
 
 bool View::detectCollision(ofVec3f pos, ofVec3f size, ofVec3f otherPos, ofVec3f otherSize)
 {
-    float dist = pos.distance(otherPos) - sqrt(2)/2*(size.x + otherSize.x);//distance - radius of bounding sphere
-    if (dist < _collisionDistance){
-        ofVec3f middle = (pos+otherPos)/2;//pos+dist/2;
-        drawCollisionCircle(middle,sqrt(2)/2*(size.x + otherSize.x));
-        //drawBoundingSphere(middle,max(otherSize.x,size.x));
-        // std::cout << "collision"<<std::endl;
+    float dist = pos.distance(otherPos) - MAX(size.x,MAX(size.y,size.z))/2 - MAX(otherSize.x,MAX(otherSize.y,otherSize.z))/2;//sqrt(2)/2*(size.x + otherSize.x);//distance - radius of bounding sphere
+    if (dist < size.x+2){
+        pos.middle(otherPos);
+        //ofVec3f middle = (pos+otherPos)/2;//pos+dist/2;
+        drawCollisionCircle(pos,size);
         return true;
     }
     return false;
@@ -131,10 +129,10 @@ bool View::detectCollision(ofVec3f pos, ofVec3f size, ofVec3f otherPos, ofVec3f 
 
 //--------------------------------------------------------------
 
-void View::drawCollisionCircle(  const ofVec3f& position, const int size){
+void View::drawCollisionCircle(  const ofVec3f& position, const ofVec3f size){
 
     ofPushMatrix();
-    ofTranslate(ofVec3f(size/2) - _zoneDim/2);
+    ofTranslate(size/2 - _zoneDim/2);
     ofPushStyle();
     ofSetColor(255,0,0);
     //  ofSpherePrimitive sphere;
@@ -145,7 +143,7 @@ void View::drawCollisionCircle(  const ofVec3f& position, const int size){
     //  of3dGraphics::drawSphere(position,size/2);
     // sphere.draw();
     ofNoFill();
-    ofDrawCircle(position,size/2);
+    ofDrawCircle(position,size.x);
     ofPopStyle();
     ofPopMatrix();
 

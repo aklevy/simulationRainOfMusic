@@ -37,7 +37,11 @@ public:
     Drone(const Drone&) = delete; //forbids copy constructor
 
     Drone(Drone&&) = default; //move constructor : ctrl-X
-    Drone(int id, std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f pos = ofVec3f(0), string modelName = "Sphere");
+    Drone(int id,
+          std::shared_ptr<Node> parentNode,
+          ofVec3f pos = ofVec3f(0),
+          ofVec3f size = ofVec3f(10),
+          string modelName = "Sphere");
 
     // Remove listeners
     ~Drone();

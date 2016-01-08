@@ -8,7 +8,7 @@ Drone::~Drone(){
     _speed_z.removeListener(&_speed_z,&Parameter<float>::listen);
 
 }
-Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f pos, string modelName):
+Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f pos, ofVec3f size, string modelName):
     _id(id),
     _size(size),
     _initialPos(pos),

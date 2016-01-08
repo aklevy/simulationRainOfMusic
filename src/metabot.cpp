@@ -11,7 +11,7 @@ Metabot::~Metabot(){
 
 }
 
-Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f pos, string modelName, float freq):
+Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f pos, ofVec3f size, string modelName, float freq):
     _id(id),
     _size(size),
     _initialPos(pos),
@@ -97,8 +97,7 @@ void Metabot::setup(){
 bool Metabot::load(){
     if(_loader.loadModel(_modelName)){
         _loader.setScale(_size.x/100,_size.y/100,_size.z/100);
-       // _size = _loader.getScale() * _loader.getBoundingBoxForNode();
-        _size +=70;
+        _size = ofVec3f(30);
         return true;
     }
     else{

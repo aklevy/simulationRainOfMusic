@@ -38,8 +38,8 @@ public:
     Metabot(Metabot&&) = default; //move constructor : ctrl-X
     Metabot(int id,
             std::shared_ptr<Node> parentNode,
-            ofVec3f size = ofVec3f(30),
             ofVec3f pos = ofVec3f(0),
+            ofVec3f size = ofVec3f(30),
             string modelName = "Square",
             float freq = 2);
 

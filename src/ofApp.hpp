@@ -49,7 +49,7 @@ public:
 
 
             // Checks if the position is not out of the zone
-            if(bot.isInZone()&& !_view.checkPosition(bot.position(),bot.size().x,bot.modelName())){
+            if(bot.isInZone()&& !_view.checkPosition(bot.position(),bot.size(),bot.modelName())){
                 //std::cout << "Robot "<< bot.className()<< " "<< bot.id() <<" out of the zone" <<std::endl;
                 _warning = "Warning: Out of zone for the robot "
                         + bot.className() + " " + std::to_string(bot.id())
@@ -76,15 +76,25 @@ public:
             _play.set(false); //stop playing once a collision is detected
         }
     }
+    //Check collision
+    template<typename Bot_T,typename OtherBot_T>
+    void checkCollision(Bot_T &bot, OtherBot_T &otherbot){
+        if(bot.id() != otherbot.id() && !otherbot.isInCollision()){
+            if(_view.detectCollision(bot.position(),bot.size(),
+                                     otherbot.position(),otherbot.size())){
+                bot.collision();
+            }
+        }
+    }
 
     // Draws one bot
     template<typename Bot_T>
     void drawOneBot(Bot_T& bot){
         // Checks if the bot is not ouf of zone
         if(!bot.isInZone()){
-            _view.paintRed(bot.position(),bot.size().x,bot.modelName());
+            _view.paintRed(bot.position(),bot.size(),bot.modelName());
         }
-        _view.drawBot(bot.position(),bot.color(),bot.size().x,bot.modelName(),bot.loader());
+        _view.drawBot(bot.position(),bot.color(),bot.size(),bot.modelName(),bot.loader());
     }
 
 
