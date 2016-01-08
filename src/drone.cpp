@@ -11,42 +11,28 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
     shareDrone(parentNode);
 
     // creates parameters to be published
-    _collision = Parameter<bool>(_droneNode,
-                                 false,
-                                 string("collision"));
-    _collision.setup("collision");
 
-    _inZone = Parameter<bool>(_droneNode,
-                              true,
-                              string("inZone"));
-    _inZone.setup("inZone");
+    _collision.setup(_droneNode,"collision",false);
+
+    _inZone.setup(_droneNode,"inZone",true);
 
     // Creates parameters to be published and listened
     // Speed set up
-    _speed_x = Parameter<float>(_droneNode,
-                                0,
-                                string("speed_x"));
-    _speed_x.setup("speed_x",-20,20);
+    _speed_x.setup(_droneNode,"speed_x",0,-20,20);
     _speed_x.getAddress()->addCallback([&](const Value *v){
         Float * val= (Float *)v;
         _speed_x.set(val->value);
     });
-     _speed_x.addListener(&_speed_x,&Parameter<float>::listen);
+    _speed_x.addListener(&_speed_x,&Parameter<float>::listen);
 
-    _speed_y = Parameter<float>(_droneNode,
-                                0,
-                                string("speed_y"));
-    _speed_y.setup("speed_y",-20,20);
+    _speed_y.setup(_droneNode,"speed_y",0,-20,20);
     _speed_y.getAddress()->addCallback([&](const Value *v){
         Float * val= (Float *)v;
         _speed_y.set(val->value);
     });
     _speed_y.addListener(&_speed_y,&Parameter<float>::listen);
 
-    _speed_z = Parameter<float>(_droneNode,
-                                0,
-                                string("speed_z"));
-    _speed_z.setup("speed_z",-20,20);
+    _speed_z.setup(_droneNode,"speed_z",0,-20,20);
     _speed_z.getAddress()->addCallback([&](const Value *v){
         Float * val= (Float *)v;
         _speed_z.set(val->value);
@@ -54,10 +40,7 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f po
     _speed_z.addListener(&_speed_z,&Parameter<float>::listen);
 
     // position
-    _position = Parameter<ofVec3f>(_droneNode,
-                                pos,
-                                string("position"));
-    _position.setup("position",ofVec3f(0),ofVec3f(500,300,400));
+    _position.setup(_droneNode,"position",pos,ofVec3f(0),ofVec3f(500,300,400));
 
     _position.getAddress()->addCallback([&](const Value *v){
         OSSIA::Tuple * val = (OSSIA::Tuple *) v;

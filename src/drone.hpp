@@ -90,7 +90,7 @@ public:
     ofVec3f size() const {return _size;}
 
     // Returns current position
-    ofVec3f position() const {return ofVec3f(_position.get().x,_position.get().z,_position.get().y);}
+    ofVec3f position() const {return ofVec3f(_position.get().x,_position.get().y,_position.get().z);}
 
     // Returns color
     ofVec3f color() const {return _color;}

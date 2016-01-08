@@ -45,10 +45,11 @@ void ofApp::setup(){
     _gui.setup("panel");
     _gui.setPosition(10,100);
 
-    _play = Parameter<bool>( _nw.getSceneNode(),
+    /*_play = Parameter<bool>( _nw.getSceneNode(),
                              false,
                              string("play"));
-    _play.setup("play");
+    */
+    _play.setup(_nw.getSceneNode(),"play",false);
 
     // i-score listener
     _play.getAddress()->addCallback([&](const Value *v){

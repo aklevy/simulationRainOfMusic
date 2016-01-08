@@ -13,23 +13,13 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     shareMetabot(parentNode);
 
     // creates parameters to be published
-    _collision = Parameter<bool>( _metabotNode,
-                                  false,
-                                  string("collision"));
-    _collision.setup("collision");
+    _collision.setup(_metabotNode,"collision",false);
 
-    _inZone = Parameter<bool>( _metabotNode,
-                               true,
-                               string("inZone"));
-    _inZone.setup("inZone");
+    _inZone.setup(_metabotNode,"inZone",true);
 
     // creates parameters to be published and listened
     // Frequency set up
-    _frequency = Parameter<float>( _metabotNode,
-                                   freq,
-                                   string("frequency"));
-
-    _frequency.setup("frequency",0,100);
+    _frequency.setup(_metabotNode,"frequency",freq,0,100);
 
     _frequency.getAddress()->addCallback([&](const Value *v){
         OSSIA::Float * val= (OSSIA::Float *)v;
@@ -40,10 +30,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     _frequency.addListener(&_frequency,&Parameter<float>::listen);
 
     // Speed set up
-    _speed_x = Parameter<float>(_metabotNode,
-                                0,
-                                string("speed_x"));
-    _speed_x.setup("speed_x",-20,20);
+    _speed_x.setup(_metabotNode,"speed_x",0,-20,20); // name , min , max
 
     _speed_x.getAddress()->addCallback([&](const Value *v){
         OSSIA::Float * val= (OSSIA::Float *)v;
@@ -54,11 +41,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
 
     _speed_x.addListener(&_speed_x,&Parameter<float>::listen);
 
-
-    _speed_y = Parameter<float>(_metabotNode,
-                                0,
-                                string("speed_y"));
-    _speed_y.setup("speed_y",-20,20);
+    _speed_y.setup(_metabotNode,"speed_y",0,-20,20);
     _speed_y.getAddress()->addCallback([&](const Value *v){
         OSSIA::Float * val= (OSSIA::Float *)v;
         if(val->value !=_speed_y){
@@ -67,10 +50,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3
     });
     _speed_y.addListener(&_speed_y,&Parameter<float>::listen);
 
-    _position = Parameter<ofVec2f>(_metabotNode,
-                                pos,
-                                string("position"));
-    _position.setup("position",ofVec2f(0),ofVec2f(500,300));
+    _position.setup(_metabotNode,"position",pos,ofVec2f(0),ofVec2f(500,300));
 
     _position.getAddress()->addCallback([&](const Value *v){
         OSSIA::Tuple * val = (OSSIA::Tuple *) v;
@@ -108,7 +88,7 @@ void Metabot::shareMetabot(std::shared_ptr<Node> parentNode){
 
 bool Metabot::load(){
     if(_loader.loadModel(_modelName)){
-        _loader.setScale(0.3,0.3,0.3);
+        _loader.setScale(_size.x/100,_size.y/100,_size.z/100);
         _size +=70;
         return true;
     }
