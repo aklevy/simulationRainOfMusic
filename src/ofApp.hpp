@@ -79,7 +79,13 @@ public:
     //Check collision
     template<typename Bot_T,typename OtherBot_T>
     void checkCollision(Bot_T &bot, OtherBot_T &otherbot){
-        if(bot.id() != otherbot.id() && !otherbot.isInCollision()){
+        if(bot.className() != otherbot.className() && !otherbot.isInCollision()){
+            if(_view.detectCollision(bot.position(),bot.size(),
+                                     otherbot.position(),otherbot.size())){
+                bot.collision();
+            }
+        }
+        else if(bot.id() != otherbot.id() && !otherbot.isInCollision()){
             if(_view.detectCollision(bot.position(),bot.size(),
                                      otherbot.position(),otherbot.size())){
                 bot.collision();
@@ -109,7 +115,6 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-
 
     string _msg,_warning,_msgGeneral;
 
@@ -146,3 +151,4 @@ private:
     // Time to start
     int start = 0;
 };
+

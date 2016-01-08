@@ -121,7 +121,7 @@ bool View::detectCollision(ofVec3f pos, ofVec3f size, ofVec3f otherPos, ofVec3f 
     if (dist < size.x+2){
         pos.middle(otherPos);
         //ofVec3f middle = (pos+otherPos)/2;//pos+dist/2;
-        drawCollisionCircle(pos,size);
+        drawCollisionCircle(pos,size*1.5);
         return true;
     }
     return false;

@@ -43,7 +43,7 @@ void ofApp::setup(){
      * */
 
     _gui.setup("panel");
-    _gui.setPosition(10,100);    
+    _gui.setPosition(10,80);
 
     //_play.setup(_nw.getSceneNode(),"play",false);
 

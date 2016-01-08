@@ -35,7 +35,7 @@ void Drone::setup(){
     _parameters.setName(this->className()+std::to_string(_id));
 
     // creates parameters to be published
-    _collision.setup(_droneNode,"collision",false);
+    _parameters.add(_collision.setup(_droneNode,"collision",false));
 
     _inZone.setup(_droneNode,"inZone",true);
 
@@ -79,8 +79,8 @@ void Drone::setup(){
         OSSIA::Float * valz = (OSSIA::Float *) val->value[2];
 
         if(valx->value != _position.get().x
-                || valz->value != _position.get().y
-                || valy->value != _position.get().z){
+                || valy->value != _position.get().y
+                || valz->value != _position.get().z){
             _position.set(ofVec3f(valx->value,valy->value,valz->value));
         }
     });
@@ -111,7 +111,7 @@ void Drone::move(){
     if(!isInCollision()){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
-        _position += ofVec3f(_speed_x.get(),_speed_z.get(),_speed_y.get());
+        _position += ofVec3f(_speed_x.get(),_speed_y.get(),_speed_z.get());
     }
 }
 //--------------------------------------------------------------

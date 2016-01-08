@@ -126,6 +126,8 @@ public:
 
 
 private:
+    ofVec3f zoneDim = ofVec3f(600,400,400);
+
     // Metabot individual id
     int _id;
 

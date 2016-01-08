@@ -77,7 +77,7 @@ void Metabot::setup(){
     });
     _speed_y.addListener(&_speed_y,&Parameter<float>::listen);
 
-    _parameters.add( _position.setup(_metabotNode,"position",_initialPos,ofVec2f(0),ofVec2f(500,300)));
+    _parameters.add( _position.setup(_metabotNode,"position",_initialPos,ofVec2f(0),zoneDim-_size));//ofVec2f(500,300)));
 
     _position.getAddress()->addCallback([&](const Value *v){
         OSSIA::Tuple * val = (OSSIA::Tuple *) v;
