@@ -72,54 +72,75 @@ template<> struct MatchingType<ofVec2f> {
 /*
  * Class inheriting from ofParameter
  * Listeners (listening to i-score and GUI) can be added
- * By passing a std::type in argument,
+ * By passing a std::type in argument, the OSSIA type is deduced in the class
  * */
+
 template <class DataValue>
 class Parameter : public ofParameter<DataValue>{
 private:
-    std::shared_ptr<Node> _botNode;
+    std::shared_ptr<Node> _parentNode;
     std::shared_ptr<Address> _address;
-public:
-    Parameter() : ofParameter<DataValue>(){    }
 
+    /*
+     * methods to communicate via OSSIA to i-score
+     * */
+    // Creates the node
     void createNode(string name,DataValue data){
         //creates node
-        std::shared_ptr<Node> node = *(_botNode->emplace(_botNode->children().cend(), name));
+        std::shared_ptr<Node> node = *(_parentNode->emplace(_parentNode->children().cend(), name));
 
         //set value
         auto val = MatchingType<DataValue>::convert(data);
         _address = node->createAddress(MatchingType<DataValue>::val);
+        //_address->pushValue(val);
+    }
+
+    // Publishes value to the node
+    void publishValue(DataValue other){
+        auto val = MatchingType<DataValue>::convert(other);
         _address->pushValue(val);
     }
 
+public:
+    Parameter() : ofParameter<DataValue>(){    }
+
+
     // creates node and sets the name, the data
-    void setup(std::shared_ptr<Node> botNode, string name, DataValue data){
-        _botNode = botNode;
+    Parameter & setup(std::shared_ptr<Node> parentNode, string name, DataValue data){
+        _parentNode = parentNode;
         createNode(name,data);
+        publishValue(data);
         this->set(name,data);
-    }
-    // creates node and sets the name, the data, the minimum and maximum value (for the gui)
-    void setup(std::shared_ptr<Node> botNode, string name,DataValue data,DataValue min,DataValue max){
-        _botNode = botNode;
-        createNode(name,data);
-        this->set(name,data,min,max);
+        return *this;
     }
 
+    // creates node and sets the name, the data, the minimum and maximum value (for the gui)
+    Parameter & setup(std::shared_ptr<Node> parentNode, string name,DataValue data,DataValue min,DataValue max){
+        _parentNode = parentNode;
+        createNode(name,data);
+        publishValue(data);
+        this->set(name,data,min,max);
+        return *this;
+    }
+
+    // Get the address of the node
     std::shared_ptr<Address> getAddress() const{
         return _address;
     }
 
+    // Listener for the GUI (but called also when i-score sends value)
     void listen(DataValue &data){
-        this->update(data);
+        // check if the value to be published is not already published
+        if(this->get() != data){
+            publishValue(data);
+        }
     }
 
-
-    void update(DataValue other){
-        auto val = MatchingType<DataValue>::convert(other);
+    // Updates value of the parameter and publish to the node
+    void update(DataValue data){
+        publishValue(data);
         // change attribute value
-        this->set(this->getName(),other);
-        // update the changed attribute value
-        _address->pushValue(val);
+        this->set(data);
     }
 };
 

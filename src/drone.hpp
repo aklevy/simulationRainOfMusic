@@ -39,6 +39,9 @@ public:
     Drone(Drone&&) = default; //move constructor : ctrl-X
     Drone(int id, std::shared_ptr<Node> parentNode, ofVec3f size, ofVec3f pos = ofVec3f(0), string modelName = "Sphere");
 
+    // Remove listeners
+    ~Drone();
+
     // Load the 3d model
     bool load();
 
@@ -59,6 +62,8 @@ public:
     // Share the drone with i-score
     void shareDrone(std::shared_ptr<Node> parentNode);
 
+    // Setup the parameters
+    void setup();
     /*
      * Getter/Setter
      * */

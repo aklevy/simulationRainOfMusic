@@ -43,6 +43,9 @@ public:
             string modelName = "Square",
             float freq = 2);
 
+    // Remove listeners
+    ~Metabot();
+
     // Load the 3d model
     bool load();
 
@@ -63,6 +66,9 @@ public:
 
     // Share the metabot with i-score
     void shareMetabot(std::shared_ptr<Node> parentNode);
+
+    // Setup the parameters
+    void setup();
 
     /*
      * Getter/Setter
@@ -118,6 +124,7 @@ public:
 
 
 
+
 private:
     // Metabot individual id
     int _id;
@@ -143,6 +150,7 @@ private:
 
     // Frequency of the walk, in Hz (default = 2Hz)
     Parameter<float> _frequency;
+    float _initialFreq;
 
     // boolean to check if the position is inbound or not
     Parameter<bool> _inZone;

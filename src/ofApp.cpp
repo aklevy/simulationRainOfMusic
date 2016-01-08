@@ -43,29 +43,26 @@ void ofApp::setup(){
      * */
 
     _gui.setup("panel");
-    _gui.setPosition(10,100);
+    _gui.setPosition(10,100);    
 
-    /*_play = Parameter<bool>( _nw.getSceneNode(),
-                             false,
-                             string("play"));
-    */
-    _play.setup(_nw.getSceneNode(),"play",false);
+    //_play.setup(_nw.getSceneNode(),"play",false);
 
     // i-score listener
+    _gui.add(_play.setup(_nw.getSceneNode(),"play",false));
+
     _play.getAddress()->addCallback([&](const Value *v){
         Float * val= (Float *)v;
         if(val->value != _play){
             _play.set(val->value);
         }
     });
-
-    // gui listener
     _play.addListener(&_play,&Parameter<bool>::listen);
 
-    _gui.add(_play);
+    // gui listener
     _gui.add(_reset.setup("reset"));
 
     for(auto &metabot : _metabots){ //template bot
+        //metabot.setup();
         _gui.add(metabot.parameters());
     }
     for(auto &drone : _drones){ //template bot
@@ -78,7 +75,6 @@ void ofApp::update(){
 
     for(auto &metabot : _metabots){
         updateOneBot(metabot);
-        //metabot.test();
         metabot.updateBot();
     }
     for(auto &drone : _drones){
@@ -126,6 +122,15 @@ void ofApp::draw(){
 
     _cam.end();
 
+    // GUI
+    /*
+    _gui.setTextColor(ofColor(255));
+    _gui.setBackgroundColor(ofColor(255));
+    _gui.setFillColor(255);
+    _gui.setBorderColor(255);
+   */
+    _gui.draw();
+
     // Displays the message concerning selected robot
     ofDrawBitmapStringHighlight(_msg, 10, 20);
 
@@ -138,14 +143,6 @@ void ofApp::draw(){
         _msgGeneral = "Time : "+ std::to_string((int)ofGetElapsedTimeMicros()*pow(10,-6)-start)+"\n";
     }
     ofDrawBitmapStringHighlight(_msgGeneral, 10, ofGetHeight()-20);
-
-    /*
-    _gui.setTextColor(ofColor(255));
-    _gui.setBackgroundColor(ofColor(255));
-    _gui.setFillColor(255);
-    _gui.setBorderColor(255);
-   */
-    _gui.draw();
 }
 
 
