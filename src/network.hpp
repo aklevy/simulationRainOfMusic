@@ -35,11 +35,15 @@ public:
     // get the scene node
     std::shared_ptr<Node> getSceneNode();
 
+    // set the simRunning boolean
+    void setSimRunning(bool b);
+
 private:
-    std::shared_ptr<Protocol> localProtocol;
-    std::shared_ptr<Device> localDevice;
-    std::shared_ptr<Node> localSceneNode;
-    std::thread networkThread;
+    std::shared_ptr<Protocol> _localProtocol;
+    std::shared_ptr<Device> _localDevice;
+    std::shared_ptr<Node> _localSceneNode;
+    std::thread _networkThread;
+    bool _simRunning;
 };
 
 #endif // NETWORK_H
