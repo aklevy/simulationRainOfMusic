@@ -31,7 +31,7 @@ public:
             start = (int)ofGetElapsedTimeMicros()*pow(10,-6);
         }
 
-        if(_play.get()){
+        if(_play){
 
             //get the time when the play button is pressed
             if(start == 0){
@@ -116,6 +116,7 @@ public:
     void mouseEntered(int x, int y);
     void mouseExited(int x, int y);
     void windowResized(int w, int h);
+
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 

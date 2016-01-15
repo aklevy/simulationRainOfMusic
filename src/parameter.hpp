@@ -10,7 +10,9 @@ template<> struct MatchingType<float> {
     using ofx_type = float;
     using ossia_type = OSSIA::Float;
     static constexpr const auto val = OSSIA::Value::Type::FLOAT;
-
+    static ofx_type convertFromOssia(Value* v) {
+        ossia_type * f = (ossia_type *)v;
+        return f->value; }
     static ossia_type* convert(ofx_type f) { return new ossia_type{f}; }
 };
 template<> struct MatchingType<double> {
@@ -18,6 +20,9 @@ template<> struct MatchingType<double> {
     static constexpr const auto val = OSSIA::Value::Type::FLOAT;
     using ossia_type = OSSIA::Float;
 
+    static ofx_type convertFromOssia(Value* v) {
+        ossia_type * f = (ossia_type *)v;
+        return f->value; }
     static ossia_type* convert(ofx_type f) { return new ossia_type{float(f)}; }
 };
 template<> struct MatchingType<int> {
@@ -25,6 +30,9 @@ template<> struct MatchingType<int> {
     static constexpr const auto val = OSSIA::Value::Type::INT;
     using ossia_type = OSSIA::Int;
 
+    static ofx_type convertFromOssia(Value* v) {
+        ossia_type * f = (ossia_type *)v;
+        return f->value; }
     static ossia_type* convert(ofx_type f) { return new ossia_type{f}; }
 };
 template<> struct MatchingType<bool> {
@@ -32,13 +40,20 @@ template<> struct MatchingType<bool> {
     static constexpr const auto val = OSSIA::Value::Type::BOOL;
     using ossia_type = OSSIA::Bool;
 
+    static ofx_type convertFromOssia(Value* v) {
+        ossia_type * f = (ossia_type *)v;
+        return f->value; }
     static ossia_type* convert(ofx_type f) { return new ossia_type{f}; }
 };
+
 template<> struct MatchingType<string> {
     using ofx_type = std::string;
     static constexpr const auto val = OSSIA::Value::Type::STRING;
     using ossia_type = OSSIA::String;
 
+    static ofx_type convertFromOssia(Value* v) {
+        ossia_type * f = (ossia_type *)v;
+        return f->value; }
     static ossia_type* convert(ofx_type f) { return new ossia_type{f}; }
 };
 template<> struct MatchingType<ofVec3f> {
@@ -46,6 +61,14 @@ template<> struct MatchingType<ofVec3f> {
     static constexpr const auto val = OSSIA::Value::Type::TUPLE;
     using ossia_type = OSSIA::Tuple;
 
+    static ofx_type convertFromOssia(ossia_type t) {
+        float x = ((OSSIA::Float*)t.value[0])->value;
+        float y = ((OSSIA::Float*)t.value[1])->value;
+        float z = ((OSSIA::Float*)t.value[2])->value;
+
+        t.value.clear();
+        return ofx_type(x,y,z);
+    }
     static ossia_type* convert(ofx_type f) {
         auto tuple = new ossia_type;
         tuple->value.reserve(3);
@@ -60,6 +83,13 @@ template<> struct MatchingType<ofVec2f> {
     static constexpr const auto val = OSSIA::Value::Type::TUPLE;
     using ossia_type = OSSIA::Tuple;
 
+    static ofx_type convertFromOssia(ossia_type t) {
+        float x = ((OSSIA::Float*)t.value[0])->value;
+        float y = ((OSSIA::Float*)t.value[1])->value;
+        t.value.clear();
+        return ofx_type(x,y);
+
+    }
     static ossia_type* convert(ofx_type f) {
         auto tuple = new ossia_type;
         tuple->value.reserve(2);
@@ -101,9 +131,43 @@ private:
         _address->pushValue(val);
     }
 
+    // Pulls the node value
+    DataValue pullNodeValue(){
+        //std::cout << ""<< std::endl;
+        auto add = this->getAddress();
+        std::cout << "plop"<< std::endl;
+
+        // add->pullValue();
+        OSSIA::Value * val = add->getValue()->clone();
+        std::cout << "pipi"<< std::endl;
+       val->getType();
+       std::cout << "pipi2"<< std::endl;
+
+        if(val->getType() == Value::Type::BOOL){
+            Bool * tmp = (Bool*) val;
+            std::cout << tmp->value<< std::endl;
+
+        }
+        else if(val->getType() == Value::Type::TUPLE){
+            std::cout << "merde"<< std::endl;
+
+        }
+        else{
+            std::cout << "gros caca"<< std::endl;
+
+        }
+        DataValue v = MatchingType<DataValue>::convertFromOssia(val);
+        std::cout << "caca"<< std::endl;
+
+        return v;
+    }
+
 public:
     Parameter() : ofParameter<DataValue>(){    }
 
+    ~Parameter(){
+        this->removeListener(this,&Parameter<DataValue>::listen);
+    }
 
     // creates node and sets the name, the data
     Parameter & setup(std::shared_ptr<Node> parentNode, string name, DataValue data){
@@ -134,9 +198,11 @@ public:
         if(_address != NULL){
             return _address;
         }
+
         for(const auto & child : _parentNode->children()){
             if (child->getName().compare(this->getName()) == 0){
-                return child->getAddress();
+                // _address =  child->getAddress();
+                return child->getAddress();//add->getValue()
             }
         }
         return NULL;
@@ -145,9 +211,16 @@ public:
     // Listener for the GUI (but called also when i-score sends value)
     void listen(DataValue &data){
         // check if the value to be published is not already published
-       // if(this->get() != data){
+        std::cout << "listen data "<< data<<std::endl;
+
+        std::cout << "listen pull "<< pullNodeValue()<<std::endl;
+
+        if(pullNodeValue() != data){// i-score->GUI OK
+            // std::cout << "listen puis publication"<<std::endl;
+
+            //if(_publishedValue != data){
             publishValue(data);
-        //}
+        }
     }
 
 

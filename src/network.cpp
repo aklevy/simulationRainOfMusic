@@ -28,6 +28,8 @@ void Network::publication(){
 
     while (_simRunning)
         ;
+
+    std::cout << "fini"<<std::endl;
 }
 
 std::shared_ptr<Node> Network::getSceneNode(){

@@ -39,6 +39,7 @@ public:
     Drone(Drone&&) = default; //move constructor : ctrl-X
     Drone(int id,
           std::shared_ptr<Node> parentNode,
+          float proba,
           ofVec3f pos = ofVec3f(0),
           ofVec3f size = ofVec3f(10),
           string modelName = "Sphere");
@@ -67,7 +68,7 @@ public:
     void shareDrone(std::shared_ptr<Node> parentNode);
 
     // Setup the parameters
-    void setup();
+    void setup(float proba, std::shared_ptr<Node> parentNode);
     /*
      * Getter/Setter
      * */
@@ -124,6 +125,9 @@ private:
 
     // node in the network
     std::shared_ptr<Node> _droneNode;
+
+    // Probability of packet loss
+    Parameter<float> _probability;
 
     // Drone size
     ofVec3f _size;

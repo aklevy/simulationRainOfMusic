@@ -43,7 +43,7 @@ void ofApp::setup(){
     //_play.setup(_nw.getSceneNode(),"play",false);
 
     // i-score listener
-    _guiViz.add(_play.setup(_nw.getSceneNode(),"Play",false));
+    _guiViz.add(_play.setup(_nw.getSceneNode(),"play",false));
 
     _play.getAddress()->addCallback([&](const Value *v){
         Bool * val= (Bool *)v;
@@ -54,7 +54,7 @@ void ofApp::setup(){
     _play.addListener(&_play,&Parameter<bool>::listen);
 
     // gui listener
-    _guiViz.add(_reset.setup("Reset"));
+    _guiViz.add(_reset.setup("reset"));
 
 
     // Fill Metabot list
@@ -71,7 +71,7 @@ void ofApp::setup(){
     }
 
     // Fill Drone list
-    _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(0,200,50)); //construct instead of copy
+    //_drones.emplace_back(1,_nw.getSceneNode(),_proba.get(),ofVec3f(0,200,50)); //construct instead of copy
 
     // Adding robots to the GUI
     for(auto &metabot : _metabots){ //template bot
@@ -144,7 +144,7 @@ void ofApp::draw(){
     _gui.setFillColor(255);
     _gui.setBorderColor(255);
    */
-    _guiSim.draw();
+    //_guiSim.draw();
     _guiViz.draw();
 
     // Displays the message concerning selected robot

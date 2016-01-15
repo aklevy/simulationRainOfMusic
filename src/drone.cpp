@@ -8,7 +8,7 @@ Drone::~Drone(){
     _speed_z.removeListener(&_speed_z,&Parameter<float>::listen);
 
 }
-Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f pos, ofVec3f size, string modelName):
+Drone::Drone(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName):
     _id(id),
     _size(size),
     _initialPos(pos),
@@ -19,7 +19,7 @@ Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f pos, ofVec3f siz
     shareDrone(parentNode);
 
     // setup parameters
-    setup();
+    setup(proba,parentNode);
 }
 
 //--------------------------------------------------------------
@@ -29,7 +29,7 @@ void Drone::shareDrone(std::shared_ptr<Node> parentNode){
 }
 
 //--------------------------------------------------------------
-void Drone::setup(){
+void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
 
     // initialize the parameters group
     _parameters.setName(this->className()+std::to_string(_id));
@@ -40,31 +40,64 @@ void Drone::setup(){
     _inZone.setup(_droneNode,"inZone",true);
 
     // Creates parameters to be published and listened
+    // probability
+    _probability.setupNoPublish(parentNode,"Packet Loss (%)",proba,0,100);
+
+    if(_probability.getAddress() == NULL){
+        std::cout << "adresse null"<<std::endl;
+    }
+    else{ _probability.getAddress()->addCallback([&](const Value *v){
+            OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value != _probability.get()){
+                _probability.set(val->value);
+            }
+
+        });
+    }
+
     // Speed set up
     _parameters.add(_speed_x.setup(_droneNode,"speed_x",0,-20,20));
     _speed_x.getAddress()->addCallback([&](const Value *v){
-        OSSIA::Float * val= (OSSIA::Float *)v;
-        if(val->value !=_speed_x){
-             std::cout << "vx " << val->value << std::endl;
-            _speed_x.set(val->value);
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{
+            OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value !=_speed_x){
+                std::cout << "vx " << val->value << std::endl;
+                _speed_x.set(val->value);
+            }
         }
     });
     _speed_x.addListener(&_speed_x,&Parameter<float>::listen);
 
     _parameters.add(_speed_y.setup(_droneNode,"speed_y",0,-20,20));
     _speed_y.getAddress()->addCallback([&](const Value *v){
-        Float * val= (Float *)v;
-        if(val->value !=_speed_y){
-            _speed_y.set(val->value);
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{
+            Float * val= (Float *)v;
+            if(val->value !=_speed_y){
+                _speed_y.set(val->value);
+            }
         }
     });
     _speed_y.addListener(&_speed_y,&Parameter<float>::listen);
 
     _parameters.add(_speed_z.setup(_droneNode,"speed_z",0,-20,20));
     _speed_z.getAddress()->addCallback([&](const Value *v){
-        Float * val= (Float *)v;
-        if(val->value !=_speed_z){
-            _speed_z.set(val->value);
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{
+            Float * val= (Float *)v;
+            if(val->value !=_speed_z){
+                _speed_z.set(val->value);
+            }
         }
     });
     _speed_z.addListener(&_speed_z,&Parameter<float>::listen);
@@ -73,15 +106,22 @@ void Drone::setup(){
     _parameters.add(_position.setup(_droneNode,"position",_initialPos,ofVec3f(0),ofVec3f(500,300,400)));
 
     _position.getAddress()->addCallback([&](const Value *v){
-        OSSIA::Tuple * val = (OSSIA::Tuple *) v;
-        OSSIA::Float * valx = (OSSIA::Float *) val->value[0];
-        OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
-        OSSIA::Float * valz = (OSSIA::Float *) val->value[2];
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{
+            OSSIA::Tuple * val = (OSSIA::Tuple *) v;
+            val->value.reserve(3);
+            OSSIA::Float * valx = (OSSIA::Float *) val->value[0];
+            OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
+            OSSIA::Float * valz = (OSSIA::Float *) val->value[2];
 
-        if(valx->value != _position.get().x
-                || valy->value != _position.get().y
-                || valz->value != _position.get().z){
-            _position.set(ofVec3f(valx->value,valy->value,valz->value));
+            if(valx->value != _position.get().x
+                    || valy->value != _position.get().y
+                    || valz->value != _position.get().z){
+                _position.set(ofVec3f(valx->value,valy->value,valz->value));
+            }
         }
     });
     _position.addListener(&_position,&Parameter<ofVec3f>::listen);
