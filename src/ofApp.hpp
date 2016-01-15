@@ -2,6 +2,8 @@
 
 #include <thread>
 #include "ofxGui.h"
+//#include "MSAPhysics3D.h"
+
 
 #include "ofMain.h"
 #include "view.hpp"
@@ -62,7 +64,7 @@ public:
         }
 
         // Updates the message to be displayed
-        if(bot.color() == _pixel && _msg.empty()){
+        if(bot.color() == _pixel){ //&& _msg.empty()){
             _msg = bot.info();
         }
 
@@ -143,13 +145,18 @@ private:
     Network _nw;
 
     // GUI
-    ofxPanel _gui;
+    ofxPanel _guiViz,_guiSim;
 
     // Boolean for the stop/play the choeregraphy
     Parameter<bool> _play;
     ofxButton _reset;
 
+    // Probability of losing network packets in %
+    Parameter<float> _proba ;// default to  10%
+
     // Time to start
     int start = 0;
+
+   // msa::physics::World3D _physics;
 };
 

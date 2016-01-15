@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 ofApp::ofApp():
-    _zoneDim(600,400,400),
+    _zoneDim(600,400,400),  //1200,800,500 : 12m x 10m x 5m
     _zoneGrid(_zoneDim), // no need to write explicitely constructor
     _view(_zoneDim),
     _pixel(0),
@@ -21,37 +21,32 @@ void ofApp::setup(){
 
 
     //   ofEnableDepthTest();
-
-    // Fill Metabot list
-    _metabots.emplace_back(1, _nw.getSceneNode()); //construct instead of copy
-    //_metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50));
-    _metabots.emplace_back(2, _nw.getSceneNode(),ofVec3f(200,0,50),ofVec3f(10),"data/spider.obj");
-    if( !_metabots.back().load()){
-        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
-    }
-    // Example for 3D model
-    _metabots.emplace_back(3, _nw.getSceneNode(),ofVec3f(400,0,50),ofVec3f(10),"data/spider.obj"); //construct instead of copy
-    if( !_metabots.back().load()){
-        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
-    }
-
-    // Fill Drone list
-    _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(0,200,50)); //construct instead of copy
-
     /*
      *  GUI
      * */
+    _guiSim.setup("Simulation");
+    _guiSim.setPosition( ofGetWidth()- 200,80);
+    _guiSim.add(_proba.setup(_nw.getSceneNode(),"Packet Loss (%)",10,0,100));
+    _proba.getAddress()->addCallback([&](const Value *v){
+        Float * val= (Float *)v;
+        if(val->value != _proba){
+            _proba.set(val->value);
+        }
+    });
+    _proba.addListener(&_proba,&Parameter<float>::listen);
 
-    _gui.setup("panel");
-    _gui.setPosition(10,80);
+
+    // GUi panel for robots
+    _guiViz.setup("Robots");
+    _guiViz.setPosition(10,80);
 
     //_play.setup(_nw.getSceneNode(),"play",false);
 
     // i-score listener
-    _gui.add(_play.setup(_nw.getSceneNode(),"play",false));
+    _guiViz.add(_play.setup(_nw.getSceneNode(),"Play",false));
 
     _play.getAddress()->addCallback([&](const Value *v){
-        Float * val= (Float *)v;
+        Bool * val= (Bool *)v;
         if(val->value != _play){
             _play.set(val->value);
         }
@@ -59,14 +54,32 @@ void ofApp::setup(){
     _play.addListener(&_play,&Parameter<bool>::listen);
 
     // gui listener
-    _gui.add(_reset.setup("reset"));
+    _guiViz.add(_reset.setup("Reset"));
 
+
+    // Fill Metabot list
+    _metabots.emplace_back(1, _nw.getSceneNode(),_proba.get()); //construct instead of copy
+    //_metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50));
+    _metabots.emplace_back(2, _nw.getSceneNode(),_proba.get(),ofVec3f(200,0,50),ofVec3f(10),"data/spider.obj");
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+    // Example for 3D model
+    _metabots.emplace_back(3, _nw.getSceneNode(),_proba.get(),ofVec3f(400,0,50),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+
+    // Fill Drone list
+    _drones.emplace_back(1,_nw.getSceneNode(),ofVec3f(0,200,50)); //construct instead of copy
+
+    // Adding robots to the GUI
     for(auto &metabot : _metabots){ //template bot
         //metabot.setup();
-        _gui.add(metabot.parameters());
+        _guiViz.add(metabot.parameters());
     }
     for(auto &drone : _drones){ //template bot
-        _gui.add(drone.parameters());
+        _guiViz.add(drone.parameters());
     }
 }
 
@@ -131,7 +144,8 @@ void ofApp::draw(){
     _gui.setFillColor(255);
     _gui.setBorderColor(255);
    */
-    _gui.draw();
+    _guiSim.draw();
+    _guiViz.draw();
 
     // Displays the message concerning selected robot
     ofDrawBitmapStringHighlight(_msg, 10, 20);

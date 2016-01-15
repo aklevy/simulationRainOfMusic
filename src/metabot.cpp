@@ -11,7 +11,7 @@ Metabot::~Metabot(){
 
 }
 
-Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f pos, ofVec3f size, string modelName, float freq):
+Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName, float freq):
     _id(id),
     _size(size),
     _initialPos(pos),
@@ -24,7 +24,7 @@ Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f pos, ofVec3f
     // adds the metabot to the node Scene
     shareMetabot(parentNode);
 
-    setup();
+    setup(proba,parentNode);
 }
 
 
@@ -35,22 +35,45 @@ void Metabot::shareMetabot(std::shared_ptr<Node> parentNode){
 }
 
 //--------------------------------------------------------------
-void Metabot::setup(){
+void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     // initialize the parameters group
     _parameters.setName(this->className()+std::to_string(_id));
+    _simulation.setName(this->className()+std::to_string(_id));
 
     // creates parameters to be published
     _collision.setup(_metabotNode,"collision",false);
 
     _inZone.setup(_metabotNode,"inZone",true);
 
+    // probability
+    _probability.setupNoPublish(parentNode,"Packet Loss (%)",proba,0,100);
+
+    if(_probability.getAddress() == NULL){
+        std::cout << "adresse null"<<std::endl;
+    }
+    else{ _probability.getAddress()->addCallback([&](const Value *v){
+            OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value != _probability.get()){
+                _probability.set(val->value);
+            }
+
+        });
+    }
+    // _proba.addListener(&_proba,&Parameter<float>::listen);
+
+
     // creates parameters to be published and listened
     // Frequency set up
     _parameters.add(_frequency.setup(_metabotNode,"frequency",_initialFreq,0,100));
     _frequency.getAddress()->addCallback([&](const Value *v){
-        OSSIA::Float * val= (OSSIA::Float *)v;
-        if(val->value !=_frequency.get()){
-            _frequency.set(val->value);
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{ OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value !=_frequency.get()){
+                _frequency.set(val->value);
+            }
         }
     });
     _frequency.addListener(&_frequency,&Parameter<float>::listen);
@@ -58,9 +81,15 @@ void Metabot::setup(){
     // Speed set up
     _parameters.add(_speed_x.setup(_metabotNode,"speed_x",1,-20,20));
     _speed_x.getAddress()->addCallback([&](const Value *v){
-        OSSIA::Float * val= (OSSIA::Float *)v;
-        if(val->value !=_speed_x){
-            _speed_x.set(val->value);
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{
+            OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value !=_speed_x){
+                _speed_x.set(val->value);
+            }
         }
     });
     _speed_x.addListener(&_speed_x,&Parameter<float>::listen);
@@ -68,11 +97,17 @@ void Metabot::setup(){
 
     _parameters.add(_speed_y.setup(_metabotNode,"speed_y",1,-20,20));
     _speed_y.getAddress()->addCallback([&](const Value *v){
-        OSSIA::Float * val= (OSSIA::Float *)v;
-        if(val->value !=_speed_y){
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{
+            OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value !=_speed_y){
 
-            std::cout << "vy " << _speed_y.get() << std::endl;
-            _speed_y.set(val->value);
+                std::cout << "vy " << _speed_y.get() << std::endl;
+                _speed_y.set(val->value);
+            }
         }
     });
     _speed_y.addListener(&_speed_y,&Parameter<float>::listen);
@@ -80,16 +115,23 @@ void Metabot::setup(){
     _parameters.add( _position.setup(_metabotNode,"position",_initialPos,ofVec2f(0),zoneDim-_size));//ofVec2f(500,300)));
 
     _position.getAddress()->addCallback([&](const Value *v){
-        OSSIA::Tuple * val = (OSSIA::Tuple *) v;
-        OSSIA::Float * valx = (OSSIA::Float *) val->value[0];
-        OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{
+            OSSIA::Tuple * val = (OSSIA::Tuple *) v;
+            OSSIA::Float * valx = (OSSIA::Float *) val->value[0];
+            OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
 
-        if(valx->value != _position.get().x
-                || valy->value != _position.get().y){
-            _position.set(ofVec2f(valx->value,valy->value));
+            if(valx->value != _position.get().x
+                    || valy->value != _position.get().y){
+                _position.set(ofVec2f(valx->value,valy->value));
+            }
         }
     });
     _position.addListener(&_position,&Parameter<ofVec2f>::listen);
+
 }
 
 //--------------------------------------------------------------
@@ -140,6 +182,9 @@ string Metabot::info() const
             + std::to_string((int)position().y)+") \n";
     msg += "Walking frequency: "
             + std::to_string(frequency()) + " Hz";
+
+    msg += "Packet Loss: "
+            + std::to_string(_probability.get()) + " %";
 
     return msg;
 }

@@ -38,6 +38,7 @@ public:
     Metabot(Metabot&&) = default; //move constructor : ctrl-X
     Metabot(int id,
             std::shared_ptr<Node> parentNode,
+            float proba,
             ofVec3f pos = ofVec3f(0),
             ofVec3f size = ofVec3f(30),
             string modelName = "Square",
@@ -68,7 +69,7 @@ public:
     void shareMetabot(std::shared_ptr<Node> parentNode);
 
     // Setup the parameters
-    void setup();
+    void setup(float proba, std::shared_ptr<Node> parentNode);
 
     /*
      * Getter/Setter
@@ -131,8 +132,11 @@ private:
     // Metabot individual id
     int _id;
 
-    // node in the network
+    // Node in the network
     std::shared_ptr<Node> _metabotNode;
+
+    // Probability of packet loss
+    Parameter<float> _probability;
 
     // Metabot size
     ofVec3f _size;
@@ -148,7 +152,7 @@ private:
     ofVec3f _color;
 
     // Parameter group
-    ofParameterGroup _parameters;
+    ofParameterGroup _parameters, _simulation;
 
     // Frequency of the walk, in Hz (default = 2Hz)
     Parameter<float> _frequency;

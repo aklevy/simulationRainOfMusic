@@ -78,8 +78,8 @@ template<> struct MatchingType<ofVec2f> {
 template <class DataValue>
 class Parameter : public ofParameter<DataValue>{
 private:
-    std::shared_ptr<Node> _parentNode;
-    std::shared_ptr<Address> _address;
+    std::shared_ptr<Node> _parentNode = NULL;
+    std::shared_ptr<Address> _address = NULL;
 
     /*
      * methods to communicate via OSSIA to i-score
@@ -123,18 +123,33 @@ public:
         return *this;
     }
 
+    // set without creating node (suppose that a node was created previously)
+    Parameter & setupNoPublish(std::shared_ptr<Node> parentNode, string name,DataValue data,DataValue min,DataValue max){
+        _parentNode = parentNode;
+        this->set(name,data,min,max);
+    }
+
     // Get the address of the node
     std::shared_ptr<Address> getAddress() const{
-        return _address;
+        if(_address != NULL){
+            return _address;
+        }
+        for(const auto & child : _parentNode->children()){
+            if (child->getName().compare(this->getName()) == 0){
+                return child->getAddress();
+            }
+        }
+        return NULL;
     }
 
     // Listener for the GUI (but called also when i-score sends value)
     void listen(DataValue &data){
         // check if the value to be published is not already published
-        if(this->get() != data){
+       // if(this->get() != data){
             publishValue(data);
-        }
+        //}
     }
+
 
     // Updates value of the parameter and publish to the node
     void update(DataValue data){
