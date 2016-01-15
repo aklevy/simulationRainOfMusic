@@ -41,10 +41,10 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
 
     // Creates parameters to be published and listened
     // probability
-    _probability.setupNoPublish(parentNode,"Packet Loss (%)",proba,0,100);
+    _probability.setupNoPublish(parentNode,"Packet0Loss(%)",proba,0,100);
 
     if(_probability.getAddress() == NULL){
-        std::cout << "adresse null"<<std::endl;
+        std::cout << "adress null"<<std::endl;
     }
     else{ _probability.getAddress()->addCallback([&](const Value *v){
             OSSIA::Float * val= (OSSIA::Float *)v;

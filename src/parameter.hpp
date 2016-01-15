@@ -135,13 +135,10 @@ private:
     DataValue pullNodeValue(){
         //std::cout << ""<< std::endl;
         auto add = this->getAddress();
-        std::cout << "plop"<< std::endl;
+        std::cout << this->getName()<< std::endl;
 
         // add->pullValue();
         OSSIA::Value * val = add->getValue()->clone();
-        std::cout << "pipi"<< std::endl;
-       val->getType();
-       std::cout << "pipi2"<< std::endl;
 
         if(val->getType() == Value::Type::BOOL){
             Bool * tmp = (Bool*) val;
@@ -149,15 +146,10 @@ private:
 
         }
         else if(val->getType() == Value::Type::TUPLE){
-            std::cout << "merde"<< std::endl;
-
-        }
-        else{
-            std::cout << "gros caca"<< std::endl;
+            std::cout << "ici"<< std::endl;
 
         }
         DataValue v = MatchingType<DataValue>::convertFromOssia(val);
-        std::cout << "caca"<< std::endl;
 
         return v;
     }
@@ -211,10 +203,6 @@ public:
     // Listener for the GUI (but called also when i-score sends value)
     void listen(DataValue &data){
         // check if the value to be published is not already published
-        std::cout << "listen data "<< data<<std::endl;
-
-        std::cout << "listen pull "<< pullNodeValue()<<std::endl;
-
         if(pullNodeValue() != data){// i-score->GUI OK
             // std::cout << "listen puis publication"<<std::endl;
 

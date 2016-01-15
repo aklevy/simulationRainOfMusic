@@ -46,10 +46,10 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _inZone.setup(_metabotNode,"inZone",true);
 
     // probability
-    _probability.setupNoPublish(parentNode,"Packet Loss (%)",proba,0,100);
+    _probability.setupNoPublish(parentNode,"PacketLoss(%)",proba,0,100);
 
     if(_probability.getAddress() == NULL){
-        std::cout << "adresse null"<<std::endl;
+        std::cout << "adress null"<<std::endl;
     }
     else{ _probability.getAddress()->addCallback([&](const Value *v){
             OSSIA::Float * val= (OSSIA::Float *)v;

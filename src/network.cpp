@@ -16,20 +16,20 @@ Network::Network(){
     // execution of publication on the networkThread thread
     std::thread t(&Network::publication, this);
     std::swap(t, _networkThread);
+    _networkThread.detach();
+
 }
 
 Network::~Network(){
-    _networkThread.join();
 }
 
 void Network::publication(){
     auto minuitProtocol = Minuit::create("127.0.0.1", 13579, 9998);
-    auto minuitDevice = Device::create(minuitProtocol, "i-score");
+   // auto minuitDevice = Device::create(minuitProtocol, "i-score");
+    Device::create(minuitProtocol, "i-score");
 
-    while (_simRunning)
+    while (_simRunning == true)
         ;
-
-    std::cout << "fini"<<std::endl;
 }
 
 std::shared_ptr<Node> Network::getSceneNode(){
