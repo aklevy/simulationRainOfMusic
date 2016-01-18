@@ -35,13 +35,13 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     _parameters.setName(this->className()+std::to_string(_id));
 
     // creates parameters to be published
-    _parameters.add(_collision.setup(_droneNode,"collision",false));
+    _collision.setup(_droneNode,"collision",false);
 
     _inZone.setup(_droneNode,"inZone",true);
 
     // Creates parameters to be published and listened
     // probability
-    _probability.setupNoPublish(parentNode,"Packet0Loss(%)",proba,0,100);
+    _probability.setupNoPublish(parentNode,"PacketLoss",proba,0,100);
 
     if(_probability.getAddress() == NULL){
         std::cout << "adress null"<<std::endl;
@@ -65,7 +65,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
         else{
             OSSIA::Float * val= (OSSIA::Float *)v;
             if(val->value !=_speed_x){
-                std::cout << "vx " << val->value << std::endl;
+               // std::cout << "vx " << val->value << std::endl;
                 _speed_x.set(val->value);
             }
         }
@@ -103,7 +103,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     _speed_z.addListener(&_speed_z,&Parameter<float>::listen);
 
     // position
-    _parameters.add(_position.setup(_droneNode,"position",_initialPos,ofVec3f(0),ofVec3f(500,300,400)));
+    _parameters.add(_position.setup(_droneNode,"position",_initialPos,ofVec3f(0),ofVec3f(50000)));
 
     _position.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
@@ -151,13 +151,27 @@ void Drone::move(){
     if(!isInCollision()){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
-        _position += ofVec3f(_speed_x.get(),_speed_y.get(),_speed_z.get());
+        float frameRate = ofGetFrameRate();
+        ofVec3f speedtmp = ofVec3f(_speed_x.get()/frameRate,
+                                   _speed_y.get()/frameRate,
+                                   _speed_z.get()/frameRate);
+        std::cout << _position<<std::endl;
+        ofVec3f newpos = _position.get() + speedtmp;
+        _position.set(newpos);
+        std::cout << "ici"<<std::endl;
+
+       // _position += speedtmp;
     }
 }
 //--------------------------------------------------------------
 
 void Drone::reset(){
-    _position.set(ofVec3f(_initialPos.x,_initialPos.y,_initialPos.z));
+    std::cout << _initialPos<<std::endl;
+    if(_initialPos != _position){
+        _position.set(_initialPos);
+    }
+      std::cout << _position<<std::endl;
+   // _position.set(_initialPos);//ofVec3f(_initialPos.x,_initialPos.y,_initialPos.z));
     _inZone.update(true);
     _collision.update(false);
 }

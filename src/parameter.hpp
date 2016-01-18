@@ -71,7 +71,7 @@ template<> struct MatchingType<ofVec3f> {
     }
     static ossia_type* convert(ofx_type f) {
         auto tuple = new ossia_type;
-        tuple->value.reserve(3);
+        tuple->value.reserve(2);
         tuple->value.push_back(new OSSIA::Float(f.x));
         tuple->value.push_back(new OSSIA::Float(f.y));
         tuple->value.push_back(new OSSIA::Float(f.z));
@@ -187,7 +187,8 @@ public:
 
     // Get the address of the node
     std::shared_ptr<Address> getAddress() const{
-        if(_address != NULL){
+       if(_address != NULL){
+         //   std::cout << "adresse"<< std::endl;
             return _address;
         }
 
@@ -214,7 +215,12 @@ public:
 
     // Updates value of the parameter and publish to the node
     void update(DataValue data){
+     //   std::cout << data<< std::endl;
+      //  std::cout << "avant publication"<< std::endl;
+
         publishValue(data);
+        //std::cout << "apres publication"<< std::endl;
+
         // change attribute value
         this->set(data);
     }

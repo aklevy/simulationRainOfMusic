@@ -155,10 +155,15 @@ void Metabot::move(ofVec3f speed){
     }
 }
 void Metabot::move(){
+    // defined in ofApp using setFrameRate()
+    float framerate = ofGetFrameRate();
     if(!isInCollision()){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
-        _position += ofVec2f(_speed_x.get(),_speed_y.get());
+        ofVec2f speedtmp = ofVec2f(_speed_x.get()/framerate,
+                                   _speed_y.get()/framerate);
+        ofVec2f newpos = _position.get() + speedtmp;
+        _position.set(newpos);
     }
 }
 

@@ -26,7 +26,7 @@ void ofApp::setup(){
      * */
     _guiSim.setup("Simulation");
     _guiSim.setPosition( ofGetWidth()- 200,80);
-    _guiSim.add(_proba.setup(_nw.getSceneNode(),"Packet Loss (%)",10,0,100));
+    _guiSim.add(_proba.setup(_nw.getSceneNode(),"PacketLoss",10,0,100));
     _proba.getAddress()->addCallback([&](const Value *v){
         Float * val= (Float *)v;
         if(val->value != _proba){
@@ -144,7 +144,7 @@ void ofApp::draw(){
     _gui.setFillColor(255);
     _gui.setBorderColor(255);
    */
-    //_guiSim.draw();
+    _guiSim.draw();
     _guiViz.draw();
 
     // Displays the message concerning selected robot

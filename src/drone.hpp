@@ -40,7 +40,7 @@ public:
     Drone(int id,
           std::shared_ptr<Node> parentNode,
           float proba,
-          ofVec3f pos = ofVec3f(0),
+          ofVec3f pos = ofVec3f(0,0,100),
           ofVec3f size = ofVec3f(10),
           string modelName = "Sphere");
 
@@ -62,7 +62,7 @@ public:
 
 
     /*
-     * Networks methos
+     * Networks methods
      */
     // Share the drone with i-score
     void shareDrone(std::shared_ptr<Node> parentNode);
