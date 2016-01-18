@@ -56,7 +56,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     }
 
     // Speed set up
-    _parameters.add(_speed_x.setup(_droneNode,"speed_x",0,-20,20));
+    _parameters.add(_speed_x.setup(_droneNode,"speed.x",0,-20,20));
     _speed_x.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){
@@ -72,7 +72,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     });
     _speed_x.addListener(&_speed_x,&Parameter<float>::listen);
 
-    _parameters.add(_speed_y.setup(_droneNode,"speed_y",0,-20,20));
+    _parameters.add(_speed_y.setup(_droneNode,"speed.y",0,-20,20));
     _speed_y.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){
@@ -87,7 +87,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     });
     _speed_y.addListener(&_speed_y,&Parameter<float>::listen);
 
-    _parameters.add(_speed_z.setup(_droneNode,"speed_z",0,-20,20));
+    _parameters.add(_speed_z.setup(_droneNode,"speed.z",0,-20,20));
     _speed_z.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){

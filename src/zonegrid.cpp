@@ -41,8 +41,8 @@ void ZoneGrid::drawGrid(){
     for(int i = 0;i<_dim.x/stepSizeX+1;i++){
 
         glBegin(GL_LINES);
-        glVertex3f(-300, 0,-200);
-        glVertex3f(-300,0,200);
+        glVertex3f(-_dim.x/2, 0,-_dim.z/2);
+        glVertex3f(-_dim.x/2, 0,_dim.z/2);
         glEnd();
         ofTranslate(stepSizeX,0,0);
     }
@@ -52,8 +52,8 @@ void ZoneGrid::drawGrid(){
     for(int i = 0;i<_dim.z/stepSizeZ+1;i++){
 
         glBegin(GL_LINES);
-        glVertex3f(-300, 0,-200);
-        glVertex3f(300, 0,-200);
+        glVertex3f(-_dim.x/2, 0,-_dim.z/2);
+        glVertex3f(_dim.x/2, 0,-_dim.z/2);
         glEnd();
         ofTranslate(0,0,stepSizeZ);
     }

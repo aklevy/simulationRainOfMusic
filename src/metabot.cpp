@@ -79,7 +79,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _frequency.addListener(&_frequency,&Parameter<float>::listen);
 
     // Speed set up
-    _parameters.add(_speed_x.setup(_metabotNode,"speed_x",2,-20,20));
+    _parameters.add(_speed_x.setup(_metabotNode,"speed.x",0,-20,20));
     _speed_x.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){
@@ -95,7 +95,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _speed_x.addListener(&_speed_x,&Parameter<float>::listen);
 
 
-    _parameters.add(_speed_y.setup(_metabotNode,"speed_y",3,-20,20));
+    _parameters.add(_speed_y.setup(_metabotNode,"speed.y",0,-20,20));
     _speed_y.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){
@@ -105,7 +105,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
             OSSIA::Float * val= (OSSIA::Float *)v;
             if(val->value !=_speed_y){
 
-                std::cout << "vy " << _speed_y.get() << std::endl;
+            //    std::cout << "vy " << _speed_y.get() << std::endl;
                 _speed_y.set(val->value);
             }
         }
@@ -167,6 +167,9 @@ void Metabot::move(){
 void Metabot::reset(){
     _position.set(_initialPos);
     _frequency.set(_initialFreq);
+    _speed_x.set(0);
+    _speed_y.set(0);
+
     _inZone.update(true);
     _collision.update(false);
 }

@@ -27,8 +27,14 @@ public:
 
         // move all the bots to their initial position
         if(_reset){
+            // reset bot position
             bot.reset();
-            start = (int)ofGetElapsedTimeMicros()*pow(10,-6);
+            // reset start time
+            start = 0;//(int)ofGetElapsedTimeMicros()*pow(10,-6);
+            // modify the displayed time
+            _msgGeneral.clear();
+            _msgGeneral = "Time : "+ std::to_string(start) +"\n";
+
         }
 
         if(_play){
@@ -49,7 +55,9 @@ public:
                 */
                 bot.move();
             }
-
+            else{ // move the bot anyway
+                bot.move();
+            }
 
             // Checks if the position is not out of the zone
             if(bot.isInZone()&& !_view.checkPosition(bot.position(),bot.size(),bot.modelName())){
@@ -59,7 +67,7 @@ public:
                         + "\n ";
 
                 bot.outOfZone();
-                _play.set(false); //stop playing once a robot is out of zone
+               // _play.set(false); //stop playing once a robot is out of zone
             }
         }
 
@@ -76,7 +84,7 @@ public:
                     + std::to_string((int)bot.position().x)+", "
                     + std::to_string((int)bot.position().y)+", "
                     + std::to_string((int)bot.position().z)+") \n";
-            _play.set(false); //stop playing once a collision is detected
+            //_play.set(false); //stop playing once a collision is detected
         }
     }
     //Check collision
