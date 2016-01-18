@@ -135,12 +135,12 @@ private:
     DataValue pullNodeValue(){
         //std::cout << ""<< std::endl;
         auto add = this->getAddress();
-        std::cout << this->getName()<< std::endl;
+       //std::cout << this->getName()<< std::endl;
 
         // add->pullValue();
         OSSIA::Value * val = add->getValue()->clone();
 
-        if(val->getType() == Value::Type::BOOL){
+        /*if(val->getType() == Value::Type::BOOL){
             Bool * tmp = (Bool*) val;
             std::cout << tmp->value<< std::endl;
 
@@ -148,7 +148,7 @@ private:
         else if(val->getType() == Value::Type::TUPLE){
             std::cout << "ici"<< std::endl;
 
-        }
+        }*/
         DataValue v = MatchingType<DataValue>::convertFromOssia(val);
 
         return v;

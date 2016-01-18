@@ -25,11 +25,11 @@ Network::~Network(){
 
 void Network::publication(){
     auto minuitProtocol = Minuit::create("127.0.0.1", 13579, 9998);
-   // auto minuitDevice = Device::create(minuitProtocol, "i-score");
-    Device::create(minuitProtocol, "i-score");
+    auto minuitDevice = Device::create(minuitProtocol, "i-score");
 
     while (_simRunning == true)
         ;
+    std::cout << "network thread closed" << std::endl;
 }
 
 std::shared_ptr<Node> Network::getSceneNode(){
