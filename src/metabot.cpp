@@ -121,7 +121,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
         }
         else{
             OSSIA::Tuple * val = (OSSIA::Tuple *) v;
-            val->value.reserve(2);
+            val->value.resize(2);
             OSSIA::Float * valx = (OSSIA::Float *) val->value[0];
             OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
 

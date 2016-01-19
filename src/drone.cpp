@@ -112,7 +112,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
         }
         else{
             OSSIA::Tuple * val = (OSSIA::Tuple *) v;
-            val->value.reserve(3);
+            val->value.resize(3);
             OSSIA::Float * valx = (OSSIA::Float *) val->value[0];
             OSSIA::Float * valy = (OSSIA::Float *) val->value[1];
             OSSIA::Float * valz = (OSSIA::Float *) val->value[2];
@@ -155,22 +155,16 @@ void Drone::move(){
         ofVec3f speedtmp = ofVec3f(_speed_x.get()/frameRate,
                                    _speed_y.get()/frameRate,
                                    _speed_z.get()/frameRate);
-        std::cout << _position<<std::endl;
         ofVec3f newpos = _position.get() + speedtmp;
         _position.set(newpos);
-        std::cout << "ici"<<std::endl;
-
-       // _position += speedtmp;
     }
 }
 //--------------------------------------------------------------
 
 void Drone::reset(){
-    std::cout << _initialPos<<std::endl;
     if(_initialPos != _position){
         _position.set(_initialPos);
     }
-      std::cout << _position<<std::endl;
    // _position.set(_initialPos);//ofVec3f(_initialPos.x,_initialPos.y,_initialPos.z));
     _inZone.update(true);
     _collision.update(false);

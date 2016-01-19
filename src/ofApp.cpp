@@ -71,7 +71,7 @@ void ofApp::setup(){
     }
 
     // Fill Drone list
-   // _drones.emplace_back(1,_nw.getSceneNode(),_proba.get(),ofVec3f(0,200,50)); //construct instead of copy
+    _drones.emplace_back(1,_nw.getSceneNode(),_proba.get(),ofVec3f(0,200,50)); //construct instead of copy
 
     // Adding robots to the GUI
     for(auto &metabot : _metabots){ //template bot

@@ -61,12 +61,23 @@ template<> struct MatchingType<ofVec3f> {
     static constexpr const auto val = OSSIA::Value::Type::TUPLE;
     using ossia_type = OSSIA::Tuple;
 
-    static ofx_type convertFromOssia(ossia_type t) {
-        float x = ((OSSIA::Float*)t.value[0])->value;
-        float y = ((OSSIA::Float*)t.value[1])->value;
-        float z = ((OSSIA::Float*)t.value[2])->value;
+    static ofx_type convertFromOssia(OSSIA::Value* v) {
+        auto tpl = dynamic_cast<OSSIA::Tuple*>(v);
+        if(!tpl)
+        {
+            return {};
+        }
 
-        t.value.clear();
+        auto& t = *tpl;
+
+        float x{}, y{}, z{};
+        if(auto ossia_x = dynamic_cast<OSSIA::Float*>(t.value[0]))
+            x = ossia_x->value;
+        if(auto ossia_y = dynamic_cast<OSSIA::Float*>(t.value[1]))
+            y = ossia_y->value;
+        if(auto ossia_z = dynamic_cast<OSSIA::Float*>(t.value[2]))
+            z = ossia_z->value;
+
         return ofx_type(x,y,z);
     }
     static ossia_type* convert(ofx_type f) {
@@ -83,10 +94,21 @@ template<> struct MatchingType<ofVec2f> {
     static constexpr const auto val = OSSIA::Value::Type::TUPLE;
     using ossia_type = OSSIA::Tuple;
 
-    static ofx_type convertFromOssia(ossia_type t) {
-        float x = ((OSSIA::Float*)t.value[0])->value;
-        float y = ((OSSIA::Float*)t.value[1])->value;
-        t.value.clear();
+    static ofx_type convertFromOssia(OSSIA::Value* v) {
+        auto tpl = dynamic_cast<OSSIA::Tuple*>(v);
+        if(!tpl)
+        {
+            return {};
+        }
+
+        auto& t = *tpl;
+        float x{}, y{};
+
+        if(auto ossia_x = dynamic_cast<OSSIA::Float*>(t.value[0]))
+            x = ossia_x->value;
+        if(auto ossia_y = dynamic_cast<OSSIA::Float*>(t.value[1]))
+            y = ossia_y->value;
+
         return ofx_type(x,y);
 
     }
@@ -133,22 +155,9 @@ private:
 
     // Pulls the node value
     DataValue pullNodeValue(){
-        //std::cout << ""<< std::endl;
         auto add = this->getAddress();
-       //std::cout << this->getName()<< std::endl;
 
-        // add->pullValue();
         OSSIA::Value * val = add->getValue()->clone();
-
-        /*if(val->getType() == Value::Type::BOOL){
-            Bool * tmp = (Bool*) val;
-            std::cout << tmp->value<< std::endl;
-
-        }
-        else if(val->getType() == Value::Type::TUPLE){
-            std::cout << "ici"<< std::endl;
-
-        }*/
         DataValue v = MatchingType<DataValue>::convertFromOssia(val);
 
         return v;
@@ -187,8 +196,8 @@ public:
 
     // Get the address of the node
     std::shared_ptr<Address> getAddress() const{
-       if(_address != NULL){
-         //   std::cout << "adresse"<< std::endl;
+        if(_address != NULL){
+            //   std::cout << "adresse"<< std::endl;
             return _address;
         }
 
@@ -205,9 +214,6 @@ public:
     void listen(DataValue &data){
         // check if the value to be published is not already published
         if(pullNodeValue() != data){// i-score->GUI OK
-            // std::cout << "listen puis publication"<<std::endl;
-
-            //if(_publishedValue != data){
             publishValue(data);
         }
     }
@@ -215,11 +221,7 @@ public:
 
     // Updates value of the parameter and publish to the node
     void update(DataValue data){
-     //   std::cout << data<< std::endl;
-      //  std::cout << "avant publication"<< std::endl;
-
         publishValue(data);
-        //std::cout << "apres publication"<< std::endl;
 
         // change attribute value
         this->set(data);
