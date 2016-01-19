@@ -25,8 +25,9 @@ void ZoneGrid::drawZone(){
 }
 //--------------------------------------------------------------
 void ZoneGrid::drawGrid(){
-    float stepSizeX = _dim.x/6;
-    float stepSizeZ = _dim.z/5;
+    // grid with step of 1m (=100cm)
+    float stepSizeX = 100;
+    float stepSizeZ = 100;
 
     ofPushStyle();
     ofPushMatrix();
@@ -64,9 +65,10 @@ void ZoneGrid::drawGrid(){
 }
 //--------------------------------------------------------------
 void ZoneGrid::drawAxes(){
-    float stepSizeX = _dim.x/3;
-    float stepSizeY = _dim.y/5;
-    float stepSizeZ = _dim.z/5;
+    // grid with step of 1m (=100cm)
+    float stepSizeX = 100;
+    float stepSizeY = 100;
+    float stepSizeZ = 100;
 
     ofPushStyle();
 

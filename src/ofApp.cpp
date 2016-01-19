@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 ofApp::ofApp():
-   _zoneDim(1200,800,500), // 12m x 8m x 5m
+   _zoneDim(1200,500,800), // 12m x 5m x 8m
     _zoneGrid(_zoneDim), // no need to write explicitely constructor
     _view(_zoneDim),
     _pixel(0),
