@@ -42,7 +42,8 @@ public:
             ofVec3f pos = ofVec3f(0),
             ofVec3f size = ofVec3f(30),
             string modelName = "Square",
-            float freq = 2);
+            float freq = 2,
+            float batt = 90);
 
     // Remove listeners
     ~Metabot();
@@ -108,6 +109,9 @@ public:
     // Returns parameters group
     ofParameterGroup parameters(){return _parameters;}
 
+    // Returns simulation parameters group
+    ofParameterGroup simulation(){return _simulation;}
+
     // Returns walking frequency
     float frequency() const {return _frequency.get();}
 
@@ -157,6 +161,10 @@ private:
     // Frequency of the walk, in Hz (default = 2Hz)
     Parameter<float> _frequency;
     float _initialFreq;
+
+    // Battery of the robot, in min
+    Parameter<float> _battery;
+    float _initialBatt;
 
     // boolean to check if the position is inbound or not
     Parameter<bool> _inZone;

@@ -77,9 +77,11 @@ void ofApp::setup(){
     for(auto &metabot : _metabots){ //template bot
         //metabot.setup();
         _guiViz.add(metabot.parameters());
+        _guiSim.add(metabot.simulation());
     }
     for(auto &drone : _drones){ //template bot
         _guiViz.add(drone.parameters());
+        _guiSim.add(drone.simulation());
     }
 }
 

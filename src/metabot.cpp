@@ -11,13 +11,14 @@ Metabot::~Metabot(){
 
 }
 
-Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName, float freq):
+Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName, float freq, float batt):
     _id(id),
     _size(size),
     _initialPos(pos),
     _color(ofVec3f(0,0,200+id)),
+    _modelName(modelName),
     _initialFreq(freq),
-    _modelName(modelName){
+    _initialBatt(batt){
     /* if(string::npos != modelName.find(".")){
         _3dmodel = PATH+modelName;
     }*/
@@ -36,7 +37,7 @@ void Metabot::shareMetabot(std::shared_ptr<Node> parentNode){
 
 //--------------------------------------------------------------
 void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
-    // initialize the parameters group
+    // initialize the parameters groups
     _parameters.setName(this->className()+std::to_string(_id));
     _simulation.setName(this->className()+std::to_string(_id));
 
@@ -49,7 +50,8 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _probability.setupNoPublish(parentNode,"PacketLoss(%)",proba,0,100);
 
     if(_probability.getAddress() == NULL){
-        std::cout << "adress null"<<std::endl;
+        // with getAddress if the adress is null, it explores the tree
+      //  std::cout << "adress null"<<std::endl;
     }
     else{ _probability.getAddress()->addCallback([&](const Value *v){
             OSSIA::Float * val= (OSSIA::Float *)v;
@@ -61,6 +63,20 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     }
     // _proba.addListener(&_proba,&Parameter<float>::listen);
 
+    // Battery set up
+    _simulation.add(_battery.setup(_metabotNode,"battery",_initialBatt,0,100));
+    _battery.getAddress()->addCallback([&](const Value *v){
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{ OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value !=_battery.get()){
+                _battery.set(val->value);
+            }
+        }
+    });
+    _battery.addListener(&_battery,&Parameter<float>::listen);
 
     // creates parameters to be published and listened
     // Frequency set up
@@ -163,7 +179,13 @@ void Metabot::move(){
         ofVec2f speedtmp = ofVec2f(_speed_x.get()/framerate,
                                    _speed_y.get()/framerate);
         ofVec2f newpos = _position.get() + speedtmp;
+        float distance = newpos.distance(_position.get());
         _position.set(newpos);
+
+        // battery consumtion model
+        float battmp = _battery.get() - distance/60;
+        // /60 because speed is in cm/s and battery in min
+        _battery.set(battmp);
     }
 }
 

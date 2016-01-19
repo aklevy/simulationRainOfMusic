@@ -8,11 +8,12 @@ Drone::~Drone(){
     _speed_z.removeListener(&_speed_z,&Parameter<float>::listen);
 
 }
-Drone::Drone(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName):
+Drone::Drone(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName, float batt):
     _id(id),
     _size(size),
     _initialPos(pos),
     _color(ofVec3f(0,200+id,0)),
+    _initialBatt(batt),
     _modelName(modelName){
 
     // adds the drone to the node Scene
@@ -31,8 +32,9 @@ void Drone::shareDrone(std::shared_ptr<Node> parentNode){
 //--------------------------------------------------------------
 void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
 
-    // initialize the parameters group
+    // initialize the parameters groups
     _parameters.setName(this->className()+std::to_string(_id));
+    _simulation.setName(this->className()+std::to_string(_id));
 
     // creates parameters to be published
     _collision.setup(_droneNode,"collision",false);
@@ -44,7 +46,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     _probability.setupNoPublish(parentNode,"PacketLoss",proba,0,100);
 
     if(_probability.getAddress() == NULL){
-        std::cout << "adress null"<<std::endl;
+       // std::cout << "adress null"<<std::endl;
     }
     else{ _probability.getAddress()->addCallback([&](const Value *v){
             OSSIA::Float * val= (OSSIA::Float *)v;
@@ -54,6 +56,21 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
 
         });
     }
+
+    // Battery set up
+    _simulation.add(_battery.setup(_droneNode,"battery",_initialBatt,0,100));
+    _battery.getAddress()->addCallback([&](const Value *v){
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{ OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value !=_battery.get()){
+                _battery.set(val->value);
+            }
+        }
+    });
+    _battery.addListener(&_battery,&Parameter<float>::listen);
 
     // Speed set up
     _parameters.add(_speed_x.setup(_droneNode,"speed.x",0,-20,20));
@@ -156,7 +173,13 @@ void Drone::move(){
                                    _speed_y.get()/frameRate,
                                    _speed_z.get()/frameRate);
         ofVec3f newpos = _position.get() + speedtmp;
+        float distance = newpos.distance(_position.get());
         _position.set(newpos);
+
+        // battery consumtion model
+        float battmp = _battery.get() - distance/60;
+        // /60 because speed is in cm/s and battery in min
+        _battery.set(battmp);
     }
 }
 //--------------------------------------------------------------

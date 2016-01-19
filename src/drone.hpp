@@ -42,7 +42,8 @@ public:
           float proba,
           ofVec3f pos = ofVec3f(0,0,100),
           ofVec3f size = ofVec3f(10),
-          string modelName = "Sphere");
+          string modelName = "Sphere",
+          float batt = 90);
 
     // Remove listeners
     ~Drone();
@@ -74,6 +75,9 @@ public:
      * */
     // Returns parameters group
     ofParameterGroup parameters(){return _parameters;}
+
+    // Returns simulation parameters group
+    ofParameterGroup simulation(){return _simulation;}
 
     // Modifies the model to the default one (=Sphere)
     void modelToDefault(){_modelName = defaultModel();}
@@ -144,13 +148,17 @@ private:
     ofVec3f _color;
 
     // Parameter group
-    ofParameterGroup _parameters;
+    ofParameterGroup _parameters,_simulation;
 
     // boolean to check if the position is inbound or not
     Parameter<bool> _inZone;
 
     // boolean for the collision
     Parameter<bool> _collision;
+
+    // Battery of the robot, in min
+    Parameter<float> _battery;
+    float _initialBatt;
 
     // 3D model name
     string _modelName;
