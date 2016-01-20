@@ -23,8 +23,6 @@ void ZoneGrid::drawZone(){
 
     ofPopStyle();
     ofPopMatrix();
-
-
 }
 
 //--------------------------------------------------------------

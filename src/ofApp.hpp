@@ -15,7 +15,7 @@
 class ofApp : public ofBaseApp{
 public:
     ofApp ();
-    ~ofApp () {_nw.setSimRunning(false);}
+    ~ofApp ();
     void setup();
     void update();
     void draw();

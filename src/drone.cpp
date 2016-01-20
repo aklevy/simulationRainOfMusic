@@ -165,7 +165,7 @@ void Drone::move(ofVec3f speed){
 }
 
 void Drone::move(){
-    if(!isInCollision()){
+    if(!isInCollision() && _battery.get()!= 0){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
         float frameRate = ofGetFrameRate();

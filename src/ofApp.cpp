@@ -9,6 +9,13 @@ ofApp::ofApp():
     _nw(){
 }
 
+ofApp::~ofApp () {
+    _nw.setSimRunning(false);
+    _play.removeListener(&_play,&Parameter<bool>::listen);
+    _proba.removeListener(&_proba,&Parameter<float>::listen);
+}
+
+
 void ofApp::setup(){
     // To print out log, uncomment the line below
     //ofSetLogLevel(OF_LOG_VERBOSE);

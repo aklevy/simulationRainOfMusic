@@ -173,7 +173,7 @@ void Metabot::move(ofVec3f speed){
 void Metabot::move(){
     // defined in ofApp using setFrameRate()
     float framerate = ofGetFrameRate();
-    if(!isInCollision()){
+    if(!isInCollision() && _battery.get()!= 0 ){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
         ofVec2f speedtmp = ofVec2f(_speed_x.get()/framerate,
