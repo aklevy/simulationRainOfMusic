@@ -55,6 +55,7 @@ void View::draw3dObject(const ofVec3f position, const ofVec3f size, const string
     // Draw
     ofTranslate(ofVec3f(0,-size.y/2,0));
     model.setPosition(position.x,position.y,position.z);
+  //  model.setRotation();
     model.drawFaces();
 }
 //--------------------------------------------------------------

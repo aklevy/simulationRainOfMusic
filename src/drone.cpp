@@ -176,7 +176,7 @@ void Drone::move(){
         float distance = newpos.distance(_position.get());
         _position.set(newpos);
 
-        // battery consumtion model
+        // battery consumption model
         float battmp = _battery.get() - distance/60;
         // /60 because speed is in cm/s and battery in min
         _battery.set(battmp);

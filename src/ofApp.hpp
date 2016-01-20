@@ -165,6 +165,8 @@ private:
     // Time to start
     int start = 0;
 
+    // Boolean for displaying help message
+    bool _help = true;
    // msa::physics::World3D _physics;
 };
 

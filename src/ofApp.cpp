@@ -109,6 +109,7 @@ void ofApp::draw(){
     // Draw axes and grid
     _zoneGrid.drawAxes();
     _zoneGrid.drawGrid();
+    _zoneGrid.drawGraduation();
 
     //Draw Metabots
     for(auto &bot : _metabots){
@@ -137,6 +138,11 @@ void ofApp::draw(){
     // Draw zone defined in setup()
     _zoneGrid.drawZone();
 
+
+    // Displays the graduation
+     ofVec3f pos0 = _cam.worldToScreen(_zoneDim);
+    //ofDrawBitmapStringHighlight("(0,0,0)", pos0.x, pos0.y);
+
     _cam.end();
 
     // GUI
@@ -161,6 +167,14 @@ void ofApp::draw(){
         _msgGeneral = "Time : "+ std::to_string((int)ofGetElapsedTimeMicros()*pow(10,-6)-start)+"\n";
     }
     ofDrawBitmapStringHighlight(_msgGeneral, 10, ofGetHeight()-20);
+
+    // Displays help message
+    if(_help){
+        string helpmsg = string("Press 'h' to hide this help message \n"
+                                "Press 'g' to toggle graduation \n"
+                                "Press 'x', 'y' or 'z'to toggle axes \n");
+     ofDrawBitmapStringHighlight(helpmsg,ofGetWidth()/2, ofGetHeight() -100);
+    }
 }
 
 
@@ -168,6 +182,10 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     _zoneGrid.modifyAxis(key);
+    // display help message
+    if(key == 'h'){
+        _help = !_help;
+    }
 }
 
 //--------------------------------------------------------------
