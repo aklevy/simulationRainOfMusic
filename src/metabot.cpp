@@ -12,8 +12,10 @@ Metabot::~Metabot(){
     _angle.removeListener(&_angle,&Parameter<float>::listen);
 }
 
-Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName, float freq, float batt):
+Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, ofVec3f zonedim,
+                 float proba, ofVec3f pos, ofVec3f size, string modelName, float freq, float batt):
     _id(id),
+    _zoneDim(zonedim),
     _size(size),
     _initialPos(pos),
     _color(ofVec3f(0,0,200+id)),
@@ -82,7 +84,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
 
     // creates parameters to be published and listened
     // Frequency set up
-    _parameters.add(_frequency.setup(_metabotNode,"frequency",_initialFreq,0,100));
+    _parameters.add(_frequency.setup(_metabotNode,"freq",_initialFreq,0,3));
     _frequency.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){
@@ -97,7 +99,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _frequency.addListener(&_frequency,&Parameter<float>::listen);
 
     // Angle set up
-    _parameters.add(_angle.setup(_metabotNode,"angle",0,0,360));
+    _parameters.add(_angle.setup(_metabotNode,"turn",0,-300,300));
     _angle.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){
@@ -113,7 +115,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
 
 
     // Speed set up
-    _parameters.add(_speed_x.setup(_metabotNode,"speed.x",0,-20,20));
+    _parameters.add(_speed_x.setup(_metabotNode,"dx",0,-300,300));
     _speed_x.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){
@@ -129,7 +131,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _speed_x.addListener(&_speed_x,&Parameter<float>::listen);
 
 
-    _parameters.add(_speed_y.setup(_metabotNode,"speed.y",0,-20,20));
+    _parameters.add(_speed_y.setup(_metabotNode,"dy",0,-300,300));
     _speed_y.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
         if(random()%100 <= proba){
@@ -146,7 +148,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     });
     _speed_y.addListener(&_speed_y,&Parameter<float>::listen);
 
-    _parameters.add( _position.setup(_metabotNode,"position",_initialPos,ofVec2f(0),zoneDim-_size));//ofVec2f(500,300)));
+    _parameters.add( _position.setup(_metabotNode,"position",_initialPos,ofVec2f(0),ofVec3f(_zoneDim.x,_zoneDim.z,_zoneDim.y)));//ofVec2f(500,300)));
 
     _position.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
@@ -193,8 +195,11 @@ void Metabot::move(){
     if(!isInCollision() && _battery.get()!= 0 ){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
-        ofVec2f speedtmp = ofVec2f(_speed_x.get()/framerate,
-                                   _speed_y.get()/framerate);
+        float dx = _speed_x.get()/framerate;
+        float dy = _speed_y.get()/framerate;
+        float ang = ofDegToRad(_angle.get());
+        ofVec2f speedtmp = ofVec2f(dx * cos(ang) - dy * sin(ang),
+                                   -(dx * sin(ang) + dy * cos(ang)));
         ofVec2f newpos = _position.get() + speedtmp;
         float distance = newpos.distance(_position.get());
         _position.set(newpos);
@@ -213,7 +218,7 @@ void Metabot::reset(){
     _frequency.set(_initialFreq);
     _speed_x.set(0);
     _speed_y.set(0);
-
+    _angle.set(0);
     _inZone.update(true);
     _collision.update(false);
 }

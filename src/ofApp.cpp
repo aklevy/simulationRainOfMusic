@@ -65,20 +65,20 @@ void ofApp::setup(){
 
 
     // Fill Metabot list
-    _metabots.emplace_back(1, _nw.getSceneNode(),_proba.get()); //construct instead of copy
+    _metabots.emplace_back(1, _nw.getSceneNode(),_zoneDim,_proba.get()); //construct instead of copy
     //_metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50));
-    _metabots.emplace_back(2, _nw.getSceneNode(),_proba.get(),ofVec3f(200,0,50),ofVec3f(10),"data/spider.obj");
+    _metabots.emplace_back(2, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(200,0,50),ofVec3f(10),"data/spider.obj");
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
     // Example for 3D model
-    _metabots.emplace_back(3, _nw.getSceneNode(),_proba.get(),ofVec3f(400,0,50),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    _metabots.emplace_back(3, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(400,0,50),ofVec3f(10),"data/spider.obj"); //construct instead of copy
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
 
     // Fill Drone list
-    _drones.emplace_back(1,_nw.getSceneNode(),_proba.get(),ofVec3f(0,200,50)); //construct instead of copy
+    _drones.emplace_back(1,_nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(0,200,50)); //construct instead of copy
 
     // Adding robots to the GUI
     for(auto &metabot : _metabots){ //template bot

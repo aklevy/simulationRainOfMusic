@@ -38,7 +38,7 @@ public:
 
     Drone(Drone&&) = default; //move constructor : ctrl-X
     Drone(int id,
-          std::shared_ptr<Node> parentNode,
+          std::shared_ptr<Node> parentNode, ofVec3f zonedim,
           float proba,
           ofVec3f pos = ofVec3f(0,0,100),
           ofVec3f size = ofVec3f(10),
@@ -129,6 +129,9 @@ public:
 private:
     // Drone individual id
     int _id;
+
+    // choreography zone dimendion
+    ofVec3f _zoneDim;
 
     // node in the network
     std::shared_ptr<Node> _droneNode;

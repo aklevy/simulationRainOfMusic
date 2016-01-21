@@ -8,8 +8,10 @@ Drone::~Drone(){
     _speed_z.removeListener(&_speed_z,&Parameter<float>::listen);
 
 }
-Drone::Drone(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName, float batt):
+Drone::Drone(int id , std::shared_ptr<Node> parentNode, ofVec3f zonedim,
+             float proba, ofVec3f pos, ofVec3f size, string modelName, float batt):
     _id(id),
+    _zoneDim(zonedim),
     _size(size),
     _initialPos(pos),
     _color(ofVec3f(0,200+id,0)),
@@ -120,7 +122,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     _speed_z.addListener(&_speed_z,&Parameter<float>::listen);
 
     // position
-    _parameters.add(_position.setup(_droneNode,"position",_initialPos,ofVec3f(0),ofVec3f(50000)));
+    _parameters.add(_position.setup(_droneNode,"position",_initialPos,ofVec3f(0),_zoneDim));
 
     _position.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss

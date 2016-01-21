@@ -38,6 +38,7 @@ public:
     Metabot(Metabot&&) = default; //move constructor : ctrl-X
     Metabot(int id,
             std::shared_ptr<Node> parentNode,
+            ofVec3f zonedim,
             float proba,
             ofVec3f pos = ofVec3f(0),
             ofVec3f size = ofVec3f(30),
@@ -134,10 +135,12 @@ public:
 
 
 private:
-    ofVec3f zoneDim = ofVec3f(600,400,400);
 
     // Metabot individual id
     int _id;
+
+    // choreography zone dimendion
+    ofVec3f _zoneDim;
 
     // Node in the network
     std::shared_ptr<Node> _metabotNode;
