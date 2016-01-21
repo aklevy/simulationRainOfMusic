@@ -82,7 +82,7 @@ template<> struct MatchingType<ofVec3f> {
     }
     static ossia_type* convert(ofx_type f) {
         auto tuple = new ossia_type;
-        tuple->value.reserve(2);
+        tuple->value.reserve(3);
         tuple->value.push_back(new OSSIA::Float(f.x));
         tuple->value.push_back(new OSSIA::Float(f.y));
         tuple->value.push_back(new OSSIA::Float(f.z));

@@ -86,10 +86,16 @@ void ofApp::setup(){
         _guiViz.add(metabot.parameters());
         _guiSim.add(metabot.simulation());
     }
+
     for(auto &drone : _drones){ //template bot
         _guiViz.add(drone.parameters());
         _guiSim.add(drone.simulation());
     }
+
+    // collapse all tabs
+    _guiViz.minimizeAll();
+    _guiSim.minimizeAll();
+
 }
 
 //--------------------------------------------------------------

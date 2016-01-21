@@ -152,6 +152,9 @@ private:
     Parameter<float> _speed_x,_speed_y;
     Parameter<ofVec2f> _position;
 
+    // Angle value
+    Parameter<float> _angle;
+
     // Metabot color (temporary used in selecting in ofApp)
     ofVec3f _color;
 

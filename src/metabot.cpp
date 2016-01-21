@@ -9,6 +9,7 @@ Metabot::~Metabot(){
     _speed_x.removeListener(&_speed_x,&Parameter<float>::listen);
     _speed_y.removeListener(&_speed_y,&Parameter<float>::listen);
 
+    _angle.removeListener(&_angle,&Parameter<float>::listen);
 }
 
 Metabot::Metabot(int id , std::shared_ptr<Node> parentNode, float proba, ofVec3f pos, ofVec3f size, string modelName, float freq, float batt):
@@ -39,6 +40,7 @@ void Metabot::shareMetabot(std::shared_ptr<Node> parentNode){
 void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     // initialize the parameters groups
     _parameters.setName(this->className()+std::to_string(_id));
+    //_parameters.
     _simulation.setName(this->className()+std::to_string(_id));
 
     // creates parameters to be published
@@ -94,6 +96,22 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     });
     _frequency.addListener(&_frequency,&Parameter<float>::listen);
 
+    // Angle set up
+    _parameters.add(_angle.setup(_metabotNode,"angle",0,0,360));
+    _angle.getAddress()->addCallback([&](const Value *v){
+        // if there is a packet loss
+        if(random()%100 <= proba){
+            // do nothing
+        }
+        else{ OSSIA::Float * val= (OSSIA::Float *)v;
+            if(val->value !=_angle.get()){
+                _angle.set(val->value);
+            }
+        }
+    });
+    _angle.addListener(&_angle,&Parameter<float>::listen);
+
+
     // Speed set up
     _parameters.add(_speed_x.setup(_metabotNode,"speed.x",0,-20,20));
     _speed_x.getAddress()->addCallback([&](const Value *v){
@@ -148,7 +166,6 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
         }
     });
     _position.addListener(&_position,&Parameter<ofVec2f>::listen);
-
 }
 
 //--------------------------------------------------------------
