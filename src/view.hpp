@@ -12,10 +12,10 @@ public:
     explicit View(ofVec3f zoneDim); // avoids implicit conversion ofVec3f->View
 
      // Draws the Robot with the given parameters
-    void drawBot(const ofVec3f position, const ofVec3f color, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model);
+    void drawBot(const ofVec3f position, const ofVec3f color, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model, float angle);
 
    // Draws the 3d object with the given parameters
-    void draw3dObject(const ofVec3f position, const ofVec3f size, const string& modelName,ofxAssimpModelLoader& model);
+    void draw3dObject(const ofVec3f position, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model, float angle);
 
     // Checks if the robot is out of the zone
     bool checkPosition(ofVec3f pos, ofVec3f size, string model);

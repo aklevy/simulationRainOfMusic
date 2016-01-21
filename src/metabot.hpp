@@ -115,6 +115,9 @@ public:
     // Returns walking frequency
     float frequency() const {return _frequency.get();}
 
+    // Returns angle
+    float angle() const {return _angle.get();}
+
     // Returns if the bot is in zone or not
     bool isInZone() const {return _inZone.get();}
 

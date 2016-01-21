@@ -109,6 +109,9 @@ public:
     // Returns color
     ofVec3f color() const {return _color;}
 
+    // Returns angle
+    float angle() const {return 0;}
+
     // Returns if the bot is in zone or not
     bool isInZone() const {return _inZone.get();}
 

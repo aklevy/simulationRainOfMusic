@@ -111,7 +111,7 @@ public:
         if(!bot.isInZone()){
             _view.paintRed(bot.position(),bot.size(),bot.modelName());
         }
-        _view.drawBot(bot.position(),bot.color(),bot.size(),bot.modelName(),bot.loader());
+        _view.drawBot(bot.position(),bot.color(),bot.size(),bot.modelName(),bot.loader(),bot.angle());
     }
 
 

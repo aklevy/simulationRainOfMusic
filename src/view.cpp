@@ -4,7 +4,7 @@ View::View(ofVec3f zoneDim):
     _zoneDim(zoneDim){
 }
 //--------------------------------------------------------------
-void View::drawBot(const ofVec3f position,const ofVec3f color, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model) {
+void View::drawBot(const ofVec3f position,const ofVec3f color, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model, float angle) {
 
     ofPushStyle();
     ofSetColor(color.x,color.y,color.z);
@@ -33,7 +33,7 @@ void View::drawBot(const ofVec3f position,const ofVec3f color, const ofVec3f siz
     else{
         // std::cout << modelName<<std::endl;
 
-        draw3dObject(position,size,modelName,model);
+        draw3dObject(position,size,modelName,model,angle);
 
     }
 
@@ -45,7 +45,7 @@ void View::drawBot(const ofVec3f position,const ofVec3f color, const ofVec3f siz
 }
 //--------------------------------------------------------------
 
-void View::draw3dObject(const ofVec3f position, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model){
+void View::draw3dObject(const ofVec3f position, const ofVec3f size, const string& modelName, ofxAssimpModelLoader& model, float angle){
     // Load 3d object
 
     // translation
@@ -55,7 +55,7 @@ void View::draw3dObject(const ofVec3f position, const ofVec3f size, const string
     // Draw
     ofTranslate(ofVec3f(0,-size.y/2,0));
     model.setPosition(position.x,position.y,position.z);
-  //  model.setRotation();
+    model.setRotation(0,angle,0,1,0);
     model.drawFaces();
 }
 //--------------------------------------------------------------
