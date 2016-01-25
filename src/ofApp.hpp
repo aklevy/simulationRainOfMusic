@@ -38,7 +38,6 @@ public:
         }
 
         if(_play){
-
             //get the time when the play button is pressed
             if(start == 0){
                 start = (int)ofGetElapsedTimeMicros()*pow(10,-6);

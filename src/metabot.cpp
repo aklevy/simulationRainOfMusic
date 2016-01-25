@@ -51,7 +51,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _inZone.setup(_metabotNode,"inZone",true);
 
     // probability
-    _probability.setupNoPublish(parentNode,"PacketLoss(%)",proba,0,100);
+    _probability.setupNoPublish(parentNode,"PacketLoss",proba,0,100);
 
     if(_probability.getAddress() == NULL){
         // with getAddress if the adress is null, it explores the tree
@@ -191,16 +191,17 @@ void Metabot::move(ofVec3f speed){
 }
 void Metabot::move(){
     // defined in ofApp using setFrameRate()
-    float framerate = ofGetFrameRate();
-    if(!isInCollision() && _battery.get()!= 0 ){
+   if(!isInCollision() && _battery.get()!= 0 ){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
-        float dx = _speed_x.get()/framerate;
-        float dy = _speed_y.get()/framerate;
-        float ang = ofDegToRad(_angle.get());
+        float dx = _speed_x.get()/_frameRate;
+        float dy = _speed_y.get()/_frameRate;
+        float ang = ofDegToRad(_loader.getRotationAngle(0) );
+
         ofVec2f speedtmp = ofVec2f(dx * cos(ang) - dy * sin(ang),
-                                   -(dx * sin(ang) + dy * cos(ang)));
+                                   (dx * sin(ang) + dy * cos(ang)));
         ofVec2f newpos = _position.get() + speedtmp;
+
         float distance = newpos.distance(_position.get());
         _position.set(newpos);
 
@@ -221,6 +222,7 @@ void Metabot::reset(){
     _angle.set(0);
     _inZone.update(true);
     _collision.update(false);
+    _loader.setRotation(0,0,0,0,0);
 }
 
 

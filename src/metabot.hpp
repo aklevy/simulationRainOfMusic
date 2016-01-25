@@ -117,7 +117,7 @@ public:
     float frequency() const {return _frequency.get();}
 
     // Returns angle
-    float angle() const {return _angle.get();}
+    float angle() { return (_loader.getRotationAngle(0) + _angle.get()/_frameRate);}///ofGetFrameRate();}
 
     // Returns if the bot is in zone or not
     bool isInZone() const {return _inZone.get();}
@@ -135,6 +135,7 @@ public:
 
 
 private:
+    float _frameRate = ofGetFrameRate();
 
     // Metabot individual id
     int _id;
