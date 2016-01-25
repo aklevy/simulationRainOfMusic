@@ -194,8 +194,8 @@ void Metabot::move(){
    if(!isInCollision() && _battery.get()!= 0 ){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
-        float dx = _speed_x.get()/_frameRate;
-        float dy = _speed_y.get()/_frameRate;
+        float dx = _speed_x.get() * (0.1/_frameRate); // mm/s
+        float dy = _speed_y.get() * (0.1/_frameRate);
         float ang = ofDegToRad(_loader.getRotationAngle(0) );
 
         ofVec2f speedtmp = ofVec2f(dx * cos(ang) - dy * sin(ang),
@@ -207,7 +207,7 @@ void Metabot::move(){
 
         // battery consumption model
         float battmp = _battery.get() - distance/60;
-        // /60 because speed is in cm/s and battery in min
+        // /60 because speed is in mm/s and battery in min
         _battery.set(battmp);
     }
 }
@@ -238,10 +238,6 @@ string Metabot::info() const
             + std::to_string((int)position().y)+") \n";
     msg += "Walking frequency: "
             + std::to_string(frequency()) + " Hz";
-
-    msg += "Packet Loss: "
-            + std::to_string(_probability.get()) + " %";
-
     return msg;
 }
 

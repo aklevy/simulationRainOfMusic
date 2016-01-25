@@ -226,6 +226,33 @@ void ofApp::mouseMoved(int x, int y){
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
 
+/*
+    ofRectangle viewMain;
+
+    viewMain.x = 0;
+    viewMain.y = 0;
+    viewMain.width = ofGetWidth();
+    viewMain.height = ofGetHeight();
+
+    for(auto &metabot : _metabots){ //template bot
+        if(metabot.color() == _pixel){
+            std::cout << metabot.position()<<std::endl;
+ofVec3f a = ofVec3f(mouseX,mouseY,);//_cam.getDistance());
+            ofVec3f tmp = _cam.screenToWorld(a,viewMain);
+            std::cout << _cam.getDistance()<< std::endl;
+            std::cout <<"avant "<< tmp<< std::endl;
+
+       //    tmp.x += _zoneDim.x/2- metabot.size().x/2;
+         //   tmp.y += _zoneDim.y/2 - metabot.size().y/2;
+            tmp.z -= _cam.getDistance();
+
+          //  tmp.x = ofGetWindowWidth() - tmp.x;
+            //tmp.y = ofGetWindowHeight() - tmp.y;
+            std::cout << tmp<< std::endl;
+
+         //   std::cout << "final "<<_cam.worldToCamera(tmp,viewMain)<< std::endl;
+        }
+    }*/
 }
 
 //--------------------------------------------------------------
