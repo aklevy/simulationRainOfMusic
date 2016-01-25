@@ -235,7 +235,7 @@ string Metabot::info() const
             + std::to_string( id()) + "\n";
     msg += "at position ("
             + std::to_string((int)position().x)+", "
-            + std::to_string((int)position().y)+") \n";
+            + std::to_string((int)position().z)+") \n";
     msg += "Walking frequency: "
             + std::to_string(frequency()) + " Hz";
     return msg;
