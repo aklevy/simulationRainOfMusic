@@ -65,29 +65,47 @@ void ofApp::setup(){
 
 
     // Fill Metabot list
-    _metabots.emplace_back(1, _nw.getSceneNode(),_zoneDim,_proba.get()); //construct instead of copy
-    //_metabots.emplace_back(2,ofVec3f(40),ofVec3f(100,0,50));
-   _metabots.emplace_back(2, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(200,0,50),ofVec3f(10),"data/spider.obj");
+    _metabots.emplace_back(1, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(200,0,200),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+   _metabots.emplace_back(2, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(200,0,300),ofVec3f(10),"data/spider.obj");
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
     // Example for 3D model
-    _metabots.emplace_back(3, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(400,0,100),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    _metabots.emplace_back(3, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(200,0,400),ofVec3f(10),"data/spider.obj"); //construct instead of copy
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
- /*   _metabots.emplace_back(4, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(0,0,150),ofVec3f(40)); //construct instead of copy
-
-    _metabots.emplace_back(5, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(0,0,50),ofVec3f(30)); //construct instead of copy
-
-    _metabots.emplace_back(6, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(10,0,80),ofVec3f(50)); //construct instead of copy
-
-    _metabots.emplace_back(7, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(0,0,250),ofVec3f(25)); //construct instead of copy
-
-    _metabots.emplace_back(8, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(40,0,350),ofVec3f(10)); //construct instead of copy
-    _metabots.emplace_back(9, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(360,0,50),ofVec3f(10)); //construct instead of copy
-    _metabots.emplace_back(10, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(80,0,450),ofVec3f(10)); //construct instead of copy
-*/
+   _metabots.emplace_back(4, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(200,0,500),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+   if( !_metabots.back().load()){
+       std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+   }
+    _metabots.emplace_back(5, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(200,0,600),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+   _metabots.emplace_back(6, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(1000,0,200),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+   if( !_metabots.back().load()){
+       std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+   }
+    _metabots.emplace_back(7, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(1000,0,300),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+    _metabots.emplace_back(8, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(1000,0,400),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+    _metabots.emplace_back(9, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(1000,0,500),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+    _metabots.emplace_back(10, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(1000,0,600),ofVec3f(10),"data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
 
     // Fill Drone list
    // _drones.emplace_back(1,_nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(0,200,50)); //construct instead of copy
