@@ -106,7 +106,14 @@ void ofApp::setup(){
     if( !_metabots.back().load()){
         std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
     }
+/*for(int i=0;i<90;i++){
 
+    _metabots.emplace_back(i+11, _nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f((i)*random()%1200,0,(i)*random()%700),ofVec3f(3),"data/spider.obj"); //construct instead of copy
+    if( !_metabots.back().load()){
+        std::cout << "The 3D object "<<_metabots.back().modelName()<< " was not loaded correctly"<<std::endl;
+    }
+
+}*/
     // Fill Drone list
    // _drones.emplace_back(1,_nw.getSceneNode(),_zoneDim,_proba.get(),ofVec3f(0,200,50)); //construct instead of copy
 
@@ -215,7 +222,8 @@ void ofApp::draw(){
     if(_help){
         string helpmsg = string("Press 'h' to hide this help message \n"
                                 "Press 'g' to toggle graduation \n"
-                                "Press 'x', 'y' or 'z'to toggle axes \n");
+                                "Press 'x', 'y' or 'z'to toggle axes \n "
+                                "Frame per second : "+ std::to_string(ofGetFrameRate()));
      ofDrawBitmapStringHighlight(helpmsg,ofGetWidth()/2, ofGetHeight() -100);
     }
 }
