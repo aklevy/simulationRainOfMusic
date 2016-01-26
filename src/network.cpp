@@ -8,7 +8,7 @@ Network::Network(){
 
     // declare this program "B" as Local device
     _localProtocol = Local::create();
-    _localDevice = Device::create(_localProtocol, "newDevice");
+    _localDevice = Device::create(_localProtocol, "simulationROM");
 
     // add a node "scene"
     _localSceneNode = *(_localDevice->emplace(_localDevice->children().cend(), "scene"));
