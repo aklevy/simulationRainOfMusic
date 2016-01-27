@@ -136,8 +136,10 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
         // if there is a packet loss
         if(random()%100 <= proba){
             // do nothing
+//            std::cout << "packet loss" << std::endl;
         }
         else{
+//            std::cout << "packet received" << std::endl;
             OSSIA::Float * val= (OSSIA::Float *)v;
             if(val->value !=_speed_y){
 
@@ -223,6 +225,7 @@ void Metabot::reset(){
     _inZone.update(true);
     _collision.update(false);
     _loader.setRotation(0,0,0,0,0);
+    _battery.set(90);
 }
 
 
