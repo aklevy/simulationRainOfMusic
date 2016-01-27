@@ -55,7 +55,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
 
     if(_probability.getAddress() == NULL){
         // with getAddress if the adress is null, it explores the tree
-      //  std::cout << "adress null"<<std::endl;
+        //  std::cout << "adress null"<<std::endl;
     }
     else{ _probability.getAddress()->addCallback([&](const Value *v){
             OSSIA::Float * val= (OSSIA::Float *)v;
@@ -70,15 +70,11 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     // Battery set up
     _simulation.add(_battery.setup(_metabotNode,"battery",_initialBatt,0,100));
     _battery.getAddress()->addCallback([&](const Value *v){
-        // if there is a packet loss
-        if(random()%100 <= proba){
-            // do nothing
+        OSSIA::Float * val= (OSSIA::Float *)v;
+        if(val->value !=_battery.get()){
+            _battery.set(val->value);
         }
-        else{ OSSIA::Float * val= (OSSIA::Float *)v;
-            if(val->value !=_battery.get()){
-                _battery.set(val->value);
-            }
-        }
+
     });
     _battery.addListener(&_battery,&Parameter<float>::listen);
 
@@ -86,8 +82,9 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     // Frequency set up
     _parameters.add(_frequency.setup(_metabotNode,"freq",_initialFreq,0,3));
     _frequency.getAddress()->addCallback([&](const Value *v){
+
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
         }
         else{ OSSIA::Float * val= (OSSIA::Float *)v;
@@ -102,7 +99,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _parameters.add(_angle.setup(_metabotNode,"turn",0,-300,300));
     _angle.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
         }
         else{ OSSIA::Float * val= (OSSIA::Float *)v;
@@ -118,7 +115,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _parameters.add(_speed_x.setup(_metabotNode,"dx",0,-300,300));
     _speed_x.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
         }
         else{
@@ -134,16 +131,12 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
     _parameters.add(_speed_y.setup(_metabotNode,"dy",0,-300,300));
     _speed_y.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
-//            std::cout << "packet loss" << std::endl;
         }
         else{
-//            std::cout << "packet received" << std::endl;
             OSSIA::Float * val= (OSSIA::Float *)v;
             if(val->value !=_speed_y){
-
-            //    std::cout << "vy " << _speed_y.get() << std::endl;
                 _speed_y.set(val->value);
             }
         }
@@ -154,7 +147,7 @@ void Metabot::setup(float proba,std::shared_ptr<Node> parentNode){
 
     _position.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
         }
         else{
@@ -193,7 +186,7 @@ void Metabot::move(ofVec3f speed){
 }
 void Metabot::move(){
     // defined in ofApp using setFrameRate()
-   if(!isInCollision() && _battery.get()!= 0 ){
+    if(!isInCollision() && _battery.get()!= 0 ){
         // a simple equation is used here but
         // it can be changed to a more complex one if needed
         float dx = _speed_x.get() * (0.1/_frameRate); // mm/s

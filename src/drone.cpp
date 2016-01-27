@@ -48,7 +48,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     _probability.setupNoPublish(parentNode,"PacketLoss",proba,0,100);
 
     if(_probability.getAddress() == NULL){
-       // std::cout << "adress null"<<std::endl;
+        // std::cout << "adress null"<<std::endl;
     }
     else{ _probability.getAddress()->addCallback([&](const Value *v){
             OSSIA::Float * val= (OSSIA::Float *)v;
@@ -62,14 +62,10 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     // Battery set up
     _simulation.add(_battery.setup(_droneNode,"battery",_initialBatt,0,100));
     _battery.getAddress()->addCallback([&](const Value *v){
-        // if there is a packet loss
-        if(random()%100 <= proba){
-            // do nothing
-        }
-        else{ OSSIA::Float * val= (OSSIA::Float *)v;
-            if(val->value !=_battery.get()){
-                _battery.set(val->value);
-            }
+        OSSIA::Float * val= (OSSIA::Float *)v;
+        if(val->value !=_battery.get()){
+            _battery.set(val->value);
+
         }
     });
     _battery.addListener(&_battery,&Parameter<float>::listen);
@@ -78,13 +74,13 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     _parameters.add(_speed_x.setup(_droneNode,"speed.x",0,-20,20));
     _speed_x.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
         }
         else{
             OSSIA::Float * val= (OSSIA::Float *)v;
             if(val->value !=_speed_x){
-               // std::cout << "vx " << val->value << std::endl;
+                // std::cout << "vx " << val->value << std::endl;
                 _speed_x.set(val->value);
             }
         }
@@ -94,7 +90,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     _parameters.add(_speed_y.setup(_droneNode,"speed.y",0,-20,20));
     _speed_y.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
         }
         else{
@@ -109,7 +105,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
     _parameters.add(_speed_z.setup(_droneNode,"speed.z",0,-20,20));
     _speed_z.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
         }
         else{
@@ -126,7 +122,7 @@ void Drone::setup(float proba,std::shared_ptr<Node> parentNode){
 
     _position.getAddress()->addCallback([&](const Value *v){
         // if there is a packet loss
-        if(random()%100 <= proba){
+        if(random()%100 <= _probability.get()){
             // do nothing
         }
         else{
@@ -190,7 +186,7 @@ void Drone::reset(){
     if(_initialPos != _position){
         _position.set(_initialPos);
     }
-   // _position.set(_initialPos);//ofVec3f(_initialPos.x,_initialPos.y,_initialPos.z));
+    // _position.set(_initialPos);//ofVec3f(_initialPos.x,_initialPos.y,_initialPos.z));
     _inZone.update(true);
     _collision.update(false);
 }
